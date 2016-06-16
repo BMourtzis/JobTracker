@@ -4,6 +4,6 @@
 $ = window.jQuery = require('jquery');
 window.coreJS = require('core-js');
 window.bootstrap = require('bootstrap');
-window.sqlite3 = require('sqlite3');
+window.sqlite3 = require('sqlite3').verbose();
 window.sequelize = require('sequelize');
 var database = require('./app/scripts/database.js');

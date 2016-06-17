@@ -6,4 +6,7 @@ window.coreJS = require('core-js');
 window.bootstrap = require('bootstrap');
 window.sqlite3 = require('sqlite3').verbose();
 window.sequelize = require('sequelize');
-require('./app/scripts/database.js');
+window.orm = require('./app/scripts/database.js');
+orm.getClient(1).then(function(client){
+  console.log(client.get('firstName'));
+});

@@ -13,49 +13,61 @@ orm.connStr = new sequelize(null, null, null, {
 
 //ObjectModels
 orm.Client = orm.connStr.define('client', {
-    id: {
-        type: sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        field: 'id'
-    },
-    firstName: {
-        type: sequelize.STRING,
-        field: 'firstname',
-        allowNull: false
-    },
-    lastName: {
-        type: sequelize.STRING,
-        field: 'lastname',
-        allowNull: false
-    },
-    businessName: {
-        type: sequelize.STRING,
-        field: 'businessname',
-        allowNull: false
-    },
-    shortName: {
-        type: sequelize.STRING(3),
-        field: 'shortname',
-        unique: true,
-        allowNull: false
-    },
-    Address: {
-      type: sequelize.STRING(150),
-      allowNull: false,
-      field: 'address'
-    },
-    Email: {
-      type: sequelize.STRING(50),
-      field: 'email',
-      validate: {
+  id: {
+    type: sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    field: 'id'
+  },
+  firstName: {
+    type: sequelize.STRING,
+    field: 'firstname',
+    allowNull: false
+  },
+  lastName: {
+    type: sequelize.STRING,
+    field: 'lastname',
+    allowNull: false
+  },
+  businessName: {
+    type: sequelize.STRING,
+    field: 'businessname',
+    allowNull: false
+  },
+  shortName: {
+    type: sequelize.STRING(3),
+    field: 'shortname',
+    unique: true,
+    allowNull: false
+  },
+  Address: {
+    type: sequelize.STRING(150),
+    allowNull: false,
+    field: 'address'
+  },
+  Email: {
+    type: sequelize.STRING(50),
+    field: 'email',
+    validate: {
         isEmail: true
-      }
-    },
-    Phone: {
-      type: sequelize.INTEGER(10),
-      field: 'phone'
     }
+  },
+  Phone: {
+    type: sequelize.INTEGER(10),
+    field: 'phone'
+  }
+}, {
+  classMethods: {
+
+  },
+  instanceMethods: {
+    createJob: function(jodname, timebooked, payment) {
+      orm.createJob(jodname, timebooked, payment, this.id);
+    },
+    createJobScheme: function(jobname, payment, time, day, repeatition, repeatitionvalues) {
+        orm.createJobScheme(jobname, payment, time, day, repeatition, repeatitionvalues, this.id);
+    }
+  }
 });
 
 orm.Job = orm.connStr.define('job', {
@@ -88,9 +100,16 @@ orm.Job = orm.connStr.define('job', {
   ClientID: {
     type: sequelize.INTEGER,
     references: {
-      model: this.Client,
+      model: orm.Client,
       key: 'id'
     }
+  }
+},{
+  classMethods:{
+
+  },
+  instanceMethods: {
+
   }
 });
 
@@ -105,6 +124,11 @@ orm.JobScheme = orm.connStr.define('jonScheme', {
     type: sequelize.STRING(100),
     allowNull: false,
     field: 'jobName'
+  },
+  Enabled: {
+    type: sequelize.BOOLEAN,
+    allowNull: false,
+    field: 'enabled'
   },
   Payment: {
     type: sequelize.DECIMAL,
@@ -133,12 +157,17 @@ orm.JobScheme = orm.connStr.define('jonScheme', {
   ClientID: {
     type: sequelize.INTEGER,
     references: {
-      model: this.Client,
+      model: orm.Client,
       key: 'id'
     }
   }
 },{
+  classMethods:{
 
+  },
+  instanceMethods: {
+
+  }
 });
 
 //Utility Functions
@@ -154,9 +183,9 @@ orm.testConnection = function() {
 }
 
 orm.reinitializeTables = function() {
-  //Client.sync({force: true});
-  //Job.sync({force: true});
-  //JobScheme.sync({force: true});
+  // orm.Client.sync({force: true});
+  // orm.Job.sync({force: true});
+  // orm.JobScheme.sync({force: true});
 }
 
 //Client Functions
@@ -202,16 +231,14 @@ orm.FindJobs = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJob = function(fistname, lastname, businessname, shortname, address, email, phone) {
-  // orm.Job.create({
-  //   firstName: firstname,
-  //   lastName: lastnane,
-  //   businessName: businessname,
-  //   shortName: shortname,
-  //   Address: address,
-  //   Email: email,
-  //   Phone: phone,
-  // });
+orm.createJob = function(jodname, timebooked, payment, clientid) {
+  orm.Job.create({
+    JobName: jobname,
+    TimeBooked: timebooked,
+    Payment: payment,
+    Status: 'Placed',
+    ClientID: clientid
+  });
 }
 
 //JobScheme Functions
@@ -229,16 +256,17 @@ orm.findJobSchemes = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJobScheme = function(fistname, lastname, businessname, shortname, address, email, phone) {
-  // orm.JobScheme.create({
-  //   firstName: firstname,
-  //   lastName: lastnane,
-  //   businessName: businessname,
-  //   shortName: shortname,
-  //   Address: address,
-  //   Email: email,
-  //   Phone: phone,
-  // });
+orm.createJobScheme = function(jobname, payment, time, day, repeatition, repeatitionvalues, clientid) {
+  orm.JobScheme.create({
+    JobName: jobname,
+    Enabled: true,
+    Payment: payment,
+    Time: time,
+    Day: day,
+    Repeatition: repeatition,
+    RepeatitionValues: repeatitionvalues,
+    ClientID: clientid
+  });
 }
 
 module.exports = orm;

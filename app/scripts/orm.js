@@ -8,7 +8,7 @@ orm.connStr = new sequelize(null, null, null, {
         min: 0,
         idle: 10000
     },
-    storage: 'app/db/jobs.db'
+    storage: './app/db/jobs.db'
 });
 
 //ObjectModels
@@ -203,10 +203,10 @@ orm.findClients = function(searchParams) {
 }
 
 ////Create Functions
-orm.createClient = function(fistname, lastname, businessname, shortname, address, email, phone) {
+orm.createClient = function(firstname, lastname, businessname, shortname, address, email, phone) {
   orm.Client.create({
     firstName: firstname,
-    lastName: lastnane,
+    lastName: lastname,
     businessName: businessname,
     shortName: shortname,
     Address: address,

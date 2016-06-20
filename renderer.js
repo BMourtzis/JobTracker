@@ -11,4 +11,5 @@ window.$ = window.jQuery = require('jquery');
 window.bootstrap = require('bootstrap');
 //AngularJS
 window.angular = require('angular');
-window.ui-bootstrap = require('angular-ui-bootstrap');
+//window.ui-bootstrap = require('angular-ui-bootstrap');
+require('./app/app.js');

@@ -6,10 +6,7 @@
 window.sqlite3 = require('sqlite3').verbose();
 window.sequelize = require('sequelize');
 window.orm = require('./app/scripts/orm.js');
-//Front-end Scripts
+//Front-end Modules
 window.$ = window.jQuery = require('jquery');
-window.bootstrap = require('bootstrap');
-//AngularJS
-window.angular = require('angular');
-//window.ui-bootstrap = require('angular-ui-bootstrap');
-require('./app/app.js');
+//Scripts
+require('./app/scripts/script.js');

@@ -1,20 +1,26 @@
+//Elements
 
 //IDs
-#menu-sidebar {
+#navbar {
+    position: absolute;
+    float: left;
+    height: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 1);
+}
+
+#sidebar {
+    background-color: rgba(255, 157, 27, 1);
+    display: none;
     //background-color: #505050;
 }
 
 //Classes
-.sidebar {
-    position: fixed;
-    top: 0px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
+.container-fluid div {
+    -webkit-transition: width 0.3s ease, margin 0.3s ease;
+    -moz-transition: width 0.3s ease, margin 0.3s ease;
+    -o-transition: width 0.3s ease, margin 0.3s ease;
+    transition: width 0.3s ease, margin 0.3s ease;
 }

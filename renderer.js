@@ -8,5 +8,6 @@ window.sequelize = require('sequelize');
 window.orm = require('./app/scripts/orm.js');
 //Front-end Modules
 window.$ = window.jQuery = require('jquery');
+window.bootstrap = require('bootstrap');
 //Scripts
-require('./app/scripts/script.js');
+window.UIFunctions = require('./app/scripts/script.js');

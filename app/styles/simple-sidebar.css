@@ -38,6 +38,7 @@
 }
 
 #page-content-wrapper {
+    float:right;
     width: 100%;
     position: absolute;
     padding: 15px;

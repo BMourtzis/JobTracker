@@ -14,3 +14,6 @@ window.bootstrap = require('bootstrap');
 window.UIFunctions = require('./app/scripts/script.js');
 
 UIFunctions.Home();
+// jQuery(document).ready(function() {
+//
+// });

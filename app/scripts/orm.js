@@ -40,19 +40,19 @@ orm.Client = orm.connStr.define('client', {
     unique: true,
     allowNull: false
   },
-  Address: {
+  address: {
     type: sequelize.STRING(150),
     allowNull: false,
     field: 'address'
   },
-  Email: {
+  email: {
     type: sequelize.STRING(50),
     field: 'email',
     validate: {
         isEmail: true
     }
   },
-  Phone: {
+  phone: {
     type: sequelize.INTEGER(10),
     field: 'phone'
   }

@@ -1,21 +1,105 @@
 <div class="row">
-    <h1 class="float-left">{{:businessName}}</h1>
+    <h2 class="float-left">{{:businessName}}</h2>
+    <div class="custom-button">
+        <button id="edit-button" type="button" class="btn btn-danger" onclick="">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+        <button id="edit-button" type="button" class="btn btn-warning" onclick="">
+            <span class="glyphicon glyphicon-pencil"></span>
+            Edit
+        </button>
+    </div>
 </div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Business Name</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Short Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{:businessName}}</td>
-            <td>{{:firstName}}</td>
-            <td>{{:lastName}}</td>
-            <td>{{:shortName}}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="row">
+    <p>
+        <strong>First Name:</strong>
+        {{:firstName}}
+    </p>
+    <p>
+        <strong>Last Name:</strong>
+        {{:lastName}}
+    </p>
+    <p>
+        <strong>Short Name:</strong>
+        {{:shortName}}
+    </p>
+    <p>
+        <strong>Address:</strong>
+        {{:address}}
+    </p>
+    <p>
+        <strong>Email:</strong>
+        {{:email}}
+    </p>
+    <p>
+        <strong>Phone:</strong>
+        {{:phone}}
+    </p>
+</div>
+<div class="row">
+    <h2>Jobs</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <h2>Job Schemes</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

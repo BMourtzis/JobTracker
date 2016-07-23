@@ -1,6 +1,6 @@
 <div class="row">
     <h1 class="float-left">Clients</h1>
-    <button id="create-button" type="button" class="btn btn-primary" onclick="UIFunctions.getCreateClient()">
+    <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateClient()">
         <span class="glyphicon glyphicon-plus"></span> Create
     </button>
 </div>
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             {{for clients}}
-            <tr class='clickable-row' data-ctrl="Clients" data-method="Job" data-id="{{:id}}">
+            <tr class='clickable-row' data-id="{{:id}}">
                 <td>{{:businessName}}</td>
                 <td>{{:firstName}}</td>
                 <td>{{:lastName}}</td>

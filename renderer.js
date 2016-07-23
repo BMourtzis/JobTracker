@@ -12,3 +12,5 @@ window.jsrender = require('jsrender');
 window.bootstrap = require('bootstrap');
 //Scripts
 window.UIFunctions = require('./app/scripts/script.js');
+
+UIFunctions.Home();

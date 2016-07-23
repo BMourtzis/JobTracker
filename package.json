@@ -1,6 +1,6 @@
 {
   "name": "JobTracker",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "An easy-to-use and stylish Job tracking application",
   "main": "main.js",
   "scripts": {

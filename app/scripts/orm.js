@@ -189,6 +189,11 @@ orm.reinitializeTables = function() {
 }
 
 //Client Functions
+//Get all Clients
+orm.getAllClients = function () {
+    return orm.Client.all();
+}
+
 ////Search Functions
 //////Simple Search
 orm.getClient = function(id) {

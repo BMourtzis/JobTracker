@@ -6,14 +6,16 @@
 window.sqlite3 = require('sqlite3').verbose();
 window.sequelize = require('sequelize');
 window.orm = require('./app/scripts/orm.js');
+window.moment = require('moment');
 //Front-end Modules
 window.$ = window.jQuery = require('jquery');
 window.jsrender = require('jsrender');
 window.bootstrap = require('bootstrap');
+window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // window.$.fn.datetimepicker = $.fn.datetimepicker; Need this!
 //Scripts
 window.UIFunctions = require('./app/scripts/script.js');
 
-UIFunctions.Home();
+UIFunctions.home();
 // jQuery(document).ready(function() {
 //
 // });

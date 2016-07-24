@@ -19,16 +19,21 @@ uiFunctions.hideSidebar = function() {
 
 }
 
-uiFunctions.Home = function() { require(uiFunctions.ContrDir+"Home.js").index(); }
+uiFunctions.home = function() { require(uiFunctions.ContrDir+"Home.js").index(); }
 
-uiFunctions.Jobs = function() {
+uiFunctions.jobs = function() { require(uiFunctions.ContrDir+"Jobs.js").index(); }
+uiFunctions.getCreateJob = function() { require(uiFunctions.ContrDir+"Jobs.js").getCreateJob(); }
+uiFunctions.createJob = function() { require(uiFunctions.ContrDir+"Jobs.js").createJob(); }
+uiFunctions.jobDetails = function(id) { require(uiFunctions.ContrDir+"Jobs.js").clientJob(id); }
+uiFunctions.getEditJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").getEditJob(id); }
+uiFunctions.editJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").editJob(id); }
 
-}
-
-uiFunctions.Clients = function() { require(uiFunctions.ContrDir+"Clients.js").index(); }
+uiFunctions.clients = function() { require(uiFunctions.ContrDir+"Clients.js").index(); }
 uiFunctions.getCreateClient = function() { require(uiFunctions.ContrDir+"Clients.js").getCreateClient(); }
 uiFunctions.createClient = function() { require(uiFunctions.ContrDir+"Clients.js").createClient(); }
 uiFunctions.clientDetails = function(id) { require(uiFunctions.ContrDir+"Clients.js").clientDetails(id); }
+uiFunctions.getEditClient = function(id) { require(uiFunctions.ContrDir+"Clients.js").getEditClient(id); }
+uiFunctions.editClient = function(id) { require(uiFunctions.ContrDir+"Clients.js").editClient(id); }
 
 uiFunctions.Timetable = function() {
 

@@ -1,13 +1,13 @@
 <div class="row">
     <h2 class="float-left">{{:businessName}}</h2>
     <div class="custom-button">
+        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditClient({{:id}})">
+            <span class="glyphicon glyphicon-pencil"></span>
+            Edit
+        </button>
         <button id="edit-button" type="button" class="btn btn-danger" onclick="">
             <span class="glyphicon glyphicon-trash"></span>
             Delete
-        </button>
-        <button id="edit-button" type="button" class="btn btn-warning" onclick="">
-            <span class="glyphicon glyphicon-pencil"></span>
-            Edit
         </button>
     </div>
 </div>
@@ -38,7 +38,13 @@
     </p>
 </div>
 <div class="row">
-    <h2>Jobs</h2>
+    <h2 class="float-left">Jobs</h2>
+    <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateClient()">
+        <span class="glyphicon glyphicon-plus"></span>
+        Create
+    </button>
+</div>
+<div class="row">
     <table class="table">
         <thead>
             <tr>
@@ -71,7 +77,13 @@
     </table>
 </div>
 <div class="row">
-    <h2>Job Schemes</h2>
+    <h2 class="float-left">Job Schemes</h2>
+    <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateClient()">
+        <span class="glyphicon glyphicon-plus"></span>
+        Create
+    </button>
+</div>
+<div class="row">
     <table class="table">
         <thead>
             <tr>

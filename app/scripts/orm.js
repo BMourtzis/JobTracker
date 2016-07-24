@@ -77,27 +77,32 @@ orm.Job = orm.connStr.define('job', {
     autoIncrement: true,
     field: 'id'
   },
-  JobName: {
+  jobName: {
     type: sequelize.STRING(100),
     allowNull: false,
     field: 'jobName'
   },
-  TimeBooked: {
+  timeBooked: {
     type: sequelize.DATE,
     allowNull: false,
     field: 'timeBooked'
   },
-  Payment: {
+  payment: {
     type: sequelize.DECIMAL,
     allowNull: false,
     field: 'payment'
   },
-  State: {
+  total: {
+    type: sequelize.DECIMAL,
+    allowNull: false,
+    field: 'total'
+  },
+  state: {
     type: sequelize.ENUM('Placed', 'Done', 'Paid'),
     allowNull: false,
     field: 'state'
   },
-  ClientID: {
+  clientID: {
     type: sequelize.INTEGER,
     references: {
       model: orm.Client,
@@ -120,41 +125,41 @@ orm.JobScheme = orm.connStr.define('jonScheme', {
     autoIncrement: true,
     field: 'id'
   },
-  JobName: {
+  jobName: {
     type: sequelize.STRING(100),
     allowNull: false,
     field: 'jobName'
   },
-  Enabled: {
+  enabled: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     field: 'enabled'
   },
-  Payment: {
+  payment: {
     type: sequelize.DECIMAL,
     allowNull: false,
     field: 'payment'
   },
-  Time: {
+  time: {
     type: sequelize.DATE,
     allowNull: false,
-    filed: 'time'
+    field: 'time'
   },
-  Day: {
+  day: {
     type: sequelize.INTEGER(1),
     allowNull: false,
     field: 'day'
   },
-  Repeatition: {
+  repeatition: {
     type: sequelize.ENUM('Daily', 'Weekly+', 'Weekly', 'Bi-Monthly', 'Monthly'),
     allowNull: false,
     field: 'repeatition'
   },
-  RepeatitionValues: {
+  repeatitionValues: {
     type: sequelize.JSON,
     field: 'repeatitionValues'
   },
-  ClientID: {
+  clientID: {
     type: sequelize.INTEGER,
     references: {
       model: orm.Client,
@@ -189,7 +194,7 @@ orm.reinitializeTables = function() {
 }
 
 //Client Functions
-//Get all Clients
+////Get all Clients
 orm.getAllClients = function () {
     return orm.Client.all();
 }
@@ -218,6 +223,22 @@ orm.createClient = function(firstname, lastname, businessname, shortname, addres
     Email: email,
     Phone: phone,
   });
+}
+
+////Edit Function
+orm.editClient = function(id, data) {
+    orm.getClient(id).then(function(client) {
+        for (var i = 0; i < data.length; i++) {
+            if(data[i].value != "")
+            {
+                client[data[i].name] = data[i].value;
+            }
+        }
+        client.save().then(function() {
+            UIFunctions.clients()
+            UIFunctions.clientDetails(id);
+        });
+    });
 }
 
 

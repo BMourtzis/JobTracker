@@ -1,16 +1,16 @@
 var ctrl = {}
 
-ctrl.ctrlName = "Clients";
+ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
 ctrl.index = function() {
     orm.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
         var data = {
-            clients: new Array()
+            jobs: new Array()
         };
         for (var i = 0; i < query.length; i++) {
-            data.clients.push(query[i].get({
+            data.jobs.push(query[i].get({
                 plain: true
             }));
         }
@@ -19,7 +19,7 @@ ctrl.index = function() {
 
         $(".clickable-row").click(function() {
             var id = $(this).data("id");
-            ctrl.clientDetails(id);
+            //ctrl.clientDetails(id);
         });
     });
 }
@@ -35,16 +35,19 @@ ctrl.clientDetails = function(id) {
     });
 }
 
-ctrl.getCreateClient = function() {
+ctrl.getCreateJob = function() {
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
     $("#sidebar").html(temp);
+    $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
+    $('#timepicker').datetimepicker({format: 'HH:mm'});
 }
 
-ctrl.createClient = function() {
-    var formData = $("#createClientForm").serializeArray();
-    orm.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
-        ctrl.index();
-    });
+ctrl.createJob = function() {
+    var formData = $("#createJobForm").serializeArray();
+    console.log(formData);
+    // orm.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
+    //     ctrl.index();
+    // });
 }
 
 ctrl.getEditClient = function(id) {

@@ -6,9 +6,13 @@
         <div class="form-group extra-large-field">
             <label for="client">Client</label>
             <select class="form-control" name="clientSelect" placeholder="Select a Client">
-                <option value="mustard">Mustard</option>
-                <option>Ketchup</option>
-                <option>Relish</option>
+                {{if client == null}}
+                    {{for clients}}
+                    <option value="{{:id}}">{{:businessName}}</option>
+                    {{/for}}
+                {{else}}
+                <option value="{{:client.id}}">{{:client.businessName}}</option>
+                {{/if}}
             </select>
         </div>
     </div>
@@ -26,23 +30,23 @@
         <div class="form-group medium-field">
             <label for="timeBooked">Booking Date</label>
             <div class='input-group date' id='datepicker'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+                <input type='text' class="form-control"/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         </div>
-        <div class="form-group medium-field">
-            <label for="timeBooked">Booking Time</label>
-            <div class='input-group date' id='timepicker'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-time"></span>
-                    </span>
-                </div>
+    <div class="form-group medium-field">
+        <label for="timeBooked">Booking Time</label>
+        <div class='input-group date' id='timepicker'>
+            <input type='text' class="form-control"/>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-time"></span>
+            </span>
         </div>
     </div>
-    <div class="row">
-        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJob()">Submit</button>
-    </div>
+</div>
+<div class="row">
+    <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJob()">Submit</button>
+</div>
 </form>

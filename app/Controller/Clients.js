@@ -17,7 +17,7 @@ ctrl.index = function() {
         var html = temp(data);
         $("#content").html(html);
 
-        $(".clickable-row").click(function() {
+        $("#client-table.clickable-row").click(function() {
             var id = $(this).data("id");
             ctrl.clientDetails(id);
         });
@@ -32,6 +32,11 @@ ctrl.clientDetails = function(id) {
         });
         var html = temp(client);
         $("#sidebar").html(html);
+
+        $("#client-job-table.clickable-row").click(function() {
+            var id = $(this).data("id");
+            UIFunctions.jobDetails(id);
+        });
     });
 }
 

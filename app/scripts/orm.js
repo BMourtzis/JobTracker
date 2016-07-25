@@ -85,7 +85,10 @@ orm.Job = orm.connStr.define('job', {
   timeBooked: {
     type: sequelize.DATE,
     allowNull: false,
-    field: 'timeBooked'
+    field: 'timeBooked',
+    get: function() {
+        return moment(this.getDataValue('timeBooked'))
+    }
   },
   payment: {
     type: sequelize.DECIMAL,
@@ -175,6 +178,11 @@ orm.JobScheme = orm.connStr.define('jonScheme', {
   }
 });
 
+orm.Job.belongsTo(orm.Client);
+orm.JobScheme.belongsTo(orm.Client);
+orm.Client.hasMany(orm.Job);
+orm.Client.hasMany(orm.JobScheme);
+
 //Utility Functions
 orm.testConnection = function() {
   orm.connStr
@@ -196,13 +204,13 @@ orm.reinitializeTables = function() {
 //Client Functions
 ////Get all Clients
 orm.getAllClients = function () {
-    return orm.Client.all();
+    return orm.Client.findAll();
 }
 
 ////Search Functions
 //////Simple Search
 orm.getClient = function(id) {
-  return orm.Client.findById(id);
+  return orm.Client.findById(id,{include: [orm.Job]});
 }
 
 //////Advanced Search
@@ -243,10 +251,15 @@ orm.editClient = function(id, data) {
 
 
 //Job Functions
+////Get all Clients
+orm.getAllJobs = function () {
+    return orm.Job.findAll({include: [ orm.Client ] });
+}
+
 ////Search Functions
 //////Simple Search
 orm.getJob = function(id) {
-  return orm.Job.findById(id);
+  return orm.Job.findById(id,{include: [orm.Client]});
 }
 
 //////Advanced Search
@@ -257,14 +270,15 @@ orm.FindJobs = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJob = function(jodname, timebooked, payment, clientid) {
-  orm.Job.create({
-    JobName: jobname,
-    TimeBooked: timebooked,
-    Payment: payment,
-    Status: 'Placed',
-    ClientID: clientid
-  });
+orm.createJob = function(jobname, timebooked, payment, clientid) {
+    orm.Job.create({
+        jobName: jobname,
+        timeBooked: timebooked,
+        payment: payment,
+        state: 'Placed',
+        clientID: clientid,
+        total: payment+(0.1*payment)
+    });
 }
 
 //JobScheme Functions

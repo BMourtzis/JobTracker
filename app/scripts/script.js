@@ -23,8 +23,9 @@ uiFunctions.home = function() { require(uiFunctions.ContrDir+"Home.js").index();
 
 uiFunctions.jobs = function() { require(uiFunctions.ContrDir+"Jobs.js").index(); }
 uiFunctions.getCreateJob = function() { require(uiFunctions.ContrDir+"Jobs.js").getCreateJob(); }
+uiFunctions.getCreateJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").getCreateJob(id); }
 uiFunctions.createJob = function() { require(uiFunctions.ContrDir+"Jobs.js").createJob(); }
-uiFunctions.jobDetails = function(id) { require(uiFunctions.ContrDir+"Jobs.js").clientJob(id); }
+uiFunctions.jobDetails = function(id) { require(uiFunctions.ContrDir+"Jobs.js").jobDetails(id); }
 uiFunctions.getEditJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").getEditJob(id); }
 uiFunctions.editJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").editJob(id); }
 

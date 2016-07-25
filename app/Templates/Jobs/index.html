@@ -8,21 +8,23 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Job Name</th>
                 <th>Business Name</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Short Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
-            <!-- {{for clients}}
+            {{for jobs}}
             <tr class='clickable-row' data-id="{{:id}}">
-                <td>{{:businessName}}</td>
-                <td>{{:firstName}}</td>
-                <td>{{:lastName}}</td>
-                <td>{{:shortName}}</td>
+                <td>{{:jobName}}</td>
+                <td>{{:client.businessName}}</td>
+                <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
+                <td>{{:timeBooked.format("HH:mm")}}</td>
+                <td>${{:total}}</td>
             </tr>
-            {{/for }} -->
+            {{/for }}
         </tbody>
     </table>
 </div>

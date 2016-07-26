@@ -5,13 +5,14 @@
     <div class="row">
         <div class="form-group extra-large-field">
             <label for="client">Client</label>
-            <select class="form-control" name="clientSelect" placeholder="Select a Client">
+            <select class="form-control" name="clientSelect">
                 {{if client == null}}
+                    <option value="" disabled selected>Select a Client</option>
                     {{for clients}}
                     <option value="{{:id}}">{{:businessName}}</option>
                     {{/for}}
                 {{else}}
-                <option value="{{:client.id}}">{{:client.businessName}}</option>
+                <option value="{{:client.id}}" selected>{{:client.businessName}}</option>
                 {{/if}}
             </select>
         </div>

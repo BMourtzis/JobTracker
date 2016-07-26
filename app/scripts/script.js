@@ -11,17 +11,15 @@ uiFunctions.toggleSidebar = function() {
     $("#content").toggleClass("col-md-11 col-md-6");
 }
 
-uiFunctions.showSidebar = function() {
-
+uiFunctions.home = function() {
+    require(uiFunctions.ContrDir+"Home.js").index();
+    uiFunctions.changeActive(0);
 }
 
-uiFunctions.hideSidebar = function() {
-
+uiFunctions.jobs = function() {
+    require(uiFunctions.ContrDir+"Jobs.js").index();
+    uiFunctions.changeActive(1);
 }
-
-uiFunctions.home = function() { require(uiFunctions.ContrDir+"Home.js").index(); }
-
-uiFunctions.jobs = function() { require(uiFunctions.ContrDir+"Jobs.js").index(); }
 uiFunctions.getCreateJob = function() { require(uiFunctions.ContrDir+"Jobs.js").getCreateJob(); }
 uiFunctions.getCreateJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").getCreateJob(id); }
 uiFunctions.createJob = function() { require(uiFunctions.ContrDir+"Jobs.js").createJob(); }
@@ -29,7 +27,10 @@ uiFunctions.jobDetails = function(id) { require(uiFunctions.ContrDir+"Jobs.js").
 uiFunctions.getEditJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").getEditJob(id); }
 uiFunctions.editJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").editJob(id); }
 
-uiFunctions.clients = function() { require(uiFunctions.ContrDir+"Clients.js").index(); }
+uiFunctions.clients = function() {
+    require(uiFunctions.ContrDir+"Clients.js").index();
+    uiFunctions.changeActive(2);
+}
 uiFunctions.getCreateClient = function() { require(uiFunctions.ContrDir+"Clients.js").getCreateClient(); }
 uiFunctions.createClient = function() { require(uiFunctions.ContrDir+"Clients.js").createClient(); }
 uiFunctions.clientDetails = function(id) { require(uiFunctions.ContrDir+"Clients.js").clientDetails(id); }
@@ -37,27 +38,26 @@ uiFunctions.getEditClient = function(id) { require(uiFunctions.ContrDir+"Clients
 uiFunctions.editClient = function(id) { require(uiFunctions.ContrDir+"Clients.js").editClient(id); }
 
 uiFunctions.Timetable = function() {
-
+    uiFunctions.changeActive(3);
 }
 
 uiFunctions.Finances = function() {
-
+    uiFunctions.changeActive(4);
 }
 
 uiFunctions.Settings = function() {
-
+    uiFunctions.changeActive(5);
 }
 
-uiFunctions.emptySidebar = function() {
-
-}
-
-uiFunctions.changeContent = function() {
-
-}
-
-uiFunctions.changeSidebar = function() {
-
+uiFunctions.changeActive = function(itemNo) {
+    $("#navbar-list").children().each(function(no, data) {
+        if(itemNo != no) {
+            $(data).removeClass("active");
+        }
+        else {
+            $(data).addClass("active");
+        }
+    });
 }
 
 module.exports = uiFunctions;

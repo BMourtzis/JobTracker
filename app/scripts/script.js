@@ -37,6 +37,8 @@ uiFunctions.clientDetails = function(id) { require(uiFunctions.ContrDir+"Clients
 uiFunctions.getEditClient = function(id) { require(uiFunctions.ContrDir+"Clients.js").getEditClient(id); }
 uiFunctions.editClient = function(id) { require(uiFunctions.ContrDir+"Clients.js").editClient(id); }
 
+uiFunctions.getCreateJobScheme = function(id) { require(uiFunctions.ContrDir+"JobSchemes.js").getCreateJobScheme(id); }
+
 uiFunctions.Timetable = function() {
     uiFunctions.changeActive(3);
 }
@@ -50,14 +52,11 @@ uiFunctions.Settings = function() {
 }
 
 uiFunctions.changeActive = function(itemNo) {
-    $("#navbar-list").children().each(function(no, data) {
-        if(itemNo != no) {
-            $(data).removeClass("active");
-        }
-        else {
-            $(data).addClass("active");
-        }
+    var listItems = $("#navbar-list").children();
+    listItems.each(function(no, data) {
+        $(data).removeClass("active");
     });
+    $(listItems[itemNo]).addClass("active");
 }
 
 module.exports = uiFunctions;

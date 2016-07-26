@@ -143,16 +143,6 @@ orm.JobScheme = orm.connStr.define('jonScheme', {
     allowNull: false,
     field: 'payment'
   },
-  time: {
-    type: sequelize.DATE,
-    allowNull: false,
-    field: 'time'
-  },
-  day: {
-    type: sequelize.INTEGER(1),
-    allowNull: false,
-    field: 'day'
-  },
   repeatition: {
     type: sequelize.ENUM('Daily', 'Weekly+', 'Weekly', 'Bi-Monthly', 'Monthly'),
     allowNull: false,
@@ -210,7 +200,7 @@ orm.getAllClients = function () {
 ////Search Functions
 //////Simple Search
 orm.getClient = function(id) {
-  return orm.Client.findById(id,{include: [orm.Job]});
+  return orm.Client.findById(id,{include: [orm.Job, orm.JobScheme]});
 }
 
 //////Advanced Search

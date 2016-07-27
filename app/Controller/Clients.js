@@ -32,7 +32,6 @@ ctrl.clientDetails = function(id) {
         });
         var html = temp(client);
         $("#sidebar").html(html);
-
         $("#client-job-table.clickable-row").click(function() {
             var id = $(this).data("id");
             UIFunctions.jobDetails(id);

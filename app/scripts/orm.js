@@ -121,7 +121,7 @@ orm.Job = orm.connStr.define('job', {
   }
 });
 
-orm.JobScheme = orm.connStr.define('jonScheme', {
+orm.JobScheme = orm.connStr.define('jobScheme', {
   id : {
     type: sequelize.INTEGER,
     primaryKey: true,
@@ -144,7 +144,7 @@ orm.JobScheme = orm.connStr.define('jonScheme', {
     field: 'payment'
   },
   repeatition: {
-    type: sequelize.ENUM('Daily', 'Weekly+', 'Weekly', 'Bi-Monthly', 'Monthly'),
+    type: sequelize.ENUM('Daily', 'Weekly+', 'Weekly', 'Fortnightly', 'Monthly'),
     allowNull: false,
     field: 'repeatition'
   },
@@ -286,16 +286,14 @@ orm.findJobSchemes = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJobScheme = function(jobname, payment, time, day, repeatition, repeatitionvalues, clientid) {
+orm.createJobScheme = function(jobname, payment, repeatition, repeatitionvalues, clientid) {
   orm.JobScheme.create({
-    JobName: jobname,
-    Enabled: true,
-    Payment: payment,
-    Time: time,
-    Day: day,
-    Repeatition: repeatition,
-    RepeatitionValues: repeatitionvalues,
-    ClientID: clientid
+    jobName: jobname,
+    enabled: true,
+    payment: payment,
+    repeatition: repeatition,
+    repeatitionValues: repeatitionvalues,
+    clientID: clientid
   });
 }
 

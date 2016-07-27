@@ -38,6 +38,13 @@ uiFunctions.getEditClient = function(id) { require(uiFunctions.ContrDir+"Clients
 uiFunctions.editClient = function(id) { require(uiFunctions.ContrDir+"Clients.js").editClient(id); }
 
 uiFunctions.getCreateJobScheme = function(id) { require(uiFunctions.ContrDir+"JobSchemes.js").getCreateJobScheme(id); }
+uiFunctions.createJobScheme = function() { require(uiFunctions.ContrDir+"JobSchemes.js").createJobScheme(); }
+uiFunctions.addRepValues = function() { require(uiFunctions.ContrDir+"JobSchemes.js").addRepValues(); }
+uiFunctions.removeRepValues = function(data) {
+    $(data).parent().remove();
+    require(uiFunctions.ContrDir+"JobSchemes.js").removeRepValues();
+}
+
 
 uiFunctions.Timetable = function() {
     uiFunctions.changeActive(3);

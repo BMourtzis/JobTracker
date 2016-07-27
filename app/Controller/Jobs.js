@@ -58,7 +58,7 @@ ctrl.getCreateJob = function(id) {
                 }
             }
         }
-        
+
         var html = temp(data);
         $("#sidebar").html(html);
 

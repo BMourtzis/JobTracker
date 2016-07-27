@@ -1,7 +1,7 @@
 <div class="row">
     <h1 class="float-left">New Job Scheme</h1>
 </div>
-<form id="createJobForm">
+<form id="createJobSchemeForm">
     <div class="row">
         <div class="form-group extra-large-field">
             <label for="client">Client</label>
@@ -17,36 +17,58 @@
         </div>
         <div class="form-group small-field">
             <label for="payment">Payment</label>
-            <input type="text" class="form-control" name="payment" placeholder="Eg. ABC">
+            <div class='input-group'>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-usd"></span>
+                </span>
+                <input type="text" class="form-control" name="payment" placeholder="Eg. 50">
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="form-group medium-field">
             <label for="repeatition">Repeatition</label>
             <select class="form-control" name="repeatitionSelect">
-                <option value="0" selected>Weekly</option>
+                <option value="" selected disabled>Select Repeatition</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Fortnightly">Fortnightly</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Weekly+">Weekly+</option>
+                <option value="Daily">Daily</option>
             </select>
         </div>
-        <div class="form-group small-field">
-            <label>Add more</label>
-            <button type="button" class="btn btn-default" onclick="">
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
+        <div id="addRepValues" class="form-group small-field">
+            <span class="glyphicon glyphicon-plus" onclick="UIFunctions.addRepValues()"></span>
         </div>
     </div>
     <br>
-    <div class="row">
-        <div class="form-group medium-field">
-            <label for="timeBooked">Booking Time</label>
-            <div class='input-group date' id='timepicker'>
-                <input type='text' class="form-control"/>
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-time"></span>
-                </span>
+    <div id="repValuesDiv">
+        <div class="row">
+            <div class="form-group medium-field">
+                <label for="client">Day</label>
+                <select class="form-control" name="clientSelect">
+                    <option value="" selected disabled>Select Day</option>
+                    <option value=0>Sunday</option>
+                    <option value=1>Monday</option>
+                    <option value=2>Tuesday</option>
+                    <option value=3>Wednesday</option>
+                    <option value=4>Thursday</option>
+                    <option value=5>Friday</option>
+                    <option value=6>Saturday</option>
+                </select>
+            </div>
+            <div class="form-group small-field">
+                <label for="timeBooked">Booking Time</label>
+                <div class='input-group date timepicker'>
+                    <input type='text' class="form-control"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJob()">Submit</button>
+        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJobScheme()">Submit</button>
     </div>
 </form>

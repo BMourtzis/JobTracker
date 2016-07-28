@@ -40,19 +40,19 @@ orm.Client = orm.connStr.define('client', {
     unique: true,
     allowNull: false
   },
-  Address: {
+  address: {
     type: sequelize.STRING(150),
     allowNull: false,
     field: 'address'
   },
-  Email: {
+  email: {
     type: sequelize.STRING(50),
     field: 'email',
     validate: {
         isEmail: true
     }
   },
-  Phone: {
+  phone: {
     type: sequelize.INTEGER(10),
     field: 'phone'
   }
@@ -61,12 +61,19 @@ orm.Client = orm.connStr.define('client', {
 
   },
   instanceMethods: {
-    createJob: function(jodname, timebooked, payment) {
-      orm.createJob(jodname, timebooked, payment, this.id);
-    },
-    createJobScheme: function(jobname, payment, time, day, repeatition, repeatitionvalues) {
-        orm.createJobScheme(jobname, payment, time, day, repeatition, repeatitionvalues, this.id);
-    }
+      addNewJob: function(jobname, timebooked, payment) {
+          return orm.Job.create({
+              jobName: jobname,
+              timeBooked: timebooked,
+              payment: payment,
+              state: 'Placed',
+              clientID: this.id,
+              total: payment+(0.1*payment)
+          });
+      },
+      addNewJobScheme: function(jobname, payment, time, day, repeatition, repeatitionvalues) {
+        //   orm.createJobScheme(jobname, payment, time, day, repeatition, repeatitionvalues, this.id);
+      }
   }
 });
 
@@ -77,27 +84,35 @@ orm.Job = orm.connStr.define('job', {
     autoIncrement: true,
     field: 'id'
   },
-  JobName: {
+  jobName: {
     type: sequelize.STRING(100),
     allowNull: false,
     field: 'jobName'
   },
-  TimeBooked: {
+  timeBooked: {
     type: sequelize.DATE,
     allowNull: false,
-    field: 'timeBooked'
+    field: 'timeBooked',
+    get: function() {
+        return moment(this.getDataValue('timeBooked'))
+    }
   },
-  Payment: {
+  payment: {
     type: sequelize.DECIMAL,
     allowNull: false,
     field: 'payment'
   },
-  State: {
+  total: {
+    type: sequelize.DECIMAL,
+    allowNull: false,
+    field: 'total'
+  },
+  state: {
     type: sequelize.ENUM('Placed', 'Done', 'Paid'),
     allowNull: false,
     field: 'state'
   },
-  ClientID: {
+  clientID: {
     type: sequelize.INTEGER,
     references: {
       model: orm.Client,
@@ -113,48 +128,38 @@ orm.Job = orm.connStr.define('job', {
   }
 });
 
-orm.JobScheme = orm.connStr.define('jonScheme', {
+orm.JobScheme = orm.connStr.define('jobScheme', {
   id : {
     type: sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     field: 'id'
   },
-  JobName: {
+  jobName: {
     type: sequelize.STRING(100),
     allowNull: false,
     field: 'jobName'
   },
-  Enabled: {
+  enabled: {
     type: sequelize.BOOLEAN,
     allowNull: false,
     field: 'enabled'
   },
-  Payment: {
+  payment: {
     type: sequelize.DECIMAL,
     allowNull: false,
     field: 'payment'
   },
-  Time: {
-    type: sequelize.DATE,
-    allowNull: false,
-    filed: 'time'
-  },
-  Day: {
-    type: sequelize.INTEGER(1),
-    allowNull: false,
-    field: 'day'
-  },
-  Repeatition: {
-    type: sequelize.ENUM('Daily', 'Weekly+', 'Weekly', 'Bi-Monthly', 'Monthly'),
+  repeatition: {
+    type: sequelize.ENUM('Daily', 'Weekly+', 'Weekly', 'Fortnightly', 'Monthly'),
     allowNull: false,
     field: 'repeatition'
   },
-  RepeatitionValues: {
+  repeatitionValues: {
     type: sequelize.JSON,
     field: 'repeatitionValues'
   },
-  ClientID: {
+  clientID: {
     type: sequelize.INTEGER,
     references: {
       model: orm.Client,
@@ -169,6 +174,11 @@ orm.JobScheme = orm.connStr.define('jonScheme', {
 
   }
 });
+
+orm.Job.belongsTo(orm.Client);
+orm.JobScheme.belongsTo(orm.Client);
+orm.Client.hasMany(orm.Job);
+orm.Client.hasMany(orm.JobScheme);
 
 //Utility Functions
 orm.testConnection = function() {
@@ -189,10 +199,19 @@ orm.reinitializeTables = function() {
 }
 
 //Client Functions
+////Get all Clients
+orm.getAllClients = function () {
+    return orm.Client.findAll();
+}
+
 ////Search Functions
 //////Simple Search
 orm.getClient = function(id) {
-  return orm.Client.findById(id);
+    return orm.Client.findById(id);
+}
+
+orm.getClientFull = function(id) {
+  return orm.Client.findById(id,{include: [orm.Job, orm.JobScheme]});
 }
 
 //////Advanced Search
@@ -215,12 +234,37 @@ orm.createClient = function(firstname, lastname, businessname, shortname, addres
   });
 }
 
+////Edit Function
+orm.editClient = function(id, data) {
+    orm.getClient(id).then(function(client) {
+        for (var i = 0; i < data.length; i++) {
+            if(data[i].value != "")
+            {
+                client[data[i].name] = data[i].value;
+            }
+        }
+        client.save().then(function() {
+            UIFunctions.clients()
+            UIFunctions.clientDetails(id);
+        });
+    });
+}
+
 
 //Job Functions
+////Get all Clients
+orm.getAllJobs = function () {
+    return orm.Job.findAll({include: [ orm.Client ] });
+}
+
 ////Search Functions
 //////Simple Search
 orm.getJob = function(id) {
-  return orm.Job.findById(id);
+    return orm.Job.findById(id);
+}
+
+orm.getJobFull = function(id) {
+  return orm.Job.findById(id,{include: [orm.Client]});
 }
 
 //////Advanced Search
@@ -231,14 +275,19 @@ orm.FindJobs = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJob = function(jodname, timebooked, payment, clientid) {
-  orm.Job.create({
-    JobName: jobname,
-    TimeBooked: timebooked,
-    Payment: payment,
-    Status: 'Placed',
-    ClientID: clientid
-  });
+orm.createJob = async function(jobname, timebooked, payment, clientid) {
+    return await orm.getClient(clientid).then(function(client) {
+         return client.addNewJob(jobname, timebooked, payment);
+    });
+}
+
+////Remove Functions
+orm.removeJob = function(id) {
+    orm.getJob(id).then(function(job) {
+        job.destroy().then(function() {
+            UIFunctions.jobs();
+        });
+    });
 }
 
 //JobScheme Functions
@@ -256,16 +305,14 @@ orm.findJobSchemes = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJobScheme = function(jobname, payment, time, day, repeatition, repeatitionvalues, clientid) {
+orm.createJobScheme = function(jobname, payment, repeatition, repeatitionvalues, clientid) {
   orm.JobScheme.create({
-    JobName: jobname,
-    Enabled: true,
-    Payment: payment,
-    Time: time,
-    Day: day,
-    Repeatition: repeatition,
-    RepeatitionValues: repeatitionvalues,
-    ClientID: clientid
+    jobName: jobname,
+    enabled: true,
+    payment: payment,
+    repeatition: repeatition,
+    repeatitionValues: repeatitionvalues,
+    clientID: clientid
   });
 }
 

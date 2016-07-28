@@ -1,6 +1,6 @@
 {
   "name": "JobTracker",
-  "version": "0.1.2",
+  "version": "0.2.6",
   "description": "An easy-to-use and stylish Job tracking application",
   "main": "main.js",
   "scripts": {
@@ -14,10 +14,14 @@
   "author": "Vasilis Mourtzis",
   "license": "MIT 1.0",
   "dependencies": {
+    "bootstrap": "^3.3.6",
+    "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
     "jquery": "2.2",
+    "jsrender": "^0.9.79",
     "less": "2.7.1",
+    "moment": "^2.14.1",
     "sequelize": "^3.20.0",
-    "sqlite": "^2.0.2"
+    "sqlite": "^2.2.0"
   },
   "devDependencies": {
     "electron-prebuilt": "^1.2.3",

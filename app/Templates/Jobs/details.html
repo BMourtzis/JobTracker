@@ -1,0 +1,35 @@
+<div class="row">
+    <h2 class="float-left">{{:jobName}}</h2>
+    <div class="custom-button">
+        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditJob({{:id}})">
+            <span class="glyphicon glyphicon-pencil"></span>
+            Edit
+        </button>
+        <button id="edit-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJob({{:id}})">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+    </div>
+</div>
+<div class="row">
+    <p>
+        <strong>Business Name:</strong>
+        {{:client.businessName}}
+    </p>
+    <p>
+        <strong>Date Booked:</strong>
+        {{:timeBooked.format("DD/MM/YYYY")}}
+    </p>
+    <p>
+        <strong>Time Booked:</strong>
+        {{:timeBooked.format("HH:mm")}}
+    </p>
+    <p>
+        <strong>Total:</strong>
+        {{:total}}
+    </p>
+    <p>
+        <strong>State:</strong>
+        {{:state}}
+    </p>
+</div>

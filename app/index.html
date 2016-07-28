@@ -6,9 +6,54 @@
         <title>Job Tracker</title>
         <link rel="stylesheet" type="text/less" href="./styles/styles.less">
         <script src="../node_modules/less/dist/less.js"></script>
+        <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../node_modules/eonasdan-bootstrap-datetimepicker-npm/build/css/bootstrap-datetimepicker.min.css">
     </head>
     <body>
-
+        <div id="container" class="container-fluid">
+            <nav id="navbar" class="col-md-1">
+                <ul id="navbar-list" class="nav nav-pills nav-stacked">
+                    <li role="presentation">
+                        <a href="#" class="text-color" onclick="UIFunctions.home()">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <span>VIP</span>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" class="text-color" onclick="UIFunctions.jobs()">
+                            <span class="glyphicon glyphicon-paperclip"></span>
+                            <span>Jobs</span>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" class="text-color" onclick="UIFunctions.clients()">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span>Clients</span>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" class="text-color" onclick="UIFunctions.Timetable()">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span>Timetable</span>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" class="text-color" onclick="UIFunctions.Finances()">
+                            <span class="glyphicon glyphicon-usd"></span>
+                            <span>Finances</span>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" class="text-color" onclick="UIFunctions.Settings()">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div id="content" class="col-md-7 col-md-offset-1"></div>
+            <div id="sidebar" class="col-md-4 col-md-offset-8"></div>
+        </div>
     </body>
     <script>
         // You can also require other files to run in this process

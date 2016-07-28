@@ -1,0 +1,58 @@
+<div class="row">
+    <h1 class="float-left">New Job</h1>
+</div>
+<form id="createJobForm">
+    <div class="row">
+        <div class="form-group extra-large-field">
+            <label for="client">Client</label>
+            <select class="form-control" name="clientSelect">
+                {{if client == null}}
+                    <option value="" disabled selected>Select a Client</option>
+                    {{for clients}}
+                    <option value="{{:id}}">{{:businessName}}</option>
+                    {{/for}}
+                {{else}}
+                <option value="{{:client.id}}" selected>{{:client.businessName}}</option>
+                {{/if}}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group large-field">
+            <label for="jobName">Job Name</label>
+            <input type="text" class="form-control" name="jobName" placeholder="Job Name">
+        </div>
+        <div class="form-group small-field">
+            <label for="payment">Payment</label>
+            <div class='input-group'>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-usd"></span>
+                </span>
+                <input type="text" class="form-control" name="payment" placeholder="Eg. 50">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group medium-field">
+            <label for="timeBooked">Booking Date</label>
+            <div class='input-group date' id='datepicker'>
+                <input type='text' class="form-control"/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    <div class="form-group medium-field">
+        <label for="timeBooked">Booking Time</label>
+        <div class='input-group date' id='timepicker'>
+            <input type='text' class="form-control"/>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-time"></span>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJob()">Submit</button>
+</div>
+</form>

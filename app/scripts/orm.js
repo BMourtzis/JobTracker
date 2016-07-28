@@ -61,12 +61,19 @@ orm.Client = orm.connStr.define('client', {
 
   },
   instanceMethods: {
-    createJob: function(jodname, timebooked, payment) {
-      orm.createJob(jodname, timebooked, payment, this.id);
-    },
-    createJobScheme: function(jobname, payment, time, day, repeatition, repeatitionvalues) {
-        orm.createJobScheme(jobname, payment, time, day, repeatition, repeatitionvalues, this.id);
-    }
+      addNewJob: function(jobname, timebooked, payment) {
+          return orm.Job.create({
+              jobName: jobname,
+              timeBooked: timebooked,
+              payment: payment,
+              state: 'Placed',
+              clientID: this.id,
+              total: payment+(0.1*payment)
+          });
+      },
+      addNewJobScheme: function(jobname, payment, time, day, repeatition, repeatitionvalues) {
+        //   orm.createJobScheme(jobname, payment, time, day, repeatition, repeatitionvalues, this.id);
+      }
   }
 });
 
@@ -200,6 +207,10 @@ orm.getAllClients = function () {
 ////Search Functions
 //////Simple Search
 orm.getClient = function(id) {
+    return orm.Client.findById(id);
+}
+
+orm.getClientFull = function(id) {
   return orm.Client.findById(id,{include: [orm.Job, orm.JobScheme]});
 }
 
@@ -249,6 +260,10 @@ orm.getAllJobs = function () {
 ////Search Functions
 //////Simple Search
 orm.getJob = function(id) {
+    return orm.Job.findById(id);
+}
+
+orm.getJobFull = function(id) {
   return orm.Job.findById(id,{include: [orm.Client]});
 }
 
@@ -260,14 +275,18 @@ orm.FindJobs = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJob = function(jobname, timebooked, payment, clientid) {
-    orm.Job.create({
-        jobName: jobname,
-        timeBooked: timebooked,
-        payment: payment,
-        state: 'Placed',
-        clientID: clientid,
-        total: payment+(0.1*payment)
+orm.createJob = async function(jobname, timebooked, payment, clientid) {
+    return await orm.getClient(clientid).then(function(client) {
+         return client.addNewJob(jobname, timebooked, payment);
+    });
+}
+
+////Remove Functions
+orm.removeJob = function(id) {
+    orm.getJob(id).then(function(job) {
+        job.destroy().then(function() {
+            UIFunctions.jobs();
+        });
     });
 }
 

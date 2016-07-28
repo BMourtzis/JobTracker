@@ -25,7 +25,7 @@ ctrl.index = function() {
 }
 
 ctrl.clientDetails = function(id) {
-    orm.getClient(id).then(function(data) {
+    orm.getClientFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
         var client = data.get({
             plain: true

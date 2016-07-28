@@ -26,7 +26,7 @@ ctrl.index = function() {
 }
 
 ctrl.jobDetails = function(id) {
-    orm.getJob(id).then(function(data) {
+    orm.getJobFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
         var job = data.get({
             plain: true
@@ -73,10 +73,14 @@ ctrl.createJob = function() {
     var time = $('#timepicker :input').val();
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
-    console.log(formData);
-    orm.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function() {
-        ctrl.index();
-    });
+    orm.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value);
+    // .then(function() {
+    //     ctrl.index();
+    // });
+}
+
+ctrl.removeJob = function(id) {
+    orm.removeJob(id);
 }
 
 ctrl.getEditJob = function(id) {

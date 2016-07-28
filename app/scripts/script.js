@@ -23,6 +23,7 @@ uiFunctions.jobs = function() {
 uiFunctions.getCreateJob = function() { require(uiFunctions.ContrDir+"Jobs.js").getCreateJob(); }
 uiFunctions.getCreateJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").getCreateJob(id); }
 uiFunctions.createJob = function() { require(uiFunctions.ContrDir+"Jobs.js").createJob(); }
+uiFunctions.removeJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").removeJob(id); }
 uiFunctions.jobDetails = function(id) { require(uiFunctions.ContrDir+"Jobs.js").jobDetails(id); }
 uiFunctions.getEditJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").getEditJob(id); }
 uiFunctions.editJob = function(id) { require(uiFunctions.ContrDir+"Jobs.js").editJob(id); }

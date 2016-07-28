@@ -1,11 +1,12 @@
 {
   "name": "JobTracker",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "An easy-to-use and stylish Job tracking application",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "rebuild-sqlite3": "cd node_modules/sqlite3 amp;amp; npm run prepublish amp;amp; node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.2-win32-x64 amp;amp; node-gyp rebuild --target=1.2.2 --arch=x64 --target_platform=win32 --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.2-win32-x64"
+    "rebuild-sqlite3": "cd node_modules/sqlite3 amp;amp; npm run prepublish amp;amp; node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.2-win32-x64 amp;amp; node-gyp rebuild --target=1.2.2 --arch=x64 --target_platform=win32 --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.2-win32-x64",
+    "rebuild-asyncawait": "cd node_modules.asyncawait amp;amp; node-gyp configure amp; amp; node-gyp rebuild --target=1.2.2 --arch=x64 --dist-url=https://atom.io/download/atom-shell amp; amp; mkdir bin/win32-x64-v8-5.1 amp; amp; mv build/Release/fibers.node bin/win32-x64-v8-5.1/fibers.node" 
   },
   "keywords": [
     "JobTracker",
@@ -14,6 +15,7 @@
   "author": "Vasilis Mourtzis",
   "license": "MIT 1.0",
   "dependencies": {
+    "asyncawait": "^1.0.6",
     "bootstrap": "^3.3.6",
     "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
     "jquery": "2.2",

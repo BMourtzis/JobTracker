@@ -275,11 +275,11 @@ orm.FindJobs = function(searchParams) {
 }
 
 ////Create Functions
-orm.createJob = async function(jobname, timebooked, payment, clientid) {
-    return await orm.getClient(clientid).then(function(client) {
+orm.createJob = async(function(jobname, timebooked, payment, clientid) {
+    return await (orm.getClient(clientid).then(function(client) {
          return client.addNewJob(jobname, timebooked, payment);
-    });
-}
+    }));
+});
 
 ////Remove Functions
 orm.removeJob = function(id) {

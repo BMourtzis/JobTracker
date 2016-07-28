@@ -73,10 +73,9 @@ ctrl.createJob = function() {
     var time = $('#timepicker :input').val();
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
-    orm.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value);
-    // .then(function() {
-    //     ctrl.index();
-    // });
+    orm.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function() {
+        ctrl.index();
+    });
 }
 
 ctrl.removeJob = function(id) {

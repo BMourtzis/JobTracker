@@ -68,7 +68,7 @@ orm.Client = orm.connStr.define('client', {
               payment: payment,
               state: 'Placed',
               clientID: this.id,
-              total: payment+(0.1*payment)
+              total: parseFloat(payment)+(0.1*payment)
           });
       },
       addNewJobScheme: function(jobname, payment, repeatition, repeatitionvalues) {

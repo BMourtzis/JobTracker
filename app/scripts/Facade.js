@@ -29,11 +29,11 @@ facade.getClientFull = async(function(id) {
 });
 
 //////Advanced Search
-facade.findClients = function(searchParams) {
-  return orm.Client.findAll({
-    where: searchParams
-  });
-}
+// facade.findClients = function(searchParams) {
+//   return orm.Client.findAll({
+//     where: searchParams
+//   });
+// }
 
 ////Create Functions
 facade.createClient = function(firstname, lastname, businessname, shortname, address, email, phone) {
@@ -64,34 +64,58 @@ facade.editClient = async(function(id, data){
 
 //Job Functions
 ////Get all Clients
-facade.getAllJobs = function () {
-    return orm.Job.findAll({include: [ orm.Client ] });
-}
+facade.getAllJobs = async(function(){
+    return await(orm.Job.findAll({include: [ orm.Client ] }).then(function(query){
+        var jobs =  new Array();
+        for (var i = 0; i < query.length; i++) {
+            jobs.push(query[i].get({plain:true}));
+        }
+        return jobs;
+    }));
+});
 
 ////Search Functions
 //////Simple Search
-facade.getJob = function(id) {
-    return orm.Job.findById(id);
-}
+facade.getJob =  async(function(id) {
+    return await(orm.Job.findById(id).then(function(query){
+        return query.get({plain:true});
+    }));
+});
 
-facade.getJobFull = function(id) {
-  return orm.Job.findById(id,{include: [orm.Client]});
-}
+facade.getJobFull = async(function(id){
+    return await(orm.Job.findById(id,{include: [orm.Client]}).then(function(query) {
+        return query.get({plain:true});
+    }));
+});
 
 //////Advanced Search
-facade.FindJobs = function(searchParams) {
-  return orm.Job.findAll({
-    where: searchParams
-  });
-}
+// facade.FindJobs = function(searchParams) {
+//   return orm.Job.findAll({
+//     where: searchParams
+//   });
+// }
 
 ////Create Functions
 facade.createJob = async(function(jobname, timebooked, payment, clientid) {
-    return await (orm.Job.findById(clientid).then(function(client) {
+    return await (orm.Client.findById(clientid).then(function(client) {
          return client.addNewJob(jobname, timebooked, payment);
     }));
 });
 
+////Edit Function
+facade.editJob = async(function(id, data){
+    console.log(data);
+    return await(orm.Job.findById(id).then(function(job){
+        for (var i = 0; i < data.length; i++) {
+            if(data[i].value != "")
+            {
+                job[data[i].name] = data[i].value;
+            }
+        }
+        console.log(job.get({plain:true}));
+        return job.save();
+    }));
+});
 
 ////Remove Functions
 facade.removeJob = async(function(id){
@@ -103,20 +127,24 @@ facade.removeJob = async(function(id){
 //JobScheme Functions
 ////Search Functions
 //////Simple Search
-facade.getJobScheme = function(id) {
-  return orm.JobScheme.findById(id);
-}
+facade.getJobScheme = async(function(id) {
+    return await(orm.JobScheme.findById(id).then(function(query){
+        return query.get({plain: true});
+    }));
+})
 
-facade.getJobSchemeFull =  function(id) {
-    return orm.JobScheme.findById(id, {include: [Client]});
-}
+facade.getJobSchemeFull = async(function(id){
+    return await(orm.JobScheme.findById(id, {include: [orm.Client]}).then(function(query) {
+        return query.get({plain: true});
+    }));
+});
 
 //////Advanced Search
-facade.findJobSchemes = function(searchParams) {
-  return orm.JobScheme.findAll({
-    where: searchParams
-  });
-}
+// facade.findJobSchemes = function(searchParams) {
+//   return orm.JobScheme.findAll({
+//     where: searchParams
+//   });
+// }
 
 ////Create Functions
 facade.createJobScheme = async(function(jobname, payment, repeatition, repeatitionvalues, clientid) {

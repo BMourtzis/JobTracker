@@ -28,11 +28,7 @@ ctrl.index = function() {
 ctrl.jobSchemeDetails = function(id) {
     facade.getJobSchemeFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
-        var jobScheme = data.get({
-            plain: true
-        });
-        console.log(jobScheme);
-        var html = temp(jobScheme);
+        var html = temp(data);
         $("#sidebar").html(html);
     });
 }
@@ -44,10 +40,7 @@ ctrl.generateJobs = function(id) {
 ctrl.getCreateJobScheme = function(id) {
     facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
-        var client = data.get({
-            plain: true
-        });
-        var html = temp(client);
+        var html = temp(data);
         $("#sidebar").html(html);
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});

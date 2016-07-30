@@ -22,8 +22,7 @@ ctrl.index = function() {
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
-        var client = data;
-        var html = temp(client);
+        var html = temp(data);
         $("#sidebar").html(html);
 
         $("#client-job-table.clickable-row").click(function() {
@@ -52,10 +51,7 @@ ctrl.createClient = function() {
 ctrl.getEditClient = function(id) {
     facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
-        var client = data.get({
-            plain: true
-        });
-        var html = temp(client);
+        var html = temp(data);
         $("#sidebar").html(html);
     });
 }

@@ -1,0 +1,33 @@
+<div class="row">
+    <h2 class="float-left">{{:jobName}}</h2>
+</div>
+<div class="row">
+    <div >
+        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditJobSchemes({{:id}})">
+            <span class="glyphicon glyphicon-pencil"></span>
+            Edit
+        </button>
+        <button id="edit-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJobSchemes({{:id}}, {{:client.id}})">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+        <button id="edit-button" type="button" class="btn btn-success" onclick="UIFunctions.generateJobs({{:id}})">
+            <span class="glyphicon glyphicon-cog"></span>
+            Generate Jobs
+        </button>
+    </div>
+</div>
+<div class="row">
+    <p>
+        <strong>Business Name:</strong>
+        {{:client.businessName}}
+    </p>
+    <p>
+        <strong>Total:</strong>
+        {{:payment}}
+    </p>
+    <p>
+        <strong>State:</strong>
+        {{:enabled}}
+    </p>
+</div>

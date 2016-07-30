@@ -8,8 +8,9 @@ window.await = require("asyncawait/await");
 //Database Modules
 window.sqlite3 = require('sqlite3').verbose();
 window.sequelize = require('sequelize');
-window.orm = require('./app/scripts/orm.js');
+window.facade = require('./app/scripts/Facade.js');
 window.moment = require('moment');
+window.ctrl = require("./app/Controller/Controllers.js");
 //Front-end Modules
 window.$ = window.jQuery = require('jquery');
 window.jsrender = require('jsrender');

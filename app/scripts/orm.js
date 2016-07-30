@@ -71,8 +71,15 @@ orm.Client = orm.connStr.define('client', {
               total: payment+(0.1*payment)
           });
       },
-      addNewJobScheme: function(jobname, payment, time, day, repeatition, repeatitionvalues) {
-        //   orm.createJobScheme(jobname, payment, time, day, repeatition, repeatitionvalues, this.id);
+      addNewJobScheme: function(jobname, payment, repeatition, repeatitionvalues) {
+          return orm.JobScheme.create({
+            jobName: jobname,
+            enabled: true,
+            payment: payment,
+            repeatition: repeatition,
+            repeatitionValues: repeatitionvalues,
+            clientID: this.id
+          });
       }
   }
 });
@@ -170,8 +177,10 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
   classMethods:{
 
   },
-  instanceMethods: {
-
+    instanceMethods: {
+        generateJobs: function() {
+            console.log("works");
+        }
   }
 });
 
@@ -196,124 +205,6 @@ orm.reinitializeTables = function() {
   // orm.Client.sync({force: true});
   // orm.Job.sync({force: true});
   // orm.JobScheme.sync({force: true});
-}
-
-//Client Functions
-////Get all Clients
-orm.getAllClients = function () {
-    return orm.Client.findAll();
-}
-
-////Search Functions
-//////Simple Search
-orm.getClient = function(id) {
-    return orm.Client.findById(id);
-}
-
-orm.getClientFull = function(id) {
-  return orm.Client.findById(id,{include: [orm.Job, orm.JobScheme]});
-}
-
-//////Advanced Search
-orm.findClients = function(searchParams) {
-  return orm.Client.findAll({
-    where: searchParams
-  });
-}
-
-////Create Functions
-orm.createClient = function(firstname, lastname, businessname, shortname, address, email, phone) {
-  orm.Client.create({
-    firstName: firstname,
-    lastName: lastname,
-    businessName: businessname,
-    shortName: shortname,
-    Address: address,
-    Email: email,
-    Phone: phone,
-  });
-}
-
-////Edit Function
-orm.editClient = function(id, data) {
-    orm.getClient(id).then(function(client) {
-        for (var i = 0; i < data.length; i++) {
-            if(data[i].value != "")
-            {
-                client[data[i].name] = data[i].value;
-            }
-        }
-        client.save().then(function() {
-            UIFunctions.clients()
-            UIFunctions.clientDetails(id);
-        });
-    });
-}
-
-
-//Job Functions
-////Get all Clients
-orm.getAllJobs = function () {
-    return orm.Job.findAll({include: [ orm.Client ] });
-}
-
-////Search Functions
-//////Simple Search
-orm.getJob = function(id) {
-    return orm.Job.findById(id);
-}
-
-orm.getJobFull = function(id) {
-  return orm.Job.findById(id,{include: [orm.Client]});
-}
-
-//////Advanced Search
-orm.FindJobs = function(searchParams) {
-  return orm.Job.findAll({
-    where: searchParams
-  });
-}
-
-////Create Functions
-orm.createJob = async(function(jobname, timebooked, payment, clientid) {
-    return await (orm.getClient(clientid).then(function(client) {
-         return client.addNewJob(jobname, timebooked, payment);
-    }));
-});
-
-////Remove Functions
-orm.removeJob = function(id) {
-    orm.getJob(id).then(function(job) {
-        job.destroy().then(function() {
-            UIFunctions.jobs();
-        });
-    });
-}
-
-//JobScheme Functions
-////Search Functions
-//////Simple Search
-orm.getJobScheme = function(id) {
-  return orm.JobScheme.findById(id);
-}
-
-//////Advanced Search
-orm.findJobSchemes = function(searchParams) {
-  return orm.JobScheme.findAll({
-    where: searchParams
-  });
-}
-
-////Create Functions
-orm.createJobScheme = function(jobname, payment, repeatition, repeatitionvalues, clientid) {
-  orm.JobScheme.create({
-    jobName: jobname,
-    enabled: true,
-    payment: payment,
-    repeatition: repeatition,
-    repeatitionValues: repeatitionvalues,
-    clientID: clientid
-  });
 }
 
 module.exports = orm;

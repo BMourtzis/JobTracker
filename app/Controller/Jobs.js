@@ -4,7 +4,7 @@ ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
 ctrl.index = function() {
-    orm.getAllJobs().then(function(query) {
+    facade.getAllJobs().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
         var data = {
             jobs: new Array()
@@ -26,7 +26,7 @@ ctrl.index = function() {
 }
 
 ctrl.jobDetails = function(id) {
-    orm.getJobFull(id).then(function(data) {
+    facade.getJobFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
         var job = data.get({
             plain: true
@@ -37,7 +37,7 @@ ctrl.jobDetails = function(id) {
 }
 
 ctrl.getCreateJob = function(id) {
-    orm.getAllClients().then(function(query) {
+    facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
         var data = {
             clients: new Array()
@@ -73,17 +73,19 @@ ctrl.createJob = function() {
     var time = $('#timepicker :input').val();
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
-    orm.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function() {
-        ctrl.index();
+    facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
+        ctrl.jobDetails(job.id);
     });
 }
 
-ctrl.removeJob = function(id) {
-    orm.removeJob(id);
+ctrl.removeJob = function(id, clientID) {
+    facade.removeJob(id).then(function(job) {
+        UIFunctions.clientDetails(clientID);
+    });
 }
 
 ctrl.getEditJob = function(id) {
-    orm.getJob(id).then(function(data) {
+    facade.getJob(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
         var client = data.get({
             plain: true
@@ -95,7 +97,7 @@ ctrl.getEditJob = function(id) {
 
 ctrl.editClient = function(id) {
     var formData = $("#editClientForm").serializeArray();
-    orm.editClient(id, formData);
+    facade.editClient(id, formData);
 }
 
 module.exports = ctrl;

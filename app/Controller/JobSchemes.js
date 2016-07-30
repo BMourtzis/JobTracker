@@ -5,7 +5,7 @@ ctrl.templateDir = "./app/Templates/";
 ctrl.repval = 0;
 
 ctrl.index = function() {
-    orm.getAllClients().then(function(query) {
+    facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
         var data = {
             clients: new Array()
@@ -25,24 +25,24 @@ ctrl.index = function() {
     });
 }
 
-ctrl.clientDetails = function(id) {
-    orm.getClient(id).then(function(data) {
+ctrl.jobSchemeDetails = function(id) {
+    facade.getJobSchemeFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
-        var client = data.get({
+        var jobScheme = data.get({
             plain: true
         });
-        var html = temp(client);
+        console.log(jobScheme);
+        var html = temp(jobScheme);
         $("#sidebar").html(html);
-
-        $("#client-job-table.clickable-row").click(function() {
-            var id = $(this).data("id");
-            UIFunctions.jobDetails(id);
-        });
     });
 }
 
+ctrl.generateJobs = function(id) {
+    facade.generateJobs(id);
+}
+
 ctrl.getCreateJobScheme = function(id) {
-    orm.getClient(id).then(function(data) {
+    facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
         var client = data.get({
             plain: true
@@ -51,6 +51,21 @@ ctrl.getCreateJobScheme = function(id) {
         $("#sidebar").html(html);
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});
+    });
+}
+
+ctrl.createJobScheme = function() {
+    var formData = $("#createJobSchemeForm").serializeArray();
+    var repvalues = new Array();
+    $("#repValuesDiv").children().each(function(no, data) {
+        var rep = {
+            day: $(data).find("select").val(),
+            time: $(data).find("input").val()
+        }
+        repvalues.push(rep);
+    });
+    facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function() {
+        UIFunctions.clientDetails(formData[0].value);
     });
 }
 
@@ -67,29 +82,18 @@ ctrl.addRepValues = function() {
     }
 }
 
+ctrl.generateNextMonthsJobs = function() {
+
+}
+
 ctrl.removeRepValues = function() {
     if(ctrl.repval > 0) {
         ctrl.repval--
     }
 }
 
-ctrl.createJobScheme = function() {
-    var formData = $("#createJobSchemeForm").serializeArray();
-    var repvalues = new Array();
-    $("#repValuesDiv").children().each(function(no, data) {
-        var rep = {
-            day: $(data).find("select").val(),
-            time: $(data).find("input").val()
-        }
-        repvalues.push(rep);
-    });
-    orm.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function() {
-        UIFunctions.clientDetails(formData[0].value);
-    });
-}
-
 ctrl.getEditClient = function(id) {
-    orm.getClient(id).then(function(data) {
+    facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
         var client = data.get({
             plain: true
@@ -101,7 +105,7 @@ ctrl.getEditClient = function(id) {
 
 ctrl.editClient = function(id) {
     var formData = $("#editClientForm").serializeArray();
-    orm.editClient(id, formData);
+    facade.editClient(id, formData);
 }
 
 module.exports = ctrl;

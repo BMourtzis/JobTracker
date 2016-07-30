@@ -4,16 +4,11 @@ ctrl.ctrlName = "Clients";
 ctrl.templateDir = "./app/Templates/";
 
 ctrl.index = function() {
-    orm.getAllClients().then(function(query) {
+    facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
         var data = {
-            clients: new Array()
+            clients: query
         };
-        for (var i = 0; i < query.length; i++) {
-            data.clients.push(query[i].get({
-                plain: true
-            }));
-        }
         var html = temp(data);
         $("#content").html(html);
 
@@ -25,16 +20,19 @@ ctrl.index = function() {
 }
 
 ctrl.clientDetails = function(id) {
-    orm.getClientFull(id).then(function(data) {
+    facade.getClientFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
-        var client = data.get({
-            plain: true
-        });
+        var client = data;
         var html = temp(client);
         $("#sidebar").html(html);
+
         $("#client-job-table.clickable-row").click(function() {
             var id = $(this).data("id");
             UIFunctions.jobDetails(id);
+        });
+        $("#client-job-scheme-table.clickable-row").click(function() {
+            var id = $(this).data("id");
+            UIFunctions.jobSchemeDetails(id);
         });
     });
 }
@@ -46,13 +44,13 @@ ctrl.getCreateClient = function() {
 
 ctrl.createClient = function() {
     var formData = $("#createClientForm").serializeArray();
-    orm.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
+    facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
         ctrl.index();
     });
 }
 
 ctrl.getEditClient = function(id) {
-    orm.getClient(id).then(function(data) {
+    facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
         var client = data.get({
             plain: true
@@ -64,7 +62,10 @@ ctrl.getEditClient = function(id) {
 
 ctrl.editClient = function(id) {
     var formData = $("#editClientForm").serializeArray();
-    orm.editClient(id, formData);
+    facade.editClient(id, formData).then(function(){
+        ctrl.index();
+        ctrl.clientDetails(id);
+    });
 }
 
 module.exports = ctrl;

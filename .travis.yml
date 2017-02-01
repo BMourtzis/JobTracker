@@ -1,0 +1,2 @@
+language: nodes_js
+node_js: 7.4.x

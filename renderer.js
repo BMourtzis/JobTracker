@@ -18,6 +18,6 @@ window.bootstrap = require('bootstrap');
 window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // window.$.fn.datetimepicker = $.fn.datetimepicker; Need this!
 //Scripts
 window.UIFunctions = require('./app/scripts/script.js');
-
+console.log("here");
 // orm.testConnection();
 UIFunctions.home();

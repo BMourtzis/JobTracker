@@ -1,4 +1,4 @@
-var facade = { }
+var facade = { };
 
 var orm = require("./orm.js");
 
@@ -6,7 +6,7 @@ var orm = require("./orm.js");
 ////Get all Clients
 facade.getAllClients = async(function() {
     return await(orm.Client.findAll().then(function(query) {
-        var clients =  new Array();
+        var clients =  [];
         for (var i = 0; i < query.length; i++) {
             clients.push(query[i].get({plain:true}));
         }
@@ -46,13 +46,13 @@ facade.createClient = function(firstname, lastname, businessname, shortname, add
     Email: email,
     Phone: phone,
   });
-}
+};
 
 ////Edit Function
 facade.editClient = async(function(id, data){
     return await(orm.Client.findById(id).then(function(client){
         for (var i = 0; i < data.length; i++) {
-            if(data[i].value != "")
+            if(data[i].value !== "")
             {
                 client[data[i].name] = data[i].value;
             }
@@ -66,7 +66,7 @@ facade.editClient = async(function(id, data){
 ////Get all Clients
 facade.getAllJobs = async(function(){
     return await(orm.Job.findAll({include: [ orm.Client ] }).then(function(query){
-        var jobs =  new Array();
+        var jobs = [];
         for (var i = 0; i < query.length; i++) {
             jobs.push(query[i].get({plain:true}));
         }
@@ -107,7 +107,7 @@ facade.editJob = async(function(id, data){
     console.log(data);
     return await(orm.Job.findById(id).then(function(job){
         for (var i = 0; i < data.length; i++) {
-            if(data[i].value != "")
+            if(data[i].value !== "")
             {
                 job[data[i].name] = data[i].value;
             }
@@ -131,7 +131,7 @@ facade.getJobScheme = async(function(id) {
     return await(orm.JobScheme.findById(id).then(function(query){
         return query.get({plain: true});
     }));
-})
+});
 
 facade.getJobSchemeFull = async(function(id){
     return await(orm.JobScheme.findById(id, {include: [orm.Client]}).then(function(query) {

@@ -1,4 +1,4 @@
-var orm = { }
+var orm = { };
 
 orm.connStr = new sequelize(null, null, null, {
     host: 'localhost',
@@ -101,7 +101,7 @@ orm.Job = orm.connStr.define('job', {
     allowNull: false,
     field: 'timeBooked',
     get: function() {
-        return moment(this.getDataValue('timeBooked'))
+        return moment(this.getDataValue('timeBooked'));
     }
   },
   payment: {
@@ -199,12 +199,12 @@ orm.testConnection = function() {
   .catch(function (err) {
     console.log('Unable to connect to the database:', err);
   });
-}
+};
 
 orm.reinitializeTables = function() {
   // orm.Client.sync({force: true});
   // orm.Job.sync({force: true});
   // orm.JobScheme.sync({force: true});
-}
+};
 
 module.exports = orm;

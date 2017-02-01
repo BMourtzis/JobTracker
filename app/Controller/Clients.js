@@ -1,4 +1,4 @@
-var ctrl = {}
+var ctrl = {};
 
 ctrl.ctrlName = "Clients";
 ctrl.templateDir = "./app/Templates/";
@@ -17,7 +17,7 @@ ctrl.index = function() {
             ctrl.clientDetails(id);
         });
     });
-}
+};
 
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
@@ -34,19 +34,19 @@ ctrl.clientDetails = function(id) {
             UIFunctions.jobSchemeDetails(id);
         });
     });
-}
+};
 
 ctrl.getCreateClient = function() {
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
     $("#sidebar").html(temp);
-}
+};
 
 ctrl.createClient = function() {
     var formData = $("#createClientForm").serializeArray();
     facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
         ctrl.index();
     });
-}
+};
 
 ctrl.getEditClient = function(id) {
     facade.getClient(id).then(function(data) {
@@ -54,7 +54,7 @@ ctrl.getEditClient = function(id) {
         var html = temp(data);
         $("#sidebar").html(html);
     });
-}
+};
 
 ctrl.editClient = function(id) {
     var formData = $("#editClientForm").serializeArray();
@@ -62,6 +62,6 @@ ctrl.editClient = function(id) {
         ctrl.index();
         ctrl.clientDetails(id);
     });
-}
+};
 
 module.exports = ctrl;

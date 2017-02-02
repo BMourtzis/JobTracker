@@ -53,7 +53,8 @@ ctrl.createJobScheme = function() {
     $("#repValuesDiv").children().each(function(no, data) {
         var rep = {
             day: $(data).find("select").val(),
-            time: $(data).find("input").val()
+            hour: $(data).find("input").val().split(":")[0],
+            minute: $(data).find("input").val().split(":")[1]
         };
         repvalues.push(rep);
     });

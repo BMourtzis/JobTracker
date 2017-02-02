@@ -158,7 +158,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
     field: 'payment'
   },
   repeatition: {
-    type: sequelize.ENUM('Daily', 'Weekly+', 'Weekly', 'Fortnightly', 'Monthly'),
+    type: sequelize.ENUM('Daily', 'Weekly', 'Fortnightly', 'Monthly'),
     allowNull: false,
     field: 'repeatition'
   },
@@ -168,6 +168,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
   },
   clientID: {
     type: sequelize.INTEGER,
+    field: "ClientID",
     references: {
       model: orm.Client,
       key: 'id'
@@ -178,8 +179,97 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
 
   },
     instanceMethods: {
-        generateJobs: function() {
-            console.log("works");
+        generateJobs: function(month) {
+            var date = Date.today().set({month: month, day: 1}).first().sunday();
+
+            switch (this.repeatition) {
+                case "Daily":
+                    this.dailyGenerator(date, month+2);
+                    break;
+                case "Weekly":
+                    this.weeklyGenerator(date, month+2);
+                    break;
+                case "Fortnightly":
+                    this.fortnightlyGenerator(date, month+2);
+                    break;
+                case "Monthly":
+                    this.monthlyGenerator(date, month+2);
+                    break;
+                default:
+            }
+
+        }, dailyGenerator: function(date, nextMonth){
+            var repvalues = JSON.parse(this.repeatitionValues);
+            date.at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+
+            for(; date.toString("M") < (nextMonth); date.next().day())
+            {
+                orm.Job.create({
+                    jobName: this.jobName,
+                    timeBooked: date,
+                    payment: this.payment,
+                    state: 'Placed',
+                    clientID: this.clientID,
+                    total: parseFloat(this.payment)+(0.1*this.payment)
+                });
+            }
+        }, weeklyGenerator: function(date, nextMonth){
+            var repvalues = JSON.parse(this.repeatitionValues);
+
+            for(; date.toString("M") < (nextMonth); date.next().sunday())
+            {
+                for(var i = 0; i< repvalues.length; i++)
+                {
+                    var jobDate = new Date(date);
+                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+
+                    orm.Job.create({
+                        jobName: this.jobName,
+                        timeBooked: jobDate,
+                        payment: this.payment,
+                        state: 'Placed',
+                        clientID: this.clientID,
+                        total: parseFloat(this.payment)+(0.1*this.payment)
+                    });
+                }
+            }
+        }, fortnightlyGenerator: function(date, nextMonth){
+            var repvalues = JSON.parse(this.repeatitionValues);
+
+            for(; date.toString("M") < (nextMonth); date.next().sunday().next().sunday())
+            {
+                for(var i = 0; i< repvalues.length; i++)
+                {
+                    var jobDate = new Date(date);
+                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+
+                    orm.Job.create({
+                        jobName: this.jobName,
+                        timeBooked: jobDate,
+                        payment: this.payment,
+                        state: 'Placed',
+                        clientID: this.clientID,
+                        total: parseFloat(this.payment)+(0.1*this.payment)
+                    });
+                }
+            }
+        }, monthlyGenerator: function(date, nextMonth){
+            var repvalues = JSON.parse(this.repeatitionValues);
+
+            for(var i = 0; i< repvalues.length; i++)
+            {
+                var jobDate = new Date(date);
+                jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+
+                orm.Job.create({
+                    jobName: this.jobName,
+                    timeBooked: jobDate,
+                    payment: this.payment,
+                    state: 'Placed',
+                    clientID: this.clientID,
+                    total: parseFloat(this.payment)+(0.1*this.payment)
+                });
+            }
         }
   }
 });

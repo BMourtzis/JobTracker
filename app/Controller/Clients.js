@@ -24,11 +24,12 @@ ctrl.clientDetails = function(id) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
         var html = temp(data);
         $("#sidebar").html(html);
-
+        
         $("#client-job-table.clickable-row").click(function() {
             var id = $(this).data("id");
             UIFunctions.jobDetails(id);
         });
+
         $("#client-job-scheme-table.clickable-row").click(function() {
             var id = $(this).data("id");
             UIFunctions.jobSchemeDetails(id);

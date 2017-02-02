@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <div class="row">
     <h1 class="float-left">Jobs</h1>
     <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJob()">
@@ -17,7 +18,7 @@
         </thead>
         <tbody>
             {{for jobs}}
-            <tr class='clickable-row' data-id="{{:id}}">
+            <tr class="clickable-row" data-id="{{:id}}">
                 <td>{{:jobName}}</td>
                 <td>{{:client.businessName}}</td>
                 <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>

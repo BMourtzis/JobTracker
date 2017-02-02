@@ -1,4 +1,4 @@
-var ctrl = {}
+var ctrl = {};
 
 ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
@@ -17,7 +17,7 @@ ctrl.index = function() {
             ctrl.jobDetails(id);
         });
     });
-}
+};
 
 ctrl.jobDetails = function(id) {
     facade.getJobFull(id).then(function(data) {
@@ -25,7 +25,7 @@ ctrl.jobDetails = function(id) {
         var html = temp(data);
         $("#sidebar").html(html);
     });
-}
+};
 
 ctrl.getCreateJob = function(id) {
     facade.getAllClients().then(function(query) {
@@ -34,7 +34,7 @@ ctrl.getCreateJob = function(id) {
             clients: query
         };
 
-        if(id != null)
+        if(id !== null)
         {
             for (var i = 0; i < data.clients.length; i++) {
                 if(data.clients[i].id == id)
@@ -51,7 +51,7 @@ ctrl.getCreateJob = function(id) {
         $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
         $('#timepicker').datetimepicker({format: 'HH:mm'});
     });
-}
+};
 
 ctrl.createJob = function() {
     var formData = $("#createJobForm").serializeArray();
@@ -62,13 +62,13 @@ ctrl.createJob = function() {
     facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
         ctrl.jobDetails(job.id);
     });
-}
+};
 
 ctrl.removeJob = function(id, clientID) {
     facade.removeJob(id).then(function() {
         UIFunctions.clientDetails(clientID);
     });
-}
+};
 
 ctrl.getEditJob = function(id) {
     facade.getJob(id).then(function(data) {
@@ -76,7 +76,7 @@ ctrl.getEditJob = function(id) {
         var html = temp(data);
         $("#sidebar").html(html);
     });
-}
+};
 
 ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
@@ -85,6 +85,6 @@ ctrl.editJob = function(id) {
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
     facade.editJob(id, formData);
-}
+};
 
 module.exports = ctrl;

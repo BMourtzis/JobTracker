@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <div class="row">
     <h2 class="float-left">{{:jobName}}</h2>
 </div>
@@ -7,11 +8,11 @@
             <span class="glyphicon glyphicon-pencil"></span>
             Edit
         </button>
-        <button id="edit-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJobSchemes({{:id}}, {{:client.id}})">
+        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJobSchemes({{:id}}, {{:client.id}})">
             <span class="glyphicon glyphicon-trash"></span>
             Delete
         </button>
-        <button id="edit-button" type="button" class="btn btn-success" onclick="UIFunctions.generateJobs({{:id}})">
+        <button id="generate-button" type="button" class="btn btn-success" onclick="UIFunctions.generateJobs({{:id}})">
             <span class="glyphicon glyphicon-cog"></span>
             Generate Jobs
         </button>

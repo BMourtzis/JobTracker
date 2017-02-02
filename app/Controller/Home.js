@@ -1,4 +1,4 @@
-var ctrl = { }
+var ctrl = { };
 
 ctrl.ctrlName = "Home";
 ctrl.templateDir = "./app/Templates/";
@@ -9,6 +9,6 @@ ctrl.index = function() {
         var html = temp(data);
         $("#content").html(html);
     });
-}
+};
 
 module.exports = ctrl;

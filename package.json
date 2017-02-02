@@ -1,12 +1,14 @@
 {
   "name": "JobTracker",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "An easy-to-use and stylish Job tracking application",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "rebuild-sqlite3": "cd node_modules/sqlite3 amp;amp; npm run prepublish amp;amp; node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.2-win32-x64 amp;amp; node-gyp rebuild --target=1.2.2 --arch=x64 --target_platform=win32 --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.2-win32-x64",
-    "rebuild-asyncawait": "cd node_modules/asyncawait amp;amp; node-gyp configure amp; amp; node-gyp rebuild --target=1.2.2 --arch=x64 --dist-url=https://atom.io/download/atom-shell amp; amp; mkdir bin/win32-x64-v8-5.1 amp; amp; mv build/Release/fibers.node bin/win32-x64-v8-5.1/fibers.node"
+    "rebuild-sqlite3": "npm run configure-sqlite3 && npm run build-sqlite3",
+    "configure-sqlite3": "cd node_modules/sqlite3 && npm run prepublish && node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.4-win32-x64",
+    "build-sqlite3": "cd node_modules/sqlite3 && node-gyp rebuild --target=1.4.15 --arch=x64 --target_platform=win32 --dist-url=https://atom.io/download/atom-shell --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.4-win32-x64",
+    "rebuild-asyncawait": "cd node_modules/asyncawait && node-gyp configure && node-gyp rebuild --target=1.4.15 --arch=x64 --dist-url=https://atom.io/download/atom-shell && mkdir bin/win32-x64-v8-7.4 && mv build/Release/fibers.node bin/win32-x64-v8-7.4/fibers.node"
   },
   "keywords": [
     "JobTracker",
@@ -19,14 +21,15 @@
     "bootstrap": "^3.3.6",
     "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
     "jquery": "2.2",
-    "jsrender": "^0.9.79",
+    "jsrender": "^0.9.83",
     "less": "2.7.1",
     "moment": "^2.14.1",
-    "sequelize": "^3.20.0",
-    "sqlite": "^2.2.0"
+    "sequelize": "^3.30.1",
+    "sqlite": "^2.3.0"
   },
   "devDependencies": {
-    "electron-prebuilt": "^1.2.3",
+    "devtron": "^1.4.0",
+    "electron-debug": "^1.1.0",
     "spectron": "^3.2.3"
   }
 }

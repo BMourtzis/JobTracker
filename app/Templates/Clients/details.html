@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <div class="row">
     <h2 class="float-left">{{:businessName}}</h2>
     <div class="custom-button">
@@ -5,7 +6,7 @@
             <span class="glyphicon glyphicon-pencil"></span>
             Edit
         </button>
-        <button id="edit-button" type="button" class="btn btn-danger" onclick="">
+        <button id="delete-button" type="button" class="btn btn-danger" onclick="">
             <span class="glyphicon glyphicon-trash"></span>
             Delete
         </button>
@@ -39,7 +40,7 @@
 </div>
 <div class="row">
     <h2 class="float-left">Job Schemes</h2>
-    <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJobScheme({{:id}})">
+    <button id="create-jobscheme-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJobScheme({{:id}})">
         <span class="glyphicon glyphicon-plus"></span>
         Create
     </button>
@@ -56,7 +57,7 @@
         </thead>
         <tbody>
             {{for jobSchemes}}
-            <tr id="client-job-scheme-table" class='clickable-row' data-id="{{:id}}">
+            <tr id="client-job-scheme-table" class="clickable-row" data-id="{{:id}}">
                 <th>{{:jobName}}</th>
                 <td>{{:repeatition}}</td>
                 <td>{{:payment}}</td>
@@ -68,7 +69,7 @@
 </div>
 <div class="row">
     <h2 class="float-left">Jobs</h2>
-    <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJob({{:id}})">
+    <button id="create-job-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJob({{:id}})">
         <span class="glyphicon glyphicon-plus"></span>
         Create
     </button>
@@ -85,7 +86,7 @@
         </thead>
         <tbody>
             {{for jobs}}
-            <tr id="client-job-table" class='clickable-row' data-id="{{:id}}">
+            <tr id="client-job-table" class="clickable-row" data-id="{{:id}}">
                 <td>{{:jobName}}</td>
                 <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
                 <td>{{:timeBooked.format("HH:mm")}}</td>

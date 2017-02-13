@@ -204,14 +204,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
 
             for(; date.toString("M") < (nextMonth); date.next().day())
             {
-                orm.Job.create({
-                    jobName: this.jobName,
-                    timeBooked: date,
-                    payment: this.payment,
-                    state: 'Placed',
-                    clientID: this.clientID,
-                    total: parseFloat(this.payment)+(0.1*this.payment)
-                });
+                this.creteJob(date);
             }
         }, weeklyGenerator: function(date, nextMonth){
             var repvalues = JSON.parse(this.repeatitionValues);
@@ -223,14 +216,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                     var jobDate = new Date(date);
                     jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
 
-                    orm.Job.create({
-                        jobName: this.jobName,
-                        timeBooked: jobDate,
-                        payment: this.payment,
-                        state: 'Placed',
-                        clientID: this.clientID,
-                        total: parseFloat(this.payment)+(0.1*this.payment)
-                    });
+                    this.creteJob(jobDate);
                 }
             }
         }, fortnightlyGenerator: function(date, nextMonth){
@@ -243,14 +229,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                     var jobDate = new Date(date);
                     jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
 
-                    orm.Job.create({
-                        jobName: this.jobName,
-                        timeBooked: jobDate,
-                        payment: this.payment,
-                        state: 'Placed',
-                        clientID: this.clientID,
-                        total: parseFloat(this.payment)+(0.1*this.payment)
-                    });
+                    this.creteJob(jobDate);
                 }
             }
         }, monthlyGenerator: function(date, nextMonth){
@@ -261,15 +240,17 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                 var jobDate = new Date(date);
                 jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
 
-                orm.Job.create({
-                    jobName: this.jobName,
-                    timeBooked: jobDate,
-                    payment: this.payment,
-                    state: 'Placed',
-                    clientID: this.clientID,
-                    total: parseFloat(this.payment)+(0.1*this.payment)
-                });
+                this.creteJob(jobDate);
             }
+        }, creteJob: function(jobDate){
+            orm.Job.create({
+                jobName: this.jobName,
+                timeBooked: jobDate,
+                payment: this.payment,
+                state: 'Placed',
+                clientID: this.clientID,
+                total: parseFloat(this.payment)+(0.1*this.payment)
+            });
         }
   }
 });

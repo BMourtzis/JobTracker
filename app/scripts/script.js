@@ -38,7 +38,7 @@ uiFunctions.removeRepValues = function(data) {
 };
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateJobs(id); };
-
+uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 
 uiFunctions.Timetable = function() {
     uiFunctions.changeActive(3);

@@ -200,7 +200,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
 
         }, dailyGenerator: function(date, nextMonth){
             var repvalues = JSON.parse(this.repeatitionValues);
-            date.at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+            date.at({hour: repvalues[i].hour, minute: repvalues[i].minute});
 
             for(; date.toString("M") < (nextMonth); date.next().day())
             {
@@ -213,11 +213,8 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
             {
                 for(var i = 0; i< repvalues.length; i++)
                 {
-                    var hour =  parseInt(repvalues[i].hour);
-                    var minute =  parseInt(repvalues[i].minute);
-
                     var jobDate = new Date(date);
-                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: hour, minute: minute});
+                    jobDate.add(repvalues[i].day).day().at({hour: repvalues[i].hour, minute: repvalues[i].minute});
 
                     this.creteJob(jobDate);
                 }
@@ -229,11 +226,8 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
             {
                 for(var i = 0; i< repvalues.length; i++)
                 {
-                    var hour =  parseInt(repvalues[i].hour);
-                    var minute =  parseInt(repvalues[i].minute);
-
                     var jobDate = new Date(date);
-                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: hour, minute: minute});
+                    jobDate.add(repvalues[i].day).day().at({hour: repvalues[i].hour, minute: repvalues[i].minute});
 
                     this.creteJob(jobDate);
                 }
@@ -241,13 +235,10 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
         }, monthlyGenerator: function(date, nextMonth){
             var repvalues = JSON.parse(this.repeatitionValues);
 
-            var hour =  parseInt(repvalues[i].hour);
-            var minute =  parseInt(repvalues[i].minute);
-
             for(var i = 0; i< repvalues.length; i++)
             {
                 var jobDate = new Date(date);
-                jobDate.add(parseInt(repvalues[i].day)).day().at({hour: hour, minute: minute});
+                jobDate.add(repvalues[i].day).day().at({hour: repvalues[i].hour, minute: repvalues[i].minute});
 
                 this.creteJob(jobDate);
             }

@@ -11,7 +11,7 @@ orm.connStr = new sequelize(null, null, null, {
     storage: './app/db/jobs.db'
 });
 
-//ObjectModels
+//Object Models
 orm.Client = orm.connStr.define('client', {
   id: {
     type: sequelize.INTEGER,
@@ -115,7 +115,7 @@ orm.Job = orm.connStr.define('job', {
     field: 'total'
   },
   state: {
-    type: sequelize.ENUM('Placed', 'Done', 'Paid'),
+    type: sequelize.ENUM('Placed', 'Done', 'Invoiced', 'Paid'),
     allowNull: false,
     field: 'state'
   },
@@ -181,19 +181,19 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
     instanceMethods: {
         generateJobs: function(month) {
             var date = Date.today().set({month: month, day: 1}).first().sunday();
-
+            month += 2;
             switch (this.repeatition) {
                 case "Daily":
-                    this.dailyGenerator(date, month+2);
+                    this.dailyGenerator(date, month);
                     break;
                 case "Weekly":
-                    this.weeklyGenerator(date, month+2);
+                    this.weeklyGenerator(date, month);
                     break;
                 case "Fortnightly":
-                    this.fortnightlyGenerator(date, month+2);
+                    this.fortnightlyGenerator(date, month);
                     break;
                 case "Monthly":
-                    this.monthlyGenerator(date, month+2);
+                    this.monthlyGenerator(date, month);
                     break;
                 default:
             }
@@ -213,8 +213,11 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
             {
                 for(var i = 0; i< repvalues.length; i++)
                 {
+                    var hour =  parseInt(repvalues[i].hour);
+                    var minute =  parseInt(repvalues[i].minute);
+
                     var jobDate = new Date(date);
-                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: hour, minute: minute});
 
                     this.creteJob(jobDate);
                 }
@@ -226,8 +229,11 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
             {
                 for(var i = 0; i< repvalues.length; i++)
                 {
+                    var hour =  parseInt(repvalues[i].hour);
+                    var minute =  parseInt(repvalues[i].minute);
+
                     var jobDate = new Date(date);
-                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+                    jobDate.add(parseInt(repvalues[i].day)).day().at({hour: hour, minute: minute});
 
                     this.creteJob(jobDate);
                 }
@@ -235,10 +241,13 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
         }, monthlyGenerator: function(date, nextMonth){
             var repvalues = JSON.parse(this.repeatitionValues);
 
+            var hour =  parseInt(repvalues[i].hour);
+            var minute =  parseInt(repvalues[i].minute);
+
             for(var i = 0; i< repvalues.length; i++)
             {
                 var jobDate = new Date(date);
-                jobDate.add(parseInt(repvalues[i].day)).day().at({hour: parseInt(repvalues[i].hour), minute: parseInt(repvalues[i].minute)});
+                jobDate.add(parseInt(repvalues[i].day)).day().at({hour: hour, minute: minute});
 
                 this.creteJob(jobDate);
             }

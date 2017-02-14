@@ -12,6 +12,10 @@ ctrl.index = function() {
         var html = temp(data);
         $("#content").html(html);
 
+        var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
+        var table = tableTemp(data);
+        $("#indexJobTable").html(table);
+
         $(".clickable-row").click(function() {
             var id = $(this).data("id");
             ctrl.jobDetails(id);
@@ -58,6 +62,7 @@ ctrl.createJob = function() {
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
+    
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
     facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
         ctrl.jobDetails(job.id);
@@ -80,10 +85,30 @@ ctrl.getEditJob = function(id) {
 
 ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
+    facade.editJob(id, formData);
+};
+
+ctrl.getRebookJob = function(id) {
+    facade.getJob(id).then(function(data) {
+        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/rebook.html');
+        var html = temp(data);
+        $("#sidebar").html(html);
+
+        $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
+        $('#timepicker').datetimepicker({format: 'HH:mm'});
+    });
+};
+
+ctrl.rebookJob = function(id){
+    var formData = [];
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
-    formData.push(moment(date+" "+time, dateTimeFormat)._d);
+
+    formData.push({
+        name: "timeBooked",
+        value: moment(date+" "+time, dateTimeFormat)._d
+    });
     facade.editJob(id, formData);
 };
 

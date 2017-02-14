@@ -18,6 +18,8 @@ uiFunctions.removeJob = function(id, clientID) { ctrl.Jobs.removeJob(id,clientID
 uiFunctions.jobDetails = function(id) { ctrl.Jobs.jobDetails(id); };
 uiFunctions.getEditJob = function(id) { ctrl.Jobs.getEditJob(id); };
 uiFunctions.editJob = function(id) { ctrl.Jobs.editJob(id); };
+uiFunctions.getRebookJob = function(id) { ctrl.Jobs.getRebookJob(id); };
+uiFunctions.rebookJob = function(id) { ctrl.Jobs.rebookJob(id); };
 
 uiFunctions.clients = function() {
     ctrl.Clients.index();
@@ -37,6 +39,7 @@ uiFunctions.removeRepValues = function(data) {
     ctrl.JobSchemes.removeRepValues();
 };
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
+uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs(id); };
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateJobs(id); };
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 

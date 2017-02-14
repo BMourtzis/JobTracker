@@ -124,8 +124,10 @@ ctrl.changeRepFields = function() {
     ctrl.selectedRep = $("#repetitionSelector").val();
 };
 
-ctrl.generateNextMonthsJobs = function() {
-
+ctrl.generateNextMonthsJobs = function(id) {
+    var date = new Date.today();
+    var month = parseInt(Date.today().toString("M"));
+    facade.generateJobs(id, month);
 };
 
 ctrl.removeRepValues = function() {

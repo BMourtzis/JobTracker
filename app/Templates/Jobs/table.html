@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Job Name</th>
+            <th>Business Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{for jobs}}
+        <tr class="clickable-row" data-id="{{:id}}">
+            <td>{{:jobName}}</td>
+            <td>{{:client.businessName}}</td>
+            <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
+            <td>{{:timeBooked.format("HH:mm")}}</td>
+            <td>${{:total}}</td>
+        </tr>
+        {{/for }}
+    </tbody>
+</table>

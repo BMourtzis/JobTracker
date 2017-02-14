@@ -71,6 +71,11 @@ facade.getAllJobs = function(){
             jobs.push(query[i].get({plain:true}));
         }
         return jobs;
+    }).then(function(data){
+        data.sort(function(a,b){
+            return a.timeBooked - b.timeBooked;
+        });
+        return data;
     });
 };
 
@@ -89,6 +94,27 @@ facade.getJobFull = function(id){
 };
 
 //////Advanced Search
+
+facade.getTodaysJobs = function()
+{
+    var todayStart = new Date.today();
+    var todayEnd = new Date.today().at({hour: 23, minute: 59});
+    return orm.Job.findAll({
+        include:[orm.Client],
+        where:{
+            timeBooked:{
+                gt: todayStart,
+                lt: todayEnd
+            }
+        }
+    }).then(function(data){
+        data.sort(function(a,b){
+            return a.timeBooked - b.timeBooked;
+        });
+        return data;
+    });
+};
+
 // facade.FindJobs = function(searchParams) {
 //   return orm.Job.findAll({
 //     where: searchParams
@@ -104,7 +130,6 @@ facade.createJob = function(jobname, timebooked, payment, clientid) {
 
 ////Edit Function
 facade.editJob = function(id, data){
-    console.log(data);
     return orm.Job.findById(id).then(function(job){
         for (var i = 0; i < data.length; i++) {
             if(data[i].value !== "")
@@ -112,7 +137,6 @@ facade.editJob = function(id, data){
                 job[data[i].name] = data[i].value;
             }
         }
-        console.log(job.get({plain:true}));
         return job.save();
     });
 };
@@ -154,9 +178,9 @@ facade.createJobScheme = function(jobname, payment, repeatition, repeatitionvalu
 };
 
 ////GenerateJobs
-facade.generateJobs = function(id) {
+facade.generateJobs = function(id, month) {
     return orm.JobScheme.findById(id).then(function(jobScheme){
-        jobScheme.generateJobs(2);
+        jobScheme.generateJobs(month);
     });
 };
 

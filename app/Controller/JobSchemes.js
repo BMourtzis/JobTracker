@@ -3,6 +3,7 @@ var ctrl = {};
 ctrl.ctrlName = "JobSchemes";
 ctrl.templateDir = "./app/Templates/";
 ctrl.repval = 0;
+ctrl.selectedRep = "";
 
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
@@ -49,23 +50,64 @@ ctrl.getCreateJobScheme = function(id) {
 
 ctrl.createJobScheme = function() {
     var formData = $("#createJobSchemeForm").serializeArray();
-    var repvalues = [];
-    $("#repValuesDiv").children().each(function(no, data) {
-        var rep = {
-            day: $(data).find("select").val(),
-            time: $(data).find("input").val()
-        };
-        repvalues.push(rep);
-    });
+    var repvalues = ctrl.getRepValues();
+
     facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function() {
         UIFunctions.clientDetails(formData[0].value);
     });
 };
 
+//Returns the rep values from the fields
+ctrl.getRepValues = function(){
+    var repvalues = [];
+    var selected = $("#repetitionSelector").val();
+
+    $("#repValuesDiv").children().each(function(no, data) {
+        var day = 0;
+        if(selected === "Monthly" || selected === "Fortnightly")
+        {
+            day = parseInt($(data).find("#day").val()) + 7*parseInt($(data).find("#week").val());
+        }
+        else if(selected === "Weekly")
+        {
+            day = parseInt($(data).find("#day").val());
+        }
+
+        var rep = {
+            day: day,
+            hour: parseInt($(data).find("#time").val().split(":")[0]),
+            minute: parseInt($(data).find("#time").val().split(":")[1])
+        };
+        repvalues.push(rep);
+    });
+    return repvalues;
+};
+
+
+//Adds new repetition field based on the selected repetition value
 ctrl.addRepValues = function() {
-    if(ctrl.repval < 6)
+    var selected = $("#repetitionSelector").val();
+
+    if(ctrl.repval < 6 && selected !== null)
     {
-        var row = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/RepValues.html');
+        var repValuesTmpl = "/";
+        switch (selected) {
+            case "Monthly":
+                repValuesTmpl += "Monthly";
+                break;
+            case "Fortnightly":
+                repValuesTmpl += "Fortnightly";
+                break;
+            case "Weekly":
+                repValuesTmpl += "Weekly";
+                break;
+            case "Daily":
+                repValuesTmpl += "Daily";
+                break;
+        }
+        repValuesTmpl += "RepValues.html";
+
+        var row = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + repValuesTmpl);
         ctrl.repval++;
         var data = { no: ctrl.repval };
         var html = row(data);
@@ -73,6 +115,13 @@ ctrl.addRepValues = function() {
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});
     }
+};
+
+ctrl.changeRepFields = function() {
+    if (ctrl.selectedRep !== $("#repetitionSelector").val()) {
+        $("#repValuesDiv").html("");
+    }
+    ctrl.selectedRep = $("#repetitionSelector").val();
 };
 
 ctrl.generateNextMonthsJobs = function() {

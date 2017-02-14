@@ -29,16 +29,16 @@ uiFunctions.clientDetails = function(id) { ctrl.Clients.clientDetails(id); };
 uiFunctions.getEditClient = function(id) { ctrl.Clients.getEditClient(id); };
 uiFunctions.editClient = function(id) { ctrl.Clients.editClient(id); };
 
-uiFunctions.getCreateJobScheme = function(id) { ctrl.JobsSchemes.getCreateJobScheme(id); };
-uiFunctions.createJobScheme = function() { ctrl.JobsSchemes.createJobScheme(); };
-uiFunctions.addRepValues = function() { ctrl.JobsSchemes.addRepValues(); };
+uiFunctions.getCreateJobScheme = function(id) { ctrl.JobSchemes.getCreateJobScheme(id); };
+uiFunctions.createJobScheme = function() { ctrl.JobSchemes.createJobScheme(); };
+uiFunctions.addRepValues = function() { ctrl.JobSchemes.addRepValues(); };
 uiFunctions.removeRepValues = function(data) {
     $(data).parent().remove();
-    ctrl.JobsSchemes.removeRepValues();
+    ctrl.JobSchemes.removeRepValues();
 };
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateJobs(id); };
-
+uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 
 uiFunctions.Timetable = function() {
     uiFunctions.changeActive(3);

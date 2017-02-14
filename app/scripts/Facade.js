@@ -156,7 +156,7 @@ facade.createJobScheme = function(jobname, payment, repeatition, repeatitionvalu
 ////GenerateJobs
 facade.generateJobs = function(id) {
     return orm.JobScheme.findById(id).then(function(jobScheme){
-        jobScheme.generateJobs();
+        jobScheme.generateJobs(2);
     });
 };
 

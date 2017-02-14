@@ -3,7 +3,7 @@
 // All of the Node.js APIs are available in this process.
 
 //Back-end Modules
-
+window.datejs = require('datejs');
 //Database Modules
 window.sqlite3 = require('sqlite3').verbose();
 window.sequelize = require('sequelize');

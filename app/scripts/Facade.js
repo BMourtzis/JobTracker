@@ -146,6 +146,26 @@ facade.editJob = function(id, data){
     });
 };
 
+facade.Done = function(id){
+    var formData = [];
+
+    formData.push({
+        name: "state",
+        value: "Done"
+    });
+    return facade.editJob(id, formData);
+};
+
+facade.Undone = function(id){
+    var formData = [];
+
+    formData.push({
+        name: "state",
+        value: "Placed"
+    });
+    return facade.editJob(id, formData);
+};
+
 ////Remove Functions
 facade.removeJob = function(id){
     return orm.Job.findById(id).then(function(job){

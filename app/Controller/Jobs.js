@@ -9,7 +9,7 @@ ctrl.index = function() {
         var data = {
             jobs:query
         };
-        var html = temp(data);
+        var html = temp();
         $("#content").html(html);
 
         var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');

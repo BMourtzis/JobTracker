@@ -6,6 +6,8 @@ uiFunctions.home = function() {
     ctrl.Home.index();
     uiFunctions.changeActive(0);
 };
+uiFunctions.homeJobDone = function(id) { ctrl.Home.Done(id); };
+uiFunctions.homeJobUndone = function(id) { ctrl.Home.Undone(id); };
 
 uiFunctions.jobs = function() {
     ctrl.Jobs.index();

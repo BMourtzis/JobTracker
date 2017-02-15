@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Job</th>
+            <th>Client</th>
+            <th>Time</th>
+            <th>Payment</th>
+            <th>Done</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{for jobs}}
+        <tr>
+            <td>{{:jobName}}</td>
+            <td>{{:client.businessName}}</td>
+            <td>{{:timeBooked.format("HH:mm")}}</td>
+            <td>${{:payment}}</td>
+            <td>
+                {{if state === "Placed"}}
+                <input type="checkbox" onclick="UIFunctions.homeJobDone({{:id}})">
+                {{else}}
+                <input type="checkbox" checked onclick="UIFunctions.homeJobUndone({{:id}})">
+                {{/if}}
+            </td>
+        </tr>
+        {{/for}}
+    </tbody>
+</table>
+<!-- TODO: Add the total income for the day -->
+<div>
+
+</div>

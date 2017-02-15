@@ -19,8 +19,10 @@
             <td>
                 {{if state === "Placed"}}
                 <input type="checkbox" onclick="UIFunctions.homeJobDone({{:id}})">
-                {{else}}
+                {{else state === "Done"}}
                 <input type="checkbox" checked onclick="UIFunctions.homeJobUndone({{:id}})">
+                {{else}}
+                {{:state}}
                 {{/if}}
             </td>
         </tr>

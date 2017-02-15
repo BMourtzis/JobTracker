@@ -4,24 +4,23 @@ ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
 ctrl.index = function() {
-    facade.getAllJobs().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
-        var data = {
-            jobs:query
-        };
         var html = temp();
         $("#content").html(html);
 
-        var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
-        var table = tableTemp(data);
-        $("#indexJobTable").html(table);
+        ctrl.loadAllJobs();
+};
 
-        //Find a way to get details and select several rows
-        $(".clickable-row").click(function() {
-            var id = $(this).data("id");
-            ctrl.jobDetails(id);
-        });
+ctrl.loadAllJobs = function(){
+    facade.getAllJobs().then(function(query) {
+        ctrl.loadTable({jobs: query});
     });
+};
+
+ctrl.loadTable = function(data){
+    var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
+    var table = tableTemp(data);
+    $("#indexJobTable").html(table);
 };
 
 ctrl.jobDetails = function(id) {

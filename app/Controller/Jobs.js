@@ -4,6 +4,8 @@ ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
 //TODO: Add advanced searching functionality
+//TODO: Add multiple selection
+//TODO: Add state change
 
 ctrl.index = function() {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
@@ -112,6 +114,25 @@ ctrl.rebookJob = function(id){
         value: moment(date+" "+time, dateTimeFormat)._d
     });
     facade.editJob(id, formData);
+};
+
+//State Machine
+ctrl.done = function(id){
+    facade.done(id).then(function(data){
+        ctrl.jobDetails(id);
+    });
+};
+
+ctrl.invoice = function(id) {
+    facade.invoice(id).then(function(data){
+        ctrl.jobDetails(id);
+    });
+};
+
+ctrl.paid = function(id){
+    facade.paid(id).then(function(data){
+        ctrl.jobDetails(id);
+    });
 };
 
 module.exports = ctrl;

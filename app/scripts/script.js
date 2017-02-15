@@ -6,8 +6,8 @@ uiFunctions.home = function() {
     ctrl.Home.index();
     uiFunctions.changeActive(0);
 };
-uiFunctions.homeJobDone = function(id) { ctrl.Home.Done(id); };
-uiFunctions.homeJobUndone = function(id) { ctrl.Home.Undone(id); };
+uiFunctions.homeJobDone = function(id) { ctrl.Home.done(id); };
+uiFunctions.homeJobUndone = function(id) { ctrl.Home.undone(id); };
 uiFunctions.previousDay = function() { ctrl.Home.previousDay(); };
 uiFunctions.nextDay = function() { ctrl.Home.nextDay(); };
 
@@ -24,6 +24,9 @@ uiFunctions.getEditJob = function(id) { ctrl.Jobs.getEditJob(id); };
 uiFunctions.editJob = function(id) { ctrl.Jobs.editJob(id); };
 uiFunctions.getRebookJob = function(id) { ctrl.Jobs.getRebookJob(id); };
 uiFunctions.rebookJob = function(id) { ctrl.Jobs.rebookJob(id); };
+uiFunctions.jobDone = function(id) { ctrl.Jobs.done(id); };
+uiFunctions.jobInvoiced = function(id) { ctrl.Jobs.invoice(id); };
+uiFunctions.jobPaid = function(id) { ctrl.Jobs.paid(id); };
 
 uiFunctions.clients = function() {
     ctrl.Clients.index();
@@ -44,7 +47,6 @@ uiFunctions.removeRepValues = function(data) {
 };
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs(id); };
-uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateJobs(id); };
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 uiFunctions.disableJobScheme = function(id){ ctrl.JobSchemes.disableJobScheme(id); };
 uiFunctions.enableJobScheme = function(id){ ctrl.JobSchemes.enableJobScheme(id); };

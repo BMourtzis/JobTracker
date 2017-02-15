@@ -38,6 +38,12 @@ ctrl.generateJobs = function(id) {
     facade.generateJobs(id);
 };
 
+ctrl.generateNextMonthsJobs = function(id) {
+    var date = new Date.today();
+    var month = parseInt(Date.today().toString("M"));
+    facade.generateJobs(id, month);
+};
+
 ctrl.getCreateJobScheme = function(id) {
     facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
@@ -122,12 +128,6 @@ ctrl.changeRepFields = function() {
         $("#repValuesDiv").html("");
     }
     ctrl.selectedRep = $("#repetitionSelector").val();
-};
-
-ctrl.generateNextMonthsJobs = function(id) {
-    var date = new Date.today();
-    var month = parseInt(Date.today().toString("M"));
-    facade.generateJobs(id, month);
 };
 
 ctrl.removeRepValues = function() {

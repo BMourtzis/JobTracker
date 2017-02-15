@@ -39,14 +39,14 @@ ctrl.previousDay = function(){
     ctrl.loadDayJobs();
 };
 
-ctrl.Done = function(id){
-    facade.Done(id).then(function(data){
+ctrl.done = function(id){
+    facade.done(id).then(function(data){
         ctrl.loadTodaysJobs();
     });
 };
 
-ctrl.Undone = function(id){
-    facade.Undone(id).then(function(){
+ctrl.undone = function(id){
+    facade.undone(id).then(function(){
         ctrl.loadTodaysJobs();
     });
 };

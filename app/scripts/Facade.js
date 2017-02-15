@@ -145,7 +145,7 @@ facade.editJob = function(id, data){
     });
 };
 
-facade.Done = function(id){
+facade.done = function(id){
     var formData = [];
 
     formData.push({
@@ -155,12 +155,52 @@ facade.Done = function(id){
     return facade.editJob(id, formData);
 };
 
-facade.Undone = function(id){
+facade.undone = function(id){
     var formData = [];
 
     formData.push({
         name: "state",
         value: "Placed"
+    });
+    return facade.editJob(id, formData);
+};
+
+facade.invoice = function(id) {
+    var formData = [];
+
+    formData.push({
+        name: "state",
+        value: "Invoiced"
+    });
+    return facade.editJob(id, formData);
+};
+
+facade.uninvoice = function(id){
+    var formData = [];
+
+    formData.push({
+        name: "state",
+        value: "Done"
+    });
+    return facade.editJob(id, formData);
+};
+
+facade.paid = function(id){
+    var formData = [];
+
+    formData.push({
+        name: "state",
+        value: "Paid"
+    });
+    return facade.editJob(id, formData);
+};
+
+facade.unpaid = function(id){
+    var formData = [];
+
+    formData.push({
+        name: "state",
+        value: "Invoiced"
     });
     return facade.editJob(id, formData);
 };

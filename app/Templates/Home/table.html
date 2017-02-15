@@ -1,4 +1,17 @@
 <!DOCTYPE html>
+<div class="row">
+    <div class="custom-button">
+        <button id="rebook-button" type="button" class="btn btn-default" onclick="UIFunctions.previousDay()">
+            <span class="glyphicon glyphicon-menu-left"></span>
+            {{:previous}}
+        </button>
+        <button id="edit-button" type="button" class="btn btn-default" onclick="UIFunctions.nextDay()">
+            {{:next}}
+            <span class="glyphicon glyphicon-menu-right"></span>
+        </button>
+    </div>
+    <h2>Jobs for {{:selectedDay}}</h2>
+</div>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -25,6 +38,7 @@
                 {{:state}}
                 {{/if}}
             </td>
+            <td><button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.jobDetails({{:id}})">More...</button></td>
         </tr>
         {{/for}}
     </tbody>

@@ -8,6 +8,8 @@ uiFunctions.home = function() {
 };
 uiFunctions.homeJobDone = function(id) { ctrl.Home.Done(id); };
 uiFunctions.homeJobUndone = function(id) { ctrl.Home.Undone(id); };
+uiFunctions.previousDay = function() { ctrl.Home.previousDay(); };
+uiFunctions.nextDay = function() { ctrl.Home.nextDay(); };
 
 uiFunctions.jobs = function() {
     ctrl.Jobs.index();

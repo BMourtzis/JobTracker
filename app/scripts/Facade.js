@@ -100,10 +100,9 @@ facade.getJobFull = function(id){
 
 //////Advanced Search
 
-facade.getTodaysJobs = function()
+facade.getTodaysJobs = function(todayStart)
 {
-    var todayStart = new Date.today();
-    var todayEnd = new Date.today().at({hour: 23, minute: 59});
+    var todayEnd = new Date(todayStart).at({hour: 23, minute: 59});
     return orm.Job.findAll({
         include:[orm.Client],
         where:{

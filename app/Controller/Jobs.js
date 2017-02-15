@@ -3,6 +3,8 @@ var ctrl = {};
 ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
+//TODO: Add advanced searching functionality
+
 ctrl.index = function() {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
         var html = temp();

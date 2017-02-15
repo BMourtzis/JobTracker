@@ -2,21 +2,28 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Job Name</th>
-            <th>Business Name</th>
+            <th></th>
+            <th>Name</th>
+            <th>Client</th>
             <th>Date</th>
             <th>Time</th>
             <th>Total</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
         {{for jobs}}
-        <tr class="clickable-row" data-id="{{:id}}">
+        <tr>
+            <td> <input type="checkbox"></td>
             <td>{{:jobName}}</td>
             <td>{{:client.businessName}}</td>
             <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
             <td>${{:total}}</td>
+            <td>{{:state}}</td>
+            <td>
+                <button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.jobDetails({{:id}})">More...</button>
+            </td>
         </tr>
         {{/for }}
     </tbody>

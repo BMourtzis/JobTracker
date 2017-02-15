@@ -42,17 +42,22 @@ uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(i
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs(id); };
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateJobs(id); };
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
+uiFunctions.disableJobScheme = function(id){ ctrl.JobSchemes.disableJobScheme(id); };
+uiFunctions.enableJobScheme = function(id){ ctrl.JobSchemes.enableJobScheme(id); };
 
 uiFunctions.Timetable = function() {
     uiFunctions.changeActive(3);
+    ctrl.Misc.comingsoon();
 };
 
 uiFunctions.Finances = function() {
     uiFunctions.changeActive(4);
+    ctrl.Misc.comingsoon();
 };
 
 uiFunctions.Settings = function() {
     uiFunctions.changeActive(5);
+    ctrl.Misc.comingsoon();
 };
 
 uiFunctions.changeActive = function(itemNo) {

@@ -147,6 +147,14 @@ ctrl.getEditClient = function(id) {
     });
 };
 
+ctrl.disableJobScheme = function(id){
+    facade.editJobScheme(id, [{name: "enabled", value: false}]);
+};
+
+ctrl.enableJobScheme = function(id){
+    facade.editJobScheme(id, [{name: "enabled", value: true}]);
+};
+
 ctrl.editClient = function(id) {
     var formData = $("#editClientForm").serializeArray();
     facade.editClient(id, formData);

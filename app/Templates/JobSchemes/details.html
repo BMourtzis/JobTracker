@@ -6,18 +6,11 @@
             <span class="glyphicon glyphicon-pencil"></span>
             Edit
         </button>
-        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJobSchemes({{:id}}, {{:client.id}})">
-            <span class="glyphicon glyphicon-trash"></span>
-            Delete
-        </button>
         <button id="generate-button" type="button" class="btn btn-success" onclick="UIFunctions.generateJobs({{:id}})">
             <span class="glyphicon glyphicon-cog"></span>
             Generate Jobs
         </button>
     </div>
-</div>
-<div class="row">
-
 </div>
 <div class="row">
     <p>
@@ -32,4 +25,23 @@
         <strong>Enabled:</strong>
         {{:enabled}}
     </p>
+</div>
+<div class="row">
+    <div class="custom-button">
+        {{if enabled}}
+        <button id="disable-button" type="button" class="btn btn-warning" onclick="UIFunctions.disableJobScheme({{:id}})">
+            <span class="glyphicon glyphicon-unchecked"></span>
+            Disable
+        </button>
+        {{else}}
+        <button id="enable-button" type="button" class="btn btn-warning" onclick="UIFunctions.enableJobScheme({{:id}})">
+            <span class="glyphicon glyphicon-check"></span>
+            Enabled
+        </button>
+        {{/if}}
+        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJobSchemes({{:id}}, {{:client.id}})">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+    </div>
 </div>

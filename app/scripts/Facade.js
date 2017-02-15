@@ -25,6 +25,11 @@ facade.getClient = function(id){
 facade.getClientFull = function(id) {
     return orm.Client.findById(id,{include: [orm.Job, orm.JobScheme]}).then(function(query){
         return query.get({plain:true});
+    }).then(function(data){
+        data.jobs.sort(function(a,b){
+            return b.timeBooked - a.timeBooked;
+        });
+        return data;
     });
 };
 
@@ -73,7 +78,7 @@ facade.getAllJobs = function(){
         return jobs;
     }).then(function(data){
         data.sort(function(a,b){
-            return a.timeBooked - b.timeBooked;
+            return b.timeBooked - a.timeBooked;
         });
         return data;
     });
@@ -174,6 +179,19 @@ facade.getJobSchemeFull = function(id){
 facade.createJobScheme = function(jobname, payment, repeatition, repeatitionvalues, clientid) {
     return orm.Client.findById(clientid).then(function(client){
         return client.addNewJobScheme(jobname, payment, repeatition, repeatitionvalues);
+    });
+};
+
+////Edit Function
+facade.editJobScheme = function(id, data){
+    return orm.JobScheme.findById(id).then(function(js){
+        for (var i = 0; i < data.length; i++) {
+            if(data[i].value !== "")
+            {
+                js[data[i].name] = data[i].value;
+            }
+        }
+        return js.save();
     });
 };
 

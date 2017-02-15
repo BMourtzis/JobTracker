@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<div class="row">
+<div>
     <h1>Dashboard</h1>
     <h2>Today's Jobs</h2>
+</div>
+<div class="row">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>#</th>
                 <th>Job</th>
                 <th>Client</th>
                 <th>Time</th>
                 <th>Payment</th>
+                <th>Done</th>
             </tr>
         </thead>
         <tbody>
             {{for jobs}}
             <tr>
-                <th scope="row">{{:#index+1}}</th>
                 <td>{{:jobName}}</td>
                 <td>{{:client.businessName}}</td>
                 <td>{{:timeBooked.format("HH:mm")}}</td>
                 <td>${{:payment}}</td>
+                <td>
+                    {{if state === "Placed"}}
+                    <input type="checkbox" >
+                    {{else}}
+                    <input type="checkbox" checked>
+                    {{/if}}
+                </td>
             </tr>
             {{/for}}
         </tbody>
     </table>
+    <!-- TODO: Add the total income for the day -->
+    <div></div>
 </div>

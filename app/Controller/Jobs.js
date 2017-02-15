@@ -16,6 +16,7 @@ ctrl.index = function() {
         var table = tableTemp(data);
         $("#indexJobTable").html(table);
 
+        //Find a way to get details and select several rows
         $(".clickable-row").click(function() {
             var id = $(this).data("id");
             ctrl.jobDetails(id);
@@ -62,7 +63,7 @@ ctrl.createJob = function() {
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
-    
+
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
     facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
         ctrl.jobDetails(job.id);

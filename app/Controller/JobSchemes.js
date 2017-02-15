@@ -5,6 +5,8 @@ ctrl.templateDir = "./app/Templates/";
 ctrl.repval = 0;
 ctrl.selectedRep = "";
 
+//TODO: Add pagination
+
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');

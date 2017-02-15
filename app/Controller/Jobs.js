@@ -6,6 +6,7 @@ ctrl.templateDir = "./app/Templates/";
 //TODO: Add advanced searching functionality
 //TODO: Add multiple selection
 //TODO: Add state change
+//TODO: Add pagination
 
 ctrl.index = function() {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');

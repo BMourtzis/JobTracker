@@ -3,6 +3,8 @@ var ctrl = {};
 ctrl.ctrlName = "Clients";
 ctrl.templateDir = "./app/Templates/";
 
+//TODO: Add pagination
+
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');

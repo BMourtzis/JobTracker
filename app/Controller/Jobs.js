@@ -3,17 +3,22 @@ var ctrl = {};
 ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
-//TODO: Add advanced searching functionality
+//TODO: Add advance searching functionality
 //TODO: Add multiple selection
 //TODO: Add state change
 //TODO: Add pagination
 
 ctrl.index = function() {
+    facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
-        var html = temp();
+        var html = temp({clients: query});
         $("#content").html(html);
 
+        $('#fromDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
+        $('#toDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
+
         ctrl.loadAllJobs();
+    });
 };
 
 ctrl.loadAllJobs = function(){
@@ -26,6 +31,21 @@ ctrl.loadTable = function(data){
     var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
     var table = tableTemp(data);
     $("#indexJobTable").html(table);
+};
+
+ctrl.searchJobs = function() {
+    var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
+    obj[item.name] = item.value;
+    return obj;
+},{});
+    formData.from = Date.parse($('#fromDatepicker :input').val());
+    formData.to = Date.parse($('#toDatepicker :input').val());
+    formData.clientSelect = parseInt(formData.clientSelect);
+    console.log(formData);
+    facade.FindJobs(formData).then(function(data){
+        console.log(data);
+        // ctrl.loadTable(data);
+    });
 };
 
 ctrl.jobDetails = function(id) {

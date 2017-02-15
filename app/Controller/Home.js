@@ -16,7 +16,7 @@ ctrl.index = function() {
 };
 
 ctrl.loadDayJobs = function() {
-    facade.getTodaysJobs(ctrl.selectedDate).then(function(query){
+    facade.getDayJobs(ctrl.selectedDate).then(function(query){
         var data = {
             jobs: query,
             selectedDay: ctrl.selectedDate.toString("dd/MM/yyyy"),
@@ -41,13 +41,13 @@ ctrl.previousDay = function(){
 
 ctrl.done = function(id){
     facade.done(id).then(function(data){
-        ctrl.loadTodaysJobs();
+        ctrl.loadDayJobs();
     });
 };
 
 ctrl.undone = function(id){
     facade.undone(id).then(function(){
-        ctrl.loadTodaysJobs();
+        ctrl.loadDayJobs();
     });
 };
 

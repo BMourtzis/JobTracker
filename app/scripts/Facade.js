@@ -99,8 +99,7 @@ facade.getJobFull = function(id){
 };
 
 //////Advanced Search
-
-facade.getTodaysJobs = function(todayStart)
+facade.getDayJobs = function(todayStart)
 {
     var todayEnd = new Date(todayStart).at({hour: 23, minute: 59});
     return orm.Job.findAll({
@@ -119,11 +118,30 @@ facade.getTodaysJobs = function(todayStart)
     });
 };
 
-// facade.FindJobs = function(searchParams) {
-//   return orm.Job.findAll({
-//     where: searchParams
-//   });
-// }
+facade.FindJobs = function(searchParams) {
+    return orm.Job.findAll({
+        include:[orm.Client],
+        where: {
+            timeBooked:{
+                gt: searchParams.from,
+                lt:searchParams.to
+            },
+            state: searchParams.statusSelect,
+            clientID: searchParams.clientSelect
+        }
+    }).then(function(query){
+        var jobs = [];
+        for (var i = 0; i < query.length; i++) {
+            jobs.push(query[i].get({plain:true}));
+        }
+        return jobs;
+    }).then(function(data){
+        data.sort(function(a,b){
+            return a.timeBooked - b.timeBooked;
+        });
+        return data;
+    });
+};
 
 ////Create Functions
 facade.createJob = function(jobname, timebooked, payment, clientid) {

@@ -70,7 +70,12 @@ facade.editClient = function(id, data){
 //Job Functions
 ////Get all Clients
 facade.getAllJobs = function(){
-    return facade.FindJobs({},{},{});
+    var searchParams = {
+        from: Date.today().last().year().set({month: 0, day: 1}),
+        to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
+    };
+
+    return facade.FindJobs(searchParams,{}, 0);
 };
 
 ////Search Functions
@@ -95,22 +100,41 @@ facade.getDayJobs = function(from)
         to: new Date(from).at({hour: 23, minute: 59})
     };
 
-    return facade.FindJobs(searchParams, {}, {});
+    return facade.FindJobs(searchParams, {}, 0);
 };
 
-facade.FindJobs = function(searchParams, orderParams, paginationParams) {
+//TODO: check if page is a number
+facade.FindJobs = function(searchParams, orderParams, page) {
+    // if(!Number.isNumeric(page)){ page = 0; }
+    var where = facade.generateQuery(searchParams);
     return orm.Job.findAll({
         include:[orm.Client],
-        where: facade.generateQuery(searchParams),
+        where: where,
         order: 'timeBooked DESC',
-        offset: 0,
-        limit: 20
+        offset: page*100,
+        limit: 100
     }).then(function(query){
-        var jobs = [];
-        for (var i = 0; i < query.length; i++) {
-            jobs.push(query[i].get({plain:true}));
-        }
-        return jobs;
+        return facade.getJobPageCount(where).then(function(count){
+            var jobs = [];
+            for (var i = 0; i < query.length; i++) {
+                jobs.push(query[i].get({plain:true}));
+            }
+
+            var data = {
+                count: count,
+                jobs: jobs
+            };
+
+            return data;
+        });
+    });
+};
+
+facade.getJobPageCount = function(searchParams){
+    return orm.Job.count({
+        where: searchParams
+    }).then(function (count) {
+        return Math.floor(count/100);
     });
 };
 

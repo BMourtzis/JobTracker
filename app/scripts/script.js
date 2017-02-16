@@ -28,6 +28,7 @@ uiFunctions.jobDone = function(id) { ctrl.Jobs.done(id); };
 uiFunctions.jobInvoiced = function(id) { ctrl.Jobs.invoice(id); };
 uiFunctions.jobPaid = function(id) { ctrl.Jobs.paid(id); };
 uiFunctions.searchJobs = function() { ctrl.Jobs.searchJobs(); };
+uiFunctions.gotoJobPage = function(page) {ctrl.Jobs.gotoPage(page); };
 
 uiFunctions.clients = function() {
     ctrl.Clients.index();

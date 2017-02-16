@@ -3,10 +3,15 @@ var ctrl = {};
 ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
-//TODO: Add multiple selection
-//TODO: Add state change
-//TODO: Add pagination
+ctrl.currentPage = 0;
+ctrl.searchParams = {};
 
+
+//TODO: Add multiple selection
+//TODO: Add pagination
+//TODO: Add ordering
+
+//Creates the index page for Jobs and loads all the jobs
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
@@ -16,22 +21,19 @@ ctrl.index = function() {
         $('#fromDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
         $('#toDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
 
+        ctrl.currentPage = 0;
         ctrl.loadAllJobs();
     });
 };
 
+//Loads all Jobs
 ctrl.loadAllJobs = function(){
     facade.getAllJobs().then(function(query) {
         ctrl.loadTable(query);
     });
 };
 
-ctrl.loadTable = function(data){
-    var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
-    var table = tableTemp({jobs: data});
-    $("#indexJobTable").html(table);
-};
-
+//Searches for the Jobs with the given parameters
 ctrl.searchJobs = function() {
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
     obj[item.name] = item.value;
@@ -47,9 +49,28 @@ ctrl.searchJobs = function() {
     }
 
     formData.clientSelect = parseInt(formData.clientSelect);
-    facade.FindJobs(formData).then(function(data){
+
+    ctrl.searchParams = formData;
+    facade.FindJobs(formData, {}, 0).then(function(data){
         ctrl.loadTable(data);
     });
+};
+
+//Loads the next page of the table
+ctrl.gotoPage = function(page) {
+    ctrl.currentPage = page;
+    facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+        ctrl.loadTable(data);
+    });
+};
+
+//Generates the table with the data given
+ctrl.loadTable = function(data){
+    data.currentPage = ctrl.currentPage;
+
+    var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
+    var table = tableTemp(data);
+    $("#indexJobTable").html(table);
 };
 
 ctrl.jobDetails = function(id) {

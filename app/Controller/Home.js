@@ -16,13 +16,11 @@ ctrl.index = function() {
 };
 
 ctrl.loadDayJobs = function() {
-    facade.getDayJobs(ctrl.selectedDate).then(function(query){
-        var data = {
-            jobs: query,
-            selectedDay: ctrl.selectedDate.toString("dd/MM/yyyy"),
-            next: new Date(ctrl.selectedDate).add(1).day().toString("dd/MM/yyyy"),
-            previous: new Date(ctrl.selectedDate).add(-1).day().toString("dd/MM/yyyy")
-        };
+    facade.getDayJobs(ctrl.selectedDate).then(function(data){
+        data.selectedDay = ctrl.selectedDate.toString("dd/MM/yyyy");
+        data.next = new Date(ctrl.selectedDate).add(1).day().toString("dd/MM/yyyy");
+        data.previous = new Date(ctrl.selectedDate).add(-1).day().toString("dd/MM/yyyy");
+        
         var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
         var table = tableTemp(data);
         $("#homeDailyTable").html(table);

@@ -39,6 +39,7 @@ uiFunctions.createClient = function() { ctrl.Clients.createClient(); };
 uiFunctions.clientDetails = function(id) { ctrl.Clients.clientDetails(id); };
 uiFunctions.getEditClient = function(id) { ctrl.Clients.getEditClient(id); };
 uiFunctions.editClient = function(id) { ctrl.Clients.editClient(id); };
+uiFunctions.getClientJobs = function(id) {ctrl.Jobs.getClientJobs(id); };
 
 uiFunctions.getCreateJobScheme = function(id) { ctrl.JobSchemes.getCreateJobScheme(id); };
 uiFunctions.createJobScheme = function() { ctrl.JobSchemes.createJobScheme(); };
@@ -50,8 +51,8 @@ uiFunctions.removeRepValues = function(data) {
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs(id); };
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
-uiFunctions.disableJobScheme = function(id){ ctrl.JobSchemes.disableJobScheme(id); };
-uiFunctions.enableJobScheme = function(id){ ctrl.JobSchemes.enableJobScheme(id); };
+uiFunctions.disableJobScheme = function(id) { ctrl.JobSchemes.disableJobScheme(id); };
+uiFunctions.enableJobScheme = function(id) { ctrl.JobSchemes.enableJobScheme(id); };
 
 uiFunctions.Timetable = function() {
     uiFunctions.changeActive(3);

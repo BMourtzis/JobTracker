@@ -8,12 +8,18 @@ ctrl.searchParams = {};
 
 
 //TODO: Add multiple selection
-//TODO: Add pagination
 //TODO: Add ordering
 
 //Creates the index page for Jobs and loads all the jobs
 ctrl.index = function() {
-    facade.getAllClients().then(function(query) {
+    ctrl.initiatePage().then(function(){
+        ctrl.loadAllJobs();
+    });
+};
+
+//Adds the heading, buttons and the modal
+ctrl.initiatePage = function(){
+    return facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
         var html = temp({clients: query});
         $("#content").html(html);
@@ -22,7 +28,16 @@ ctrl.index = function() {
         $('#toDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
 
         ctrl.currentPage = 0;
-        ctrl.loadAllJobs();
+    });
+};
+
+//Queries all the jobs based on the client id
+ctrl.getClientJobs = function(id){
+    ctrl.initiatePage().then(function(){
+        ctrl.searchParams = {clientSelect: id};
+        facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+            ctrl.loadTable(data);
+        });
     });
 };
 
@@ -35,6 +50,8 @@ ctrl.loadAllJobs = function(){
 
 //Searches for the Jobs with the given parameters
 ctrl.searchJobs = function() {
+    ctrl.currentPage = 0;
+
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
     obj[item.name] = item.value;
     return obj;
@@ -51,7 +68,7 @@ ctrl.searchJobs = function() {
     formData.clientSelect = parseInt(formData.clientSelect);
 
     ctrl.searchParams = formData;
-    facade.FindJobs(formData, {}, 0).then(function(data){
+    facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };
@@ -73,6 +90,7 @@ ctrl.loadTable = function(data){
     $("#indexJobTable").html(table);
 };
 
+//Gets the client details and loads them on the sidebar
 ctrl.jobDetails = function(id) {
     facade.getJobFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
@@ -81,6 +99,7 @@ ctrl.jobDetails = function(id) {
     });
 };
 
+//Creates the createJob page
 ctrl.getCreateJob = function(id) {
     facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
@@ -107,6 +126,7 @@ ctrl.getCreateJob = function(id) {
     });
 };
 
+//Creates a new job based on the fields and saves it in the db
 ctrl.createJob = function() {
     var formData = $("#createJobForm").serializeArray();
     var date = $('#datepicker :input').val();
@@ -119,12 +139,14 @@ ctrl.createJob = function() {
     });
 };
 
+//Deletes the selected Job
 ctrl.removeJob = function(id, clientID) {
     facade.removeJob(id).then(function() {
         UIFunctions.clientDetails(clientID);
     });
 };
 
+//Creates the edit details page
 ctrl.getEditJob = function(id) {
     facade.getJob(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
@@ -133,11 +155,13 @@ ctrl.getEditJob = function(id) {
     });
 };
 
+//Updates the details of the job based on the edits made
 ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
     facade.editJob(id, formData);
 };
 
+//Creates the Rebook job page
 ctrl.getRebookJob = function(id) {
     facade.getJob(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/rebook.html');
@@ -149,6 +173,7 @@ ctrl.getRebookJob = function(id) {
     });
 };
 
+//Rebooks a job
 ctrl.rebookJob = function(id){
     var formData = [];
     var date = $('#datepicker :input').val();

@@ -23,6 +23,8 @@ ctrl.index = function() {
 
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
+        console.log(data);
+        data.jobs = data.jobs.slice(0,9);
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
         var html = temp(data);
         $("#sidebar").html(html);

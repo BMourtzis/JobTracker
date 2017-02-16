@@ -23,13 +23,13 @@ ctrl.index = function() {
 
 ctrl.loadAllJobs = function(){
     facade.getAllJobs().then(function(query) {
-        ctrl.loadTable({jobs: query});
+        ctrl.loadTable(query);
     });
 };
 
 ctrl.loadTable = function(data){
     var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
-    var table = tableTemp(data);
+    var table = tableTemp({jobs: data});
     $("#indexJobTable").html(table);
 };
 
@@ -38,13 +38,20 @@ ctrl.searchJobs = function() {
     obj[item.name] = item.value;
     return obj;
 },{});
-    formData.from = Date.parse($('#fromDatepicker :input').val());
-    formData.to = Date.parse($('#toDatepicker :input').val());
+
+    if($('#fromDatepicker :input').val() !== "") {
+        formData.from = Date.parse($('#fromDatepicker :input').val());
+    }
+
+    if($('#toDatepicker :input').val() !== "") {
+        formData.to = Date.parse($('#toDatepicker :input').val());
+    }
+
     formData.clientSelect = parseInt(formData.clientSelect);
     console.log(formData);
     facade.FindJobs(formData).then(function(data){
         console.log(data);
-        // ctrl.loadTable(data);
+        ctrl.loadTable(data);
     });
 };
 

@@ -121,14 +121,7 @@ facade.getDayJobs = function(todayStart)
 facade.FindJobs = function(searchParams) {
     return orm.Job.findAll({
         include:[orm.Client],
-        where: {
-            timeBooked:{
-                gt: searchParams.from,
-                lt:searchParams.to
-            },
-            state: searchParams.statusSelect,
-            clientID: searchParams.clientSelect
-        }
+        where: facade.generateQuery(searchParams)
     }).then(function(query){
         var jobs = [];
         for (var i = 0; i < query.length; i++) {
@@ -141,6 +134,40 @@ facade.FindJobs = function(searchParams) {
         });
         return data;
     });
+};
+
+facade.generateQuery = function(searchParams) {
+    var query = {};
+    console.log(searchParams);
+    if(searchParams.from !== undefined && searchParams.to !== undefined){
+        if(searchParams.from === undefined){
+            query.timeBooked = {
+                lt: searchParams.to
+            };
+        }
+        else if(searchParams.to === undefined){
+            query.timeBooked = {
+                gt: searchParams.from
+            };
+        }
+        else{
+            console.log("in");
+            query.timeBooked = {
+                gt: searchParams.from,
+                lt: searchParams.to
+            };
+        }
+    }
+
+    if(searchParams.statusSelect !== ""){
+        query.state = searchParams.statusSelect;
+    }
+
+    if(!Number.isNaN(searchParams.clientSelect)){
+        query.clientID = searchParams.clientSelect;
+    }
+
+    return query;
 };
 
 ////Create Functions

@@ -70,18 +70,7 @@ facade.editClient = function(id, data){
 //Job Functions
 ////Get all Clients
 facade.getAllJobs = function(){
-    return orm.Job.findAll({include: [ orm.Client ] }).then(function(query){
-        var jobs = [];
-        for (var i = 0; i < query.length; i++) {
-            jobs.push(query[i].get({plain:true}));
-        }
-        return jobs;
-    }).then(function(data){
-        data.sort(function(a,b){
-            return b.timeBooked - a.timeBooked;
-        });
-        return data;
-    });
+    return facade.FindJobs({},{},{});
 };
 
 ////Search Functions
@@ -99,46 +88,35 @@ facade.getJobFull = function(id){
 };
 
 //////Advanced Search
-facade.getDayJobs = function(todayStart)
+facade.getDayJobs = function(from)
 {
-    var todayEnd = new Date(todayStart).at({hour: 23, minute: 59});
-    return orm.Job.findAll({
-        include:[orm.Client],
-        where:{
-            timeBooked:{
-                gt: todayStart,
-                lt: todayEnd
-            }
-        }
-    }).then(function(data){
-        data.sort(function(a,b){
-            return a.timeBooked - b.timeBooked;
-        });
-        return data;
-    });
+    var searchParams = {
+        from: from,
+        to: new Date(from).at({hour: 23, minute: 59})
+    };
+
+    return facade.FindJobs(searchParams, {}, {});
 };
 
-facade.FindJobs = function(searchParams) {
+facade.FindJobs = function(searchParams, orderParams, paginationParams) {
     return orm.Job.findAll({
         include:[orm.Client],
-        where: facade.generateQuery(searchParams)
+        where: facade.generateQuery(searchParams),
+        order: 'timeBooked DESC',
+        offset: 0,
+        limit: 20
     }).then(function(query){
         var jobs = [];
         for (var i = 0; i < query.length; i++) {
             jobs.push(query[i].get({plain:true}));
         }
         return jobs;
-    }).then(function(data){
-        data.sort(function(a,b){
-            return a.timeBooked - b.timeBooked;
-        });
-        return data;
     });
 };
 
 facade.generateQuery = function(searchParams) {
     var query = {};
-    console.log(searchParams);
+
     if(searchParams.from !== undefined && searchParams.to !== undefined){
         if(searchParams.from === undefined){
             query.timeBooked = {
@@ -151,7 +129,6 @@ facade.generateQuery = function(searchParams) {
             };
         }
         else{
-            console.log("in");
             query.timeBooked = {
                 gt: searchParams.from,
                 lt: searchParams.to
@@ -159,11 +136,11 @@ facade.generateQuery = function(searchParams) {
         }
     }
 
-    if(searchParams.statusSelect !== ""){
+    if(searchParams.statusSelect !== "" && searchParams.statusSelect !== undefined){
         query.state = searchParams.statusSelect;
     }
 
-    if(!Number.isNaN(searchParams.clientSelect)){
+    if(!Number.isNaN(searchParams.clientSelect) && searchParams.clientSelect !== undefined){
         query.clientID = searchParams.clientSelect;
     }
 

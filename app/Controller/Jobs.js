@@ -3,7 +3,6 @@ var ctrl = {};
 ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
-//TODO: Add advance searching functionality
 //TODO: Add multiple selection
 //TODO: Add state change
 //TODO: Add pagination
@@ -48,9 +47,7 @@ ctrl.searchJobs = function() {
     }
 
     formData.clientSelect = parseInt(formData.clientSelect);
-    console.log(formData);
     facade.FindJobs(formData).then(function(data){
-        console.log(data);
         ctrl.loadTable(data);
     });
 };

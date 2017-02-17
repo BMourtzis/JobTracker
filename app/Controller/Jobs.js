@@ -3,9 +3,12 @@ var ctrl = {};
 ctrl.ctrlName = "Jobs";
 ctrl.templateDir = "./app/Templates/";
 
+//Properties for searching
 ctrl.currentPage = 0;
 ctrl.searchParams = {};
 
+//Properties for selection
+ctrl.selectedList = [];
 
 //TODO: Add multiple selection
 //TODO: Add ordering
@@ -68,9 +71,22 @@ ctrl.searchJobs = function() {
     formData.clientSelect = parseInt(formData.clientSelect);
 
     ctrl.searchParams = formData;
-    facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+    facade.searchJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
+};
+
+ctrl.updateSelectedList = function() {
+    var tdList = $("#indexJobTable :checked");
+    ctrl.selectedList = [];
+    for(var i = 0; i < tdList.length; i++){
+        ctrl.selectedList.push(parseInt($(tdList[i]).val()));
+    }
+
+    var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/selectedListOptions.html');
+    var html = temp({count: ctrl.selectedList.length});
+    $("#sidebar").html(html);
+
 };
 
 //Loads the next page of the table
@@ -146,6 +162,10 @@ ctrl.removeJob = function(id, clientID) {
     });
 };
 
+ctrl.bulkDelete = function() {
+    facade.bulkDeleteJobs(ctrl.selectedList);
+};
+
 //Creates the edit details page
 ctrl.getEditJob = function(id) {
     facade.getJob(id).then(function(data) {
@@ -204,6 +224,19 @@ ctrl.paid = function(id){
     facade.paid(id).then(function(data){
         ctrl.jobDetails(id);
     });
+};
+
+//List State Machine
+ctrl.jobListDone = function() {
+    facade.jobListDone(ctrl.selectedList);
+};
+
+ctrl.jobListInvoiced = function() {
+    facade.jobListInvoiced(ctrl.selectedList);
+};
+
+ctrl.jobListPaid = function() {
+    facade.jobListPaid(ctrl.selectedList);
 };
 
 module.exports = ctrl;

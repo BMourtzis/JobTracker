@@ -14,7 +14,7 @@
     <tbody>
         {{for jobs}}
         <tr>
-            <td> <input type="checkbox"></td>
+            <td> <input type="checkbox" onclick="UIFunctions.updateJobSelectedList()" value="{{:id}}"></td>
             <td>{{:jobName}}</td>
             <td>{{:client.businessName}}</td>
             <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>

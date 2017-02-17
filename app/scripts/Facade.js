@@ -75,7 +75,7 @@ facade.getAllJobs = function(){
         to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
     };
 
-    return facade.FindJobs(searchParams,{}, 0);
+    return facade.FindJobs(facade.generateQuery(searchParams), {}, 0);
 };
 
 ////Search Functions
@@ -100,21 +100,21 @@ facade.getDayJobs = function(from)
         to: new Date(from).at({hour: 23, minute: 59})
     };
 
-    return facade.FindJobs(searchParams, {}, 0);
+    return facade.FindJobs(facade.generateQuery(searchParams), {}, 0);
 };
 
 //TODO: check if page is a number
+//TODO: update to findAncCountAll method
 facade.FindJobs = function(searchParams, orderParams, page) {
     // if(!Number.isNumeric(page)){ page = 0; }
-    var where = facade.generateQuery(searchParams);
     return orm.Job.findAll({
         include:[orm.Client],
-        where: where,
+        where: searchParams,
         order: 'timeBooked DESC',
         offset: page*100,
         limit: 100
     }).then(function(query){
-        return facade.getJobPageCount(where).then(function(count){
+        return facade.getJobPageCount(searchParams).then(function(count){
             var jobs = [];
             for (var i = 0; i < query.length; i++) {
                 jobs.push(query[i].get({plain:true}));
@@ -130,6 +130,11 @@ facade.FindJobs = function(searchParams, orderParams, page) {
     });
 };
 
+facade.searchJobs = function(searchParams, orderParams, page) {
+    var where = facade.generateQuery(searchParams);
+    return facade.FindJobs(where, orderParams, page);
+};
+
 facade.getJobPageCount = function(searchParams){
     return orm.Job.count({
         where: searchParams
@@ -138,6 +143,7 @@ facade.getJobPageCount = function(searchParams){
     });
 };
 
+//Query Generator Helper
 facade.generateQuery = function(searchParams) {
     var query = {};
 
@@ -191,6 +197,7 @@ facade.editJob = function(id, data){
     });
 };
 
+//////State Machine for single objects
 facade.done = function(id){
     var formData = [];
 
@@ -251,12 +258,40 @@ facade.unpaid = function(id){
     return facade.editJob(id, formData);
 };
 
+//List State Machine
+facade.bulkUpdateJobList = function(idList, state){
+    var query = {
+        id: {$in: idList}
+    };
+    return orm.Job.update({state: state}, {where: query});
+};
+
+facade.jobListDone = function(idList) {
+    return facade.bulkUpdateJobList(idList, "Done");
+};
+
+facade.jobListInvoiced = function(idList) {
+    return facade.bulkUpdateJobList(idList, "Invoiced");
+};
+
+facade.jobListPaid = function(idList) {
+    return facade.bulkUpdateJobList(idList, "Paid");
+};
+
 ////Remove Functions
 facade.removeJob = function(id){
     return orm.Job.findById(id).then(function(job){
         return job.destroy();
     });
 };
+
+facade.bulkDeleteJobs = function(idList) {
+    return orm.Job.destroy({
+        where: {id:{$in: idList}}
+    });
+};
+
+
 
 //JobScheme Functions
 ////Search Functions

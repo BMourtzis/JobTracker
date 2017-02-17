@@ -24,11 +24,19 @@ uiFunctions.getEditJob = function(id) { ctrl.Jobs.getEditJob(id); };
 uiFunctions.editJob = function(id) { ctrl.Jobs.editJob(id); };
 uiFunctions.getRebookJob = function(id) { ctrl.Jobs.getRebookJob(id); };
 uiFunctions.rebookJob = function(id) { ctrl.Jobs.rebookJob(id); };
+
 uiFunctions.jobDone = function(id) { ctrl.Jobs.done(id); };
 uiFunctions.jobInvoiced = function(id) { ctrl.Jobs.invoice(id); };
 uiFunctions.jobPaid = function(id) { ctrl.Jobs.paid(id); };
+
+uiFunctions.jobListDone = function() { ctrl.Jobs.jobListDone(); };
+uiFunctions.jobListInvoiced = function() { ctrl.Jobs.jobListInvoiced(); };
+uiFunctions.jobListPaid = function() { ctrl.Jobs.jobListPaid(); };
+uiFunctions.jobListDelete = function() { ctrl.Jobs.bulkDelete(); };
+
 uiFunctions.searchJobs = function() { ctrl.Jobs.searchJobs(); };
-uiFunctions.gotoJobPage = function(page) {ctrl.Jobs.gotoPage(page); };
+uiFunctions.gotoJobPage = function(page) { ctrl.Jobs.gotoPage(page); };
+uiFunctions.updateJobSelectedList = function() { ctrl.Jobs.updateSelectedList(); };
 
 uiFunctions.clients = function() {
     ctrl.Clients.index();

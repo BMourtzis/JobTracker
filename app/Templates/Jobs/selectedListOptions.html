@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<div class="row">
+    <p>
+        <h3>{{:count}} Job(s) Selected</h3>
+    </p>
+</div>
+<div class="row">
+
+</div>
+<div class="row">
+    <div class="float-left">
+        <span>Status:</span>
+        <button id="done-button" type="button" class="btn btn-success" onclick="UIFunctions.jobListDone()">
+            Done
+        </button>
+        <button id="invoice-button" type="button" class="btn btn-success" onclick="UIFunctions.jobListInvoiced()">
+            Invoiced
+        </button>
+        <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.jobListPaid()">
+            Paid
+        </button>
+    </div>
+    <div class="float-right">
+        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.jobListDelete()">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+    </div>
+</div>

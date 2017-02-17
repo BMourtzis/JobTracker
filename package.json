@@ -23,6 +23,7 @@
     "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
     "jquery": "2.2",
     "jsrender": "^0.9.83",
+    "jszip": "^2.6.1",
     "less": "2.7.1",
     "moment": "^2.14.1",
     "sequelize": "^3.30.1",

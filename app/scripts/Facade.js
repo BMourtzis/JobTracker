@@ -130,6 +130,31 @@ facade.FindJobs = function(searchParams, orderParams, page) {
     });
 };
 
+facade.getMonthJobs = function(clientId, year, month){
+    var from = new Date.today().set({year: year, month: month, day: 1});
+    var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
+
+    return orm.Job.findAll({
+        where:{
+            clientID: clientId,
+            timeBooked:{
+                gt: from,
+                lt: to
+            }
+        }
+    }).then(function(data){
+        if(data){
+            var jobs = [];
+            for(var i = 0; i< data.length; i++){
+                jobs.push(data[i].get({plain: true}));
+            }
+            
+            return jobs;
+        }
+        return data;
+    });
+};
+
 facade.searchJobs = function(searchParams, orderParams, page) {
     var where = facade.generateQuery(searchParams);
     return facade.FindJobs(where, orderParams, page);
@@ -340,6 +365,44 @@ facade.generateJobs = function(id, month) {
     return orm.JobScheme.findById(id).then(function(jobScheme){
         jobScheme.generateJobs(month);
     });
+};
+
+//Invoice
+facade.generateMonthInvoices = function(year, month){
+
+};
+
+facade.generateClientInvoice = function(client, year, month){
+    var from = new Date.today().set({year: year, month: month, day: 1});
+    var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
+
+    return orm.Client.findOne({
+        include:[{
+            model: orm.Job,
+            where: {
+                state: "Done",
+                timeBooked: {
+                    gt:from,
+                    lt: to
+                },
+            }
+        }],
+        where: {
+            id: client
+        }
+    }).then(function(data){
+        if(data) {
+            return data.get({plain: true});
+        }
+        return data;
+    }).then(function(data){
+        console.log(data);
+        if(data){
+            RG.generatInvoice(data, year, month);
+        }
+
+    });
+
 };
 
 module.exports = facade;

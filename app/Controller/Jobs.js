@@ -10,7 +10,6 @@ ctrl.searchParams = {};
 //Properties for selection
 ctrl.selectedList = [];
 
-//TODO: Add multiple selection
 //TODO: Add ordering
 
 //Creates the index page for Jobs and loads all the jobs

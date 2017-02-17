@@ -1,6 +1,6 @@
 {
   "name": "JobTracker",
-  "version": "0.3.2",
+  "version": "0.4.1",
   "description": "An easy-to-use and stylish Job tracking application",
   "main": "main.js",
   "scripts": {
@@ -19,6 +19,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "datejs": "^1.0.0-rc3",
+    "docxtemplater": "^3.0.3",
     "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
     "jquery": "2.2",
     "jsrender": "^0.9.83",

@@ -1,4 +1,4 @@
-var orm = { };
+var orm = {};
 
 orm.connStr = new sequelize(null, null, null, {
     host: 'localhost',
@@ -13,246 +13,263 @@ orm.connStr = new sequelize(null, null, null, {
 
 //Object Models
 orm.Client = orm.connStr.define('client', {
-  id: {
-    type: sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    field: 'id'
-  },
-  firstName: {
-    type: sequelize.STRING,
-    field: 'firstname',
-    allowNull: false
-  },
-  lastName: {
-    type: sequelize.STRING,
-    field: 'lastname',
-    allowNull: false
-  },
-  businessName: {
-    type: sequelize.STRING,
-    field: 'businessname',
-    allowNull: false
-  },
-  shortName: {
-    type: sequelize.STRING(3),
-    field: 'shortname',
-    unique: true,
-    allowNull: false
-  },
-  address: {
-    type: sequelize.STRING(150),
-    allowNull: false,
-    field: 'address'
-  },
-  email: {
-    type: sequelize.STRING(50),
-    field: 'email',
-    validate: {
-        isEmail: true
+    id: {
+        type: sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: 'id'
+    },
+    firstName: {
+        type: sequelize.STRING,
+        field: 'firstname',
+        allowNull: false
+    },
+    lastName: {
+        type: sequelize.STRING,
+        field: 'lastname',
+        allowNull: false
+    },
+    businessName: {
+        type: sequelize.STRING,
+        field: 'businessname',
+        allowNull: false
+    },
+    shortName: {
+        type: sequelize.STRING(3),
+        field: 'shortname',
+        unique: true,
+        allowNull: false
+    },
+    address: {
+        type: sequelize.STRING(150),
+        allowNull: false,
+        field: 'address'
+    },
+    email: {
+        type: sequelize.STRING(50),
+        field: 'email',
+        validate: {
+            isEmail: true
+        }
+    },
+    phone: {
+        type: sequelize.INTEGER(10),
+        field: 'phone'
     }
-  },
-  phone: {
-    type: sequelize.INTEGER(10),
-    field: 'phone'
-  }
 }, {
-  classMethods: {
+    classMethods: {
 
-  },
-  instanceMethods: {
-      addNewJob: function(jobname, timebooked, payment) {
-          return orm.Job.create({
-              jobName: jobname,
-              timeBooked: timebooked,
-              payment: payment,
-              state: 'Placed',
-              clientID: this.id,
-              total: parseFloat(payment)+(0.1*payment)
-          });
-      },
-      addNewJobScheme: function(jobname, payment, repeatition, repeatitionvalues) {
-          return orm.JobScheme.create({
-            jobName: jobname,
-            enabled: true,
-            payment: payment,
-            repeatition: repeatition,
-            repeatitionValues: repeatitionvalues,
-            clientID: this.id
-          });
-      }
-  }
+    },
+    instanceMethods: {
+        addNewJob: function(jobname, timebooked, payment) {
+            return orm.Job.create({
+                jobName: jobname,
+                timeBooked: timebooked,
+                payment: payment,
+                state: 'Placed',
+                clientID: this.id,
+                total: parseFloat(payment) + (0.1 * payment)
+            });
+        },
+        addNewJobScheme: function(jobname, payment, repeatition, repeatitionvalues) {
+            return orm.JobScheme.create({
+                jobName: jobname,
+                enabled: true,
+                payment: payment,
+                repeatition: repeatition,
+                repeatitionValues: repeatitionvalues,
+                clientID: this.id
+            });
+        }
+    }
 });
 
 orm.Job = orm.connStr.define('job', {
-  id: {
-    type: sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    field: 'id'
-  },
-  jobName: {
-    type: sequelize.STRING(100),
-    allowNull: false,
-    field: 'jobName'
-  },
-  timeBooked: {
-    type: sequelize.DATE,
-    allowNull: false,
-    field: 'timeBooked',
-    get: function() {
-        return moment(this.getDataValue('timeBooked'));
+    id: {
+        type: sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: 'id'
+    },
+    jobName: {
+        type: sequelize.STRING(100),
+        allowNull: false,
+        field: 'jobName'
+    },
+    timeBooked: {
+        type: sequelize.DATE,
+        allowNull: false,
+        field: 'timeBooked',
+        get: function() {
+            return moment(this.getDataValue('timeBooked'));
+        }
+    },
+    payment: {
+        type: sequelize.DECIMAL,
+        allowNull: false,
+        field: 'payment'
+    },
+    total: {
+        type: sequelize.DECIMAL,
+        allowNull: false,
+        field: 'total'
+    },
+    state: {
+        type: sequelize.ENUM('Placed', 'Done', 'Invoiced', 'Paid'),
+        allowNull: false,
+        field: 'state'
+    },
+    clientID: {
+        type: sequelize.INTEGER,
+        references: {
+            model: orm.Client,
+            key: 'id'
+        }
     }
-  },
-  payment: {
-    type: sequelize.DECIMAL,
-    allowNull: false,
-    field: 'payment'
-  },
-  total: {
-    type: sequelize.DECIMAL,
-    allowNull: false,
-    field: 'total'
-  },
-  state: {
-    type: sequelize.ENUM('Placed', 'Done', 'Invoiced', 'Paid'),
-    allowNull: false,
-    field: 'state'
-  },
-  clientID: {
-    type: sequelize.INTEGER,
-    references: {
-      model: orm.Client,
-      key: 'id'
+}, {
+    classMethods: {
+
+    },
+    instanceMethods: {
+
     }
-  }
-},{
-  classMethods:{
-
-  },
-  instanceMethods: {
-
-  }
 });
 
 orm.JobScheme = orm.connStr.define('jobScheme', {
-  id : {
-    type: sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    field: 'id'
-  },
-  jobName: {
-    type: sequelize.STRING(100),
-    allowNull: false,
-    field: 'jobName'
-  },
-  enabled: {
-    type: sequelize.BOOLEAN,
-    allowNull: false,
-    field: 'enabled'
-  },
-  payment: {
-    type: sequelize.DECIMAL,
-    allowNull: false,
-    field: 'payment'
-  },
-  repeatition: {
-    type: sequelize.ENUM('Daily', 'Weekly', 'Fortnightly', 'Monthly'),
-    allowNull: false,
-    field: 'repeatition'
-  },
-  repeatitionValues: {
-    type: sequelize.JSON,
-    field: 'repeatitionValues'
-  },
-  clientID: {
-    type: sequelize.INTEGER,
-    field: "ClientID",
-    references: {
-      model: orm.Client,
-      key: 'id'
+    id: {
+        type: sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: 'id'
+    },
+    jobName: {
+        type: sequelize.STRING(100),
+        allowNull: false,
+        field: 'jobName'
+    },
+    enabled: {
+        type: sequelize.BOOLEAN,
+        allowNull: false,
+        field: 'enabled'
+    },
+    payment: {
+        type: sequelize.DECIMAL,
+        allowNull: false,
+        field: 'payment'
+    },
+    repeatition: {
+        type: sequelize.ENUM('Daily', 'Weekly', 'Fortnightly', 'Monthly'),
+        allowNull: false,
+        field: 'repeatition'
+    },
+    repeatitionValues: {
+        type: sequelize.JSON,
+        field: 'repeatitionValues'
+    },
+    clientID: {
+        type: sequelize.INTEGER,
+        field: "ClientID",
+        references: {
+            model: orm.Client,
+            key: 'id'
+        }
     }
-  }
-},{
-  classMethods:{
+}, {
+    classMethods: {
 
-  },
+    },
     instanceMethods: {
         generateJobs: function(month) {
-            var date = Date.today().set({month: month, day: 1}).first().sunday();
-            month += 2;
-            switch (this.repeatition) {
-                case "Daily":
-                    this.dailyGenerator(date, month);
-                    break;
-                case "Weekly":
-                    this.weeklyGenerator(date, month);
-                    break;
-                case "Fortnightly":
-                    this.fortnightlyGenerator(date, month);
-                    break;
-                case "Monthly":
-                    this.monthlyGenerator(date, month);
-                    break;
-                default:
+            if (this.enabled) {
+                var date = Date.today().set({
+                    month: month,
+                    day: 1
+                }).first().sunday();
+
+                month += 2;
+                switch (this.repeatition) {
+                    case "Daily":
+                        this.dailyGenerator(date, month);
+                        break;
+                    case "Weekly":
+                        this.weeklyGenerator(date, month);
+                        break;
+                    case "Fortnightly":
+                        this.fortnightlyGenerator(date, month);
+                        break;
+                    case "Monthly":
+                        this.monthlyGenerator(date, month);
+                        break;
+                    default:
+                }
             }
 
-        }, dailyGenerator: function(date, nextMonth){
+        },
+        dailyGenerator: function(date, nextMonth) {
             var repvalues = JSON.parse(this.repeatitionValues);
-            date.at({hour: repvalues[i].hour, minute: repvalues[i].minute});
+            date.at({
+                hour: repvalues[i].hour,
+                minute: repvalues[i].minute
+            });
 
-            for(; date.toString("M") < (nextMonth); date.next().day())
-            {
+            for (; date.toString("M") < (nextMonth); date.next().day()) {
                 this.creteJob(date);
             }
-        }, weeklyGenerator: function(date, nextMonth){
+        },
+        weeklyGenerator: function(date, nextMonth) {
             var repvalues = JSON.parse(this.repeatitionValues);
 
-            for(; date.toString("M") < (nextMonth); date.next().sunday())
-            {
-                for(var i = 0; i< repvalues.length; i++)
-                {
+            for (; date.toString("M") < (nextMonth); date.next().sunday()) {
+                for (var i = 0; i < repvalues.length; i++) {
                     var jobDate = new Date(date);
-                    jobDate.add(repvalues[i].day).day().at({hour: repvalues[i].hour, minute: repvalues[i].minute});
+                    jobDate.add(repvalues[i].day).day().at({
+                        hour: repvalues[i].hour,
+                        minute: repvalues[i].minute
+                    });
 
                     this.creteJob(jobDate);
                 }
             }
-        }, fortnightlyGenerator: function(date, nextMonth){
+        },
+        fortnightlyGenerator: function(date, nextMonth) {
             var repvalues = JSON.parse(this.repeatitionValues);
 
-            for(; date.toString("M") < (nextMonth); date.next().sunday().next().sunday())
-            {
-                for(var i = 0; i< repvalues.length; i++)
-                {
+            for (; date.toString("M") < (nextMonth); date.next().sunday().next().sunday()) {
+                for (var i = 0; i < repvalues.length; i++) {
                     var jobDate = new Date(date);
-                    jobDate.add(repvalues[i].day).day().at({hour: repvalues[i].hour, minute: repvalues[i].minute});
+                    jobDate.add(repvalues[i].day).day().at({
+                        hour: repvalues[i].hour,
+                        minute: repvalues[i].minute
+                    });
 
                     this.creteJob(jobDate);
                 }
             }
-        }, monthlyGenerator: function(date, nextMonth){
+        },
+        monthlyGenerator: function(date, nextMonth) {
             var repvalues = JSON.parse(this.repeatitionValues);
 
-            for(var i = 0; i< repvalues.length; i++)
-            {
+            for (var i = 0; i < repvalues.length; i++) {
                 var jobDate = new Date(date);
-                jobDate.add(repvalues[i].day).day().at({hour: repvalues[i].hour, minute: repvalues[i].minute});
+                jobDate.add(repvalues[i].day).day().at({
+                    hour: repvalues[i].hour,
+                    minute: repvalues[i].minute
+                });
 
                 this.creteJob(jobDate);
             }
-        }, creteJob: function(jobDate){
+        },
+        creteJob: function(jobDate) {
             orm.Job.create({
                 jobName: this.jobName,
                 timeBooked: jobDate,
                 payment: this.payment,
                 state: 'Placed',
                 clientID: this.clientID,
-                total: parseFloat(this.payment)+(0.1*this.payment)
+                total: parseFloat(this.payment) + (0.1 * this.payment)
             });
         }
-  }
+    }
 });
 
 orm.Job.belongsTo(orm.Client);
@@ -262,20 +279,20 @@ orm.Client.hasMany(orm.JobScheme);
 
 //Utility Functions
 orm.testConnection = function() {
-  orm.connStr
-  .authenticate()
-  .then(function(err) {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(function (err) {
-    console.log('Unable to connect to the database:', err);
-  });
+    orm.connStr
+        .authenticate()
+        .then(function(err) {
+            console.log('Connection has been established successfully.');
+        })
+        .catch(function(err) {
+            console.log('Unable to connect to the database:', err);
+        });
 };
 
 orm.reinitializeTables = function() {
-  // orm.Client.sync({force: true});
-  // orm.Job.sync({force: true});
-  // orm.JobScheme.sync({force: true});
+    // orm.Client.sync({force: true});
+    // orm.Job.sync({force: true});
+    // orm.JobScheme.sync({force: true});
 };
 
 module.exports = orm;

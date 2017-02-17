@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <div class="row">
-    <h2 class="float-left">{{:businessName}}</h2>
+    <h2 class="details-heading float-left">{{:businessName}}</h2>
     <div class="custom-button">
         <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditClient({{:id}})">
             <span class="glyphicon glyphicon-pencil"></span>
@@ -39,7 +39,7 @@
     </p>
 </div>
 <div class="row">
-    <h2 class="float-left">Job Schemes</h2>
+    <h2 class="details-heading float-left">Services</h2>
     <button id="create-jobscheme-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJobScheme({{:id}})">
         <span class="glyphicon glyphicon-plus"></span>
         Create
@@ -47,7 +47,7 @@
 </div>
 <div class="row">
     <table class="table">
-        <thead>
+        <thead class="details-heading">
             <tr>
                 <th>Job Name</th>
                 <th>Repeatition</th>
@@ -60,7 +60,7 @@
             <tr id="client-job-scheme-table" class="clickable-row" data-id="{{:id}}">
                 <th>{{:jobName}}</th>
                 <td>{{:repeatition}}</td>
-                <td>{{:payment}}</td>
+                <td>${{:payment}}</td>
                 <td>{{:enabled}}</td>
             </tr>
             {{/for}}
@@ -68,7 +68,7 @@
     </table>
 </div>
 <div class="row">
-    <h2 class="float-left">Jobs</h2>
+    <h2 class="details-heading float-left">Jobs</h2>
     <button id="create-job-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJob({{:id}})">
         <span class="glyphicon glyphicon-plus"></span>
         Create
@@ -76,7 +76,7 @@
 </div>
 <div class="row">
     <table class="table">
-        <thead>
+        <thead class="details-heading">
             <tr>
                 <th>Job Name</th>
                 <th>Date</th>
@@ -95,4 +95,9 @@
             {{/for }}
         </tbody>
     </table>
+</div>
+<div class="row">
+    <button id="see-all-jobs-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getClientJobs({{:id}})">
+        See All Jobs
+    </button>
 </div>

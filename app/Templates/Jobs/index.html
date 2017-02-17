@@ -1,31 +1,73 @@
 <!DOCTYPE html>
 <div class="row">
     <h1 class="float-left">Jobs</h1>
-    <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJob()">
-        <span class="glyphicon glyphicon-plus"></span> Create
-    </button>
 </div>
 <div class="row">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Job Name</th>
-                <th>Business Name</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{for jobs}}
-            <tr class="clickable-row" data-id="{{:id}}">
-                <td>{{:jobName}}</td>
-                <td>{{:client.businessName}}</td>
-                <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
-                <td>{{:timeBooked.format("HH:mm")}}</td>
-                <td>${{:total}}</td>
-            </tr>
-            {{/for }}
-        </tbody>
-    </table>
+    <div class="custom-button">
+        <button id="advance-search-button" type="button" class="btn btn-default" data-toggle="modal" data-target="#advSearchModal">
+            <span class="glyphicon glyphicon-search"></span> Advance Search
+        </button>
+        <button id="create-button" type="button" class="btn btn-primary" onclick="UIFunctions.getCreateJob()">
+            <span class="glyphicon glyphicon-plus"></span> Create
+        </button>
+    </div>
+    <!-- <input type="checkbox"> -->
+</div>
+<div id="indexJobTable" class="row"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="advSearchModal" tabindex="" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Search Options</h4>
+            </div>
+            <div class="modal-body">
+                <form id="searchOptionsForm">
+                    <div class="form-group medium-field">
+                        <label for="timeBooked">From Date</label>
+                        <div class="input-group date" id="fromDatepicker">
+                            <input type="text" class="form-control" placeholder="" />
+                            <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group medium-field">
+                        <label for="timeBooked">To Date</label>
+                        <div class="input-group date" id="toDatepicker">
+                            <input type="text" class="form-control" placeholder="" />
+                            <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Copy from Create -->
+                        <label for="client">Client</label>
+                        <select class="form-control" name="clientSelect">
+                            <option value="" selected></option>
+                            {{for clients}}
+                                <option value="{{:id}}">{{:businessName}}</option>
+                            {{/for}}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">Status</label>
+                        <select class="form-control" name="statusSelect">
+                            <option value="" selected></option>
+                            <option value="Placed">Placed</option>
+                            <option value="Done">Done</option>
+                            <option value="Invoiced">Invoiced</option>
+                            <option value="Paid">Paid</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="UIFunctions.searchJobs()">Search</button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -5,6 +5,8 @@ ctrl.templateDir = "./app/Templates/";
 ctrl.repval = 0;
 ctrl.selectedRep = "";
 
+//TODO: Add pagination
+
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
@@ -36,6 +38,12 @@ ctrl.jobSchemeDetails = function(id) {
 
 ctrl.generateJobs = function(id) {
     facade.generateJobs(id);
+};
+
+ctrl.generateNextMonthsJobs = function(id) {
+    var date = new Date.today();
+    var month = parseInt(Date.today().toString("M"));
+    facade.generateJobs(id, month);
 };
 
 ctrl.getCreateJobScheme = function(id) {
@@ -124,10 +132,6 @@ ctrl.changeRepFields = function() {
     ctrl.selectedRep = $("#repetitionSelector").val();
 };
 
-ctrl.generateNextMonthsJobs = function() {
-
-};
-
 ctrl.removeRepValues = function() {
     if(ctrl.repval > 0) {
         ctrl.repval--;
@@ -143,6 +147,14 @@ ctrl.getEditClient = function(id) {
         var html = temp(client);
         $("#sidebar").html(html);
     });
+};
+
+ctrl.disableJobScheme = function(id){
+    facade.editJobScheme(id, [{name: "enabled", value: false}]);
+};
+
+ctrl.enableJobScheme = function(id){
+    facade.editJobScheme(id, [{name: "enabled", value: true}]);
 };
 
 ctrl.editClient = function(id) {

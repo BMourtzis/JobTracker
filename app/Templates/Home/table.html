@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<div class="row">
+    <div class="custom-button">
+        <button id="rebook-button" type="button" class="btn btn-default" onclick="UIFunctions.previousDay()">
+            <span class="glyphicon glyphicon-menu-left"></span>
+            {{:previous}}
+        </button>
+        <button id="edit-button" type="button" class="btn btn-default" onclick="UIFunctions.nextDay()">
+            {{:next}}
+            <span class="glyphicon glyphicon-menu-right"></span>
+        </button>
+    </div>
+    <h2>Jobs for {{:selectedDay}}</h2>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Job</th>
+            <th>Client</th>
+            <th>Time</th>
+            <th>Payment</th>
+            <th>Done</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{for jobs}}
+        <tr>
+            <td>{{:jobName}}</td>
+            <td>{{:client.businessName}}</td>
+            <td>{{:timeBooked.format("HH:mm")}}</td>
+            <td>${{:payment}}</td>
+            <td>
+                {{if state === "Placed"}}
+                <input type="checkbox" onclick="UIFunctions.homeJobDone({{:id}})">
+                {{else state === "Done"}}
+                <input type="checkbox" checked onclick="UIFunctions.homeJobUndone({{:id}})">
+                {{else}}
+                {{:state}}
+                {{/if}}
+            </td>
+            <td><button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.jobDetails({{:id}})">More...</button></td>
+        </tr>
+        {{/for}}
+    </tbody>
+</table>
+<!-- TODO: Add the total income for the day -->
+<div>
+
+</div>

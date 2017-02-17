@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <div class="row">
-    <h2 class="float-left">{{:jobName}}</h2>
+    <h2 class="details-heading float-left">{{:jobName}}</h2>
     <div class="custom-button">
+        {{if state === "Placed"}}
+        <button id="done-button" type="button" class="btn btn-success" onclick="UIFunctions.jobDone({{:id}})">
+            Done
+        </button>
+        {{else state === "Done"}}
+        <button id="invoice-button" type="button" class="btn btn-success" onclick="UIFunctions.jobInvoiced({{:id}})">
+            Invoiced
+        </button>
+        {{else state === "Invoiced"}}
+        <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.jobPaid({{:id}})">
+            Paid
+        </button>
+        {{/if}}
+        <button id="rebook-button" type="button" class="btn btn-info" onclick="UIFunctions.getRebookJob({{:id}})">
+            <span class="glyphicon glyphicon-time"></span>
+            Rebook
+        </button>
         <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditJob({{:id}})">
             <span class="glyphicon glyphicon-pencil"></span>
             Edit
-        </button>
-        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJob({{:id}}, {{:client.id}})">
-            <span class="glyphicon glyphicon-trash"></span>
-            Delete
         </button>
     </div>
 </div>
@@ -30,7 +43,15 @@
         ${{:total}}
     </p>
     <p>
-        <strong>State:</strong>
+        <strong>Status:</strong>
         {{:state}}
     </p>
+</div>
+<div class="row">
+    <div class="custom-button">
+        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJob({{:id}}, {{:client.id}})">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+    </div>
 </div>

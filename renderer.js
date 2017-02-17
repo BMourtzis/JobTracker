@@ -18,6 +18,7 @@ window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // win
 
 //Scripts
 window.UIFunctions = require('./app/scripts/script.js');
+require('./app/scripts/JSRenderExtensions.js');
 
 // orm.testConnection();
 

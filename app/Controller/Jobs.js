@@ -10,6 +10,7 @@ ctrl.searchParams = {};
 //Properties for selection
 ctrl.selectedList = [];
 
+//TODO: Add select all checkbox
 //TODO: Add ordering
 
 //Creates the index page for Jobs and loads all the jobs

@@ -62,18 +62,23 @@ uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 uiFunctions.disableJobScheme = function(id) { ctrl.JobSchemes.disableJobScheme(id); };
 uiFunctions.enableJobScheme = function(id) { ctrl.JobSchemes.enableJobScheme(id); };
 
-uiFunctions.Timetable = function() {
+uiFunctions.invoices = function() {
     uiFunctions.changeActive(3);
     ctrl.Misc.comingsoon();
 };
 
-uiFunctions.Finances = function() {
+uiFunctions.timetable = function() {
     uiFunctions.changeActive(4);
     ctrl.Misc.comingsoon();
 };
 
-uiFunctions.Settings = function() {
+uiFunctions.finances = function() {
     uiFunctions.changeActive(5);
+    ctrl.Misc.comingsoon();
+};
+
+uiFunctions.settings = function() {
+    uiFunctions.changeActive(6);
     ctrl.Misc.comingsoon();
 };
 

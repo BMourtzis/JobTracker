@@ -2,6 +2,9 @@ var facade = { };
 
 var orm = require("./orm.js");
 
+// TODO: Remove invoice and paid functionality from jobs. Invoices will do that. Invoices will change the state to invoiced or paid accordingly.
+//
+
 //Client Functions
 ////Get all Clients
 facade.getAllClients = function() {
@@ -148,7 +151,7 @@ facade.getMonthJobs = function(clientId, year, month){
             for(var i = 0; i< data.length; i++){
                 jobs.push(data[i].get({plain: true}));
             }
-            
+
             return jobs;
         }
         return data;
@@ -369,7 +372,36 @@ facade.generateJobs = function(id, month) {
 
 //Invoice
 facade.generateMonthInvoices = function(year, month){
+    var from = new Date.today().set({year: year, month: month, day: 1});
+    var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
 
+    return orm.Client.findAll({
+        include:[{
+            model: orm.Job,
+            where: {
+                state: "Done",
+                timeBooked: {
+                    gt:from,
+                    lt: to
+                }
+            }
+        }]
+    }).then(function(data){
+        if(data.length > 0) {
+            var clients = [];
+            for(var i = 0; i < data.length; i++)
+            {
+                clients.push(data[i].get({plain: true}));
+            }
+            return clients;
+        }
+        return data;
+    }).then(function(data){
+        if(data){
+            RG.generateMultipleInvoices(data, year, month);
+        }
+
+    });
 };
 
 facade.generateClientInvoice = function(client, year, month){
@@ -396,9 +428,8 @@ facade.generateClientInvoice = function(client, year, month){
         }
         return data;
     }).then(function(data){
-        console.log(data);
         if(data){
-            RG.generatInvoice(data, year, month);
+            RG.generateInvoice(data, year, month);
         }
 
     });

@@ -3,7 +3,7 @@ var gen = {};
 var JSZip = require('jszip');
 var docxtemplater = require('docxtemplater');
 
-gen.generatInvoice = function(client, year, month){
+gen.generateInvoice = function(client, year, month){
     var content = fs.readFileSync(path.resolve("./app/Misc/", "Receipt_Template.docx"), "binary");
     var zip = new JSZip(content);
     var doc = new docxtemplater();
@@ -39,13 +39,13 @@ gen.generatInvoice = function(client, year, month){
         doc.render();
 
         var buf = doc.getZip().generate({type: "nodebuffer"});
-        fs.writeFileSync(path.resolve("./app/Misc/", "test.docx"), buf);
+        fs.writeFileSync(path.resolve("./app/Misc/", client.businessName+".docx"), buf);
     });
 };
 
-gen.generateMultipleInvoices = function(clients) {
-    for (var client in clients) {
-        gen.generateReceipt(client);
+gen.generateMultipleInvoices = function(clients, year, month) {
+    for (var i = 0; i<clients.length; i++) {
+        gen.generateInvoice(clients[i], year, month);
     }
 };
 

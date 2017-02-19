@@ -50,7 +50,7 @@
         <thead class="details-heading">
             <tr>
                 <th>Job Name</th>
-                <th>Repeatition</th>
+                <th>Repetition</th>
                 <th>Payment</th>
                 <th>Enabled</th>
             </tr>
@@ -59,7 +59,7 @@
             {{for jobSchemes}}
             <tr id="client-job-scheme-table" class="clickable-row" data-id="{{:id}}">
                 <th>{{:jobName}}</th>
-                <td>{{:repeatition}}</td>
+                <td>{{:repetition}}</td>
                 <td>${{:payment}}</td>
                 <td>{{:enabled}}</td>
             </tr>
@@ -96,8 +96,10 @@
         </tbody>
     </table>
 </div>
+{{if jobs.length > 0 }}
 <div class="row">
     <button id="see-all-jobs-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getClientJobs({{:id}})">
         See All Jobs
     </button>
 </div>
+{{/if}}

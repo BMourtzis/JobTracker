@@ -84,13 +84,13 @@ orm.client =  orm.connStr.define('client', {
                 total: parseFloat(payment) + (0.1 * payment)
             });
         },
-        addNewJobScheme: function addNewJobScheme(jobname, payment, repeatition, repetitionvalues){
+        addNewJobScheme: function addNewJobScheme(jobname, payment, repetition, repetitionvalues){
             return orm.jobScheme.create({
                 jobName: jobname,
                 enabled: true,
                 payment: payment,
-                repeatition: repeatition,
-                repeatitionValues: repeatitionvalues,
+                repetition: repetition,
+                repetitionValues: repetitionvalues,
                 clientID: this.id
             });
         },

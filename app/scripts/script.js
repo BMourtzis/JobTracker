@@ -39,6 +39,7 @@ uiFunctions.jobListDelete = function() { ctrl.Jobs.bulkDelete(); };
 uiFunctions.searchJobs = function() { ctrl.Jobs.searchJobs(); };
 uiFunctions.gotoJobPage = function(page) { ctrl.Jobs.gotoPage(page); };
 uiFunctions.updateJobSelectedList = function() { ctrl.Jobs.updateSelectedList(); };
+uiFunctions.updateAllCheckboxes = function() { ctrl.Jobs.updateAllCheckboxes(); };
 
 uiFunctions.clients = function() {
     ctrl.Clients.index();

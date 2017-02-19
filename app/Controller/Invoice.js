@@ -5,9 +5,7 @@ var ctrl = { };
 ctrl.ctrlName = "Invoice";
 ctrl.templateDir = "./app/Templates/";
 
-//TODO: collapsable table rows
-//http://stackoverflow.com/questions/18495653/how-do-i-collapse-a-table-row-in-bootstrap
-//http://getbootstrap.com/javascript/#collapse
+//TODO: add invoice table
 ctrl.index = function() {
 
 };

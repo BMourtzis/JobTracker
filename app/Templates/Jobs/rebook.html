@@ -2,15 +2,12 @@
 <div class="row">
     <h1 class="float-left">Rebook {{:jobName}}</h1>
 </div>
-<div class="row">
-    <p>Edit the fields that need to be changed, the other will stay as they are</p>
-</div>
 <form id="editJobForm">
     <div class="row">
         <div class="form-group medium-field">
             <label for="timeBooked">Booking Date</label>
             <div class="input-group date" id="datepicker">
-                    <input type="text" class="form-control" placeholder="{{:timeBooked.format('DD/MM/YYYY')}}" />
+                    <input type="text" class="form-control" value="{{:timeBooked.format('DD/MM/YYYY')}}" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -19,7 +16,7 @@
         <div class="form-group medium-field">
             <label for="timeBooked">Booking Time</label>
             <div class="input-group date" id="timepicker">
-                    <input type="text" class="form-control" placeholder="{{:timeBooked.format('HH:mm')}}" />
+                    <input type="text" class="form-control" value="{{:timeBooked.format('HH:mm')}}" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>

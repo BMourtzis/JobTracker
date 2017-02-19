@@ -57,13 +57,12 @@ facade.getJobFull = function(id){
 };
 
 //////Advanced Search
-facade.getDayJobs = function(from)
-{
+facade.getDayJobs = function(from) {
     return jobRegister.getDayJobs(from);
 };
 
-facade.FindJobs = function(searchParams, orderParams, page) {
-    return jobRegister.FindJobs(searchParams, orderParams, page);
+facade.getClientJobs = function(searchParams, orderParams, page){
+    return jobRegister.getClientJobs(searchParams, orderParams, page);
 };
 
 facade.getMonthJobs = function(clientId, year, month){

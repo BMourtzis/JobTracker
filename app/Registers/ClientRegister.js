@@ -44,15 +44,15 @@ register.getClientFull = function(id) {
 
 ////Create Functions
 register.createClient = function(firstname, lastname, businessname, shortname, address, email, phone) {
-  orm.client.create({
-    firstName: firstname,
-    lastName: lastname,
-    businessName: businessname,
-    shortName: shortname,
-    Address: address,
-    Email: email,
-    Phone: phone,
-  });
+    return orm.client.create({
+        firstName: firstname,
+        lastName: lastname,
+        businessName: businessname,
+        shortName: shortname,
+        address: address,
+        Email: email,
+        Phone: phone,
+     });
 };
 
 ////Edit Function

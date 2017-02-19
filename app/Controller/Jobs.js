@@ -12,7 +12,7 @@ ctrl.searchParams = {};
 //Properties for selection
 ctrl.selectedList = [];
 
-//TODO: Add select all checkbox
+//TODO: Fix the check all checkbox on the UI
 //TODO: Add ordering
 
 //Creates the index page for Jobs and loads all the jobs
@@ -40,7 +40,7 @@ ctrl.initiatePage = function(){
 ctrl.getClientJobs = function(id){
     ctrl.initiatePage().then(function(){
         ctrl.searchParams = {clientSelect: id};
-        facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+        facade.getClientJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
             ctrl.loadTable(data);
         });
     });
@@ -73,7 +73,7 @@ ctrl.searchJobs = function() {
     formData.clientSelect = parseInt(formData.clientSelect);
 
     ctrl.searchParams = formData;
-    facade.searchJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };
@@ -81,9 +81,10 @@ ctrl.searchJobs = function() {
 ctrl.updateSelectedList = function() {
     var tdList = $("#indexJobTable :checked");
     ctrl.selectedList = [];
-    for(var i = 0; i < tdList.length; i++){
-        ctrl.selectedList.push(parseInt($(tdList[i]).val()));
-    }
+
+    tdList.each(function(){
+        ctrl.selectedList.push(parseInt($(this).val()));
+    });
 
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/selectedListOptions.html');
     var html = temp({count: ctrl.selectedList.length});
@@ -91,10 +92,21 @@ ctrl.updateSelectedList = function() {
 
 };
 
+ctrl.updateAllCheckboxes = function() {
+    var checked = $("#jobAllCheckbox").is(":checked");
+    var tdList = $("#indexJobTable :checkbox");
+
+    tdList.each(function(){
+        $(this).prop("checked", checked);
+    });
+
+    ctrl.updateSelectedList();
+};
+
 //Loads the next page of the table
 ctrl.gotoPage = function(page) {
     ctrl.currentPage = page;
-    facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+    facade.FindJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };

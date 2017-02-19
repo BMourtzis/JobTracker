@@ -3,6 +3,7 @@
     <h1 class="float-left">Jobs</h1>
 </div>
 <div class="row">
+    <input id="jobAllCheckbox" type="checkbox" onclick="UIFunctions.updateAllCheckboxes()">
     <div class="custom-button">
         <button id="advance-search-button" type="button" class="btn btn-default" data-toggle="modal" data-target="#advSearchModal">
             <span class="glyphicon glyphicon-search"></span> Advance Search
@@ -30,7 +31,7 @@
                         <div class="input-group date" id="fromDatepicker">
                             <input type="text" class="form-control" placeholder="" />
                             <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
+                                <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>
@@ -39,7 +40,7 @@
                         <div class="input-group date" id="toDatepicker">
                             <input type="text" class="form-control" placeholder="" />
                             <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
+                                <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>

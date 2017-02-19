@@ -9,7 +9,8 @@ register.getAllJobs = function(){
         to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
     };
 
-    return register.FindJobs(register.generateQuery(searchParams), {}, 0);
+
+    return register.FindJobs(register.generateQuery(searchParams), "timeBooked DESC", 0);
 };
 
 //Search Functions
@@ -47,17 +48,17 @@ register.getDayJobs = function(from)
         to: new Date(from).at({hour: 23, minute: 59})
     };
 
-    return register.FindJobs(register.generateQuery(searchParams), {}, 0);
+    return register.FindJobs(register.generateQuery(searchParams), "timeBooked ASC", 0);
 };
 
 //TODO: check if page is a number
-//TODO: update to findAncCountAll method
+//TODO: add orderParams options
 register.FindJobs = function(searchParams, orderParams, page) {
     // if(!Number.isNumeric(page)){ page = 0; }
     return orm.job.findAll({
-        include:[orm.client],
+        include: [orm.client],
         where: searchParams,
-        order: 'timeBooked DESC',
+        order: orderParams,
         offset: page*100,
         limit: 100
     }).then(function(query){
@@ -75,6 +76,14 @@ register.FindJobs = function(searchParams, orderParams, page) {
             return data;
         });
     });
+};
+
+register.getClientJobs = function(searchParams, orderParams, page){
+    if(orderParams === "") {
+        orderParams = "timeBooked DESC";
+    }
+    
+    return register.FindJobs(register.generateQuery(searchParams), orderParams, page);
 };
 
 register.getMonthJobs = function(clientId, year, month){
@@ -103,8 +112,11 @@ register.getMonthJobs = function(clientId, year, month){
 };
 
 register.searchJobs = function(searchParams, orderParams, page) {
-    var where = register.generateQuery(searchParams);
-    return register.FindJobs(where, orderParams, page);
+    if(orderParams === "") {
+        orderParams = "timeBooked DESC";
+    }
+
+    return register.FindJobs(register.generateQuery(searchParams), orderParams, page);
 };
 
 register.getJobPageCount = function(searchParams){
@@ -160,11 +172,12 @@ register.createJob = function(jobname, timebooked, payment, clientid) {
 register.editJob = function(id, data){
     return orm.job.findById(id).then(function(job){
         for (var i = 0; i < data.length; i++) {
-            if(data[i].value !== "")
+            if(data[i].value !== "" && !Number.isNaN(data[i].value))
             {
                 job[data[i].name] = data[i].value;
             }
         }
+
         if(job.changed('payment')){
             job.total = job.payment + job.payment*0.1;
         }

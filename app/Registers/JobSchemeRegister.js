@@ -27,7 +27,7 @@ register.getJobSchemeFull = function(id){
 ////Create Functions
 register.createJobScheme = function(jobname, payment, repeatition, repeatitionvalues, clientid) {
     return orm.client.findById(clientid).then(function(client){
-        return client.createJobScheme(jobname, payment, repeatition, repeatitionvalues);
+        return client.addNewJobScheme(jobname, payment, repeatition, repeatitionvalues);
     });
 };
 

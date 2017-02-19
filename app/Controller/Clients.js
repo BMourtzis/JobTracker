@@ -21,6 +21,7 @@ ctrl.index = function() {
     });
 };
 
+//TODO: Add pagination, maybe not
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
         data.jobs = data.jobs.slice(0,9);
@@ -47,6 +48,8 @@ ctrl.getCreateClient = function() {
 
 ctrl.createClient = function() {
     var formData = $("#createClientForm").serializeArray();
+    formData[1].value = formData[1].value.toUpperCase();
+    console.log(formData);
     facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
         ctrl.index();
     });
@@ -62,6 +65,8 @@ ctrl.getEditClient = function(id) {
 
 ctrl.editClient = function(id) {
     var formData = $("#editClientForm").serializeArray();
+    formData[1].value = formData[1].value.toUpperCase();
+
     facade.editClient(id, formData).then(function(){
         ctrl.index();
         ctrl.clientDetails(id);

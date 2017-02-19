@@ -1,3 +1,5 @@
+var facade = require('../scripts/Facade.js');
+
 var ctrl = {};
 
 ctrl.ctrlName = "Misc";

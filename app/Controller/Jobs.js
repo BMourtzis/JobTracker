@@ -1,3 +1,5 @@
+var facade = require('../scripts/Facade.js');
+
 var ctrl = {};
 
 ctrl.ctrlName = "Jobs";
@@ -178,6 +180,7 @@ ctrl.getEditJob = function(id) {
 //Updates the details of the job based on the edits made
 ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
+    formData[1].value = parseFloat(formData[1].value);
     facade.editJob(id, formData);
 };
 

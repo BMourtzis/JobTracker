@@ -1,3 +1,5 @@
+//This file contains the connectionString and functions to test and operate the connection
+
 var orm = {};
 
 orm.connStr = new sequelize(null, null, null, {
@@ -11,8 +13,19 @@ orm.connStr = new sequelize(null, null, null, {
     storage: './app/db/jobs.db'
 });
 
-//Object Models
-orm.Client = orm.connStr.define('client', {
+//Utility Functions
+orm.testConnection = function() {
+    orm.connStr
+        .authenticate()
+        .then(function(err) {
+            console.log('Connection has been established successfully.');
+        })
+        .catch(function(err) {
+            console.log('Unable to connect to the database:', err);
+        });
+};
+
+orm.client =  orm.connStr.define('client', {
     id: {
         type: sequelize.INTEGER,
         primaryKey: true,
@@ -61,8 +74,8 @@ orm.Client = orm.connStr.define('client', {
 
     },
     instanceMethods: {
-        addNewJob: function(jobname, timebooked, payment) {
-            return orm.Job.create({
+        addNewJob: function(jobname, timebooked, payment){
+            return orm.job.create({
                 jobName: jobname,
                 timeBooked: timebooked,
                 payment: payment,
@@ -71,8 +84,8 @@ orm.Client = orm.connStr.define('client', {
                 total: parseFloat(payment) + (0.1 * payment)
             });
         },
-        addNewJobScheme: function(jobname, payment, repeatition, repeatitionvalues) {
-            return orm.JobScheme.create({
+        addNewJobScheme: function addNewJobScheme(jobname, payment, repeatition, repetitionvalues){
+            return orm.jobScheme.create({
                 jobName: jobname,
                 enabled: true,
                 payment: payment,
@@ -80,11 +93,11 @@ orm.Client = orm.connStr.define('client', {
                 repeatitionValues: repeatitionvalues,
                 clientID: this.id
             });
-        }
+        },
     }
 });
 
-orm.Job = orm.connStr.define('job', {
+orm.job = orm.connStr.define('job', {
     id: {
         type: sequelize.INTEGER,
         primaryKey: true,
@@ -122,7 +135,7 @@ orm.Job = orm.connStr.define('job', {
     clientID: {
         type: sequelize.INTEGER,
         references: {
-            model: orm.Client,
+            model: this.client,
             key: 'id'
         }
     }
@@ -135,7 +148,7 @@ orm.Job = orm.connStr.define('job', {
     }
 });
 
-orm.JobScheme = orm.connStr.define('jobScheme', {
+orm.jobScheme = orm.connStr.define('jobScheme', {
     id: {
         type: sequelize.INTEGER,
         primaryKey: true,
@@ -157,12 +170,12 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
         allowNull: false,
         field: 'payment'
     },
-    repeatition: {
+    repetition: {
         type: sequelize.ENUM('Daily', 'Weekly', 'Fortnightly', 'Monthly'),
         allowNull: false,
         field: 'repeatition'
     },
-    repeatitionValues: {
+    repetitionValues: {
         type: sequelize.JSON,
         field: 'repeatitionValues'
     },
@@ -170,7 +183,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
         type: sequelize.INTEGER,
         field: "ClientID",
         references: {
-            model: orm.Client,
+            model: this.client,
             key: 'id'
         }
     }
@@ -179,7 +192,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
 
     },
     instanceMethods: {
-        generateJobs: function(month) {
+        generateJobs: function generateJobs(month){
             if (this.enabled) {
                 var date = Date.today().set({
                     month: month,
@@ -187,7 +200,7 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                 }).first().sunday();
 
                 month += 2;
-                switch (this.repeatition) {
+                switch (this.repetition) {
                     case "Daily":
                         this.dailyGenerator(date, month);
                         break;
@@ -203,21 +216,20 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                     default:
                 }
             }
-
         },
-        dailyGenerator: function(date, nextMonth) {
-            var repvalues = JSON.parse(this.repeatitionValues);
+        dailyGenerator: function dailyGenerator(date, nextMonth) {
+            var repvalues = JSON.parse(this.repetitionValues);
             date.at({
                 hour: repvalues[i].hour,
                 minute: repvalues[i].minute
             });
 
             for (; date.toString("M") < (nextMonth); date.next().day()) {
-                this.creteJob(date);
+                this.createJob(date);
             }
         },
-        weeklyGenerator: function(date, nextMonth) {
-            var repvalues = JSON.parse(this.repeatitionValues);
+        weeklyGenerator: function weeklyGenerator(date, nextMonth) {
+            var repvalues = JSON.parse(this.repetitionValues);
 
             for (; date.toString("M") < (nextMonth); date.next().sunday()) {
                 for (var i = 0; i < repvalues.length; i++) {
@@ -227,12 +239,12 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                         minute: repvalues[i].minute
                     });
 
-                    this.creteJob(jobDate);
+                    this.createJob(jobDate);
                 }
             }
         },
-        fortnightlyGenerator: function(date, nextMonth) {
-            var repvalues = JSON.parse(this.repeatitionValues);
+        fortnightlyGenerator: function fortnightlyGenerator(date, nextMonth) {
+            var repvalues = JSON.parse(this.repetitionValues);
 
             for (; date.toString("M") < (nextMonth); date.next().sunday().next().sunday()) {
                 for (var i = 0; i < repvalues.length; i++) {
@@ -242,12 +254,12 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                         minute: repvalues[i].minute
                     });
 
-                    this.creteJob(jobDate);
+                    this.createJob(jobDate);
                 }
             }
         },
-        monthlyGenerator: function(date, nextMonth) {
-            var repvalues = JSON.parse(this.repeatitionValues);
+        monthlyGenerator: function monthlyGenerator(date, nextMonth) {
+            var repvalues = JSON.parse(this.repetitionValues);
 
             for (var i = 0; i < repvalues.length; i++) {
                 var jobDate = new Date(date);
@@ -256,38 +268,23 @@ orm.JobScheme = orm.connStr.define('jobScheme', {
                     minute: repvalues[i].minute
                 });
 
-                this.creteJob(jobDate);
+                this.createJob(jobDate);
             }
         },
-        creteJob: function(jobDate) {
-            orm.Job.create({
-                jobName: this.jobName,
-                timeBooked: jobDate,
-                payment: this.payment,
-                state: 'Placed',
-                clientID: this.clientID,
-                total: parseFloat(this.payment) + (0.1 * this.payment)
+        createJob: function createJob(jobDate) {
+            var payment = this.payment;
+            var jobName = this.jobName;
+            orm.client.findById(this.clientID).then(function(client){
+                client.addNewJob(jobName, jobDate, payment);
             });
         }
     }
 });
 
-orm.Job.belongsTo(orm.Client);
-orm.JobScheme.belongsTo(orm.Client);
-orm.Client.hasMany(orm.Job);
-orm.Client.hasMany(orm.JobScheme);
-
-//Utility Functions
-orm.testConnection = function() {
-    orm.connStr
-        .authenticate()
-        .then(function(err) {
-            console.log('Connection has been established successfully.');
-        })
-        .catch(function(err) {
-            console.log('Unable to connect to the database:', err);
-        });
-};
+orm.jobScheme.belongsTo(orm.client);
+orm.job.belongsTo(orm.client);
+orm.client.hasMany(orm.job);
+orm.client.hasMany(orm.jobScheme);
 
 orm.reinitializeTables = function() {
     // orm.Client.sync({force: true});

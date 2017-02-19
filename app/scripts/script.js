@@ -1,3 +1,5 @@
+var ctrl = require("../Controller/Controllers.js");
+
 var uiFunctions = { };
 
 uiFunctions.ContrDir = "../Controller/";

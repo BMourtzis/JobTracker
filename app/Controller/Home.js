@@ -1,3 +1,5 @@
+var facade = require('../scripts/Facade.js');
+
 var ctrl = { };
 
 ctrl.ctrlName = "Home";
@@ -20,7 +22,7 @@ ctrl.loadDayJobs = function() {
         data.selectedDay = ctrl.selectedDate.toString("dd/MM/yyyy");
         data.next = new Date(ctrl.selectedDate).add(1).day().toString("dd/MM/yyyy");
         data.previous = new Date(ctrl.selectedDate).add(-1).day().toString("dd/MM/yyyy");
-        
+
         var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
         var table = tableTemp(data);
         $("#homeDailyTable").html(table);

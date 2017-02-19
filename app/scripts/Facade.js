@@ -5,7 +5,6 @@ var schemeRegister = require('../Registers/JobSchemeRegister.js');
 var facade = { };
 
 // TODO: Remove invoice and paid functionality from jobs. Invoices will do that. Invoices will change the state to invoiced or paid accordingly.
-//
 
 //Client Functions
 ////Get all Clients

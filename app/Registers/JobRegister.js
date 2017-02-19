@@ -51,10 +51,10 @@ register.getDayJobs = function(from)
     return register.FindJobs(register.generateQuery(searchParams), "timeBooked ASC", 0);
 };
 
-//TODO: check if page is a number
-//TODO: add orderParams options
 register.FindJobs = function(searchParams, orderParams, page) {
-    // if(!Number.isNumeric(page)){ page = 0; }
+    if(!Number.isInteger(page)) {
+         page = 0;
+     }
     return orm.job.findAll({
         include: [orm.client],
         where: searchParams,
@@ -82,7 +82,7 @@ register.getClientJobs = function(searchParams, orderParams, page){
     if(orderParams === "") {
         orderParams = "timeBooked DESC";
     }
-    
+
     return register.FindJobs(register.generateQuery(searchParams), orderParams, page);
 };
 

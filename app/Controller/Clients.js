@@ -5,6 +5,7 @@ var ctrl = {};
 ctrl.ctrlName = "Clients";
 ctrl.templateDir = "./app/Templates/";
 
+//Shows a table of all the clients
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
@@ -22,6 +23,8 @@ ctrl.index = function() {
 };
 
 //TODO: Add pagination, maybe not
+
+//Shows client the selected client on the sidebar
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
         data.jobs = data.jobs.slice(0,9);
@@ -41,20 +44,23 @@ ctrl.clientDetails = function(id) {
     });
 };
 
+//Displays the create client page
 ctrl.getCreateClient = function() {
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
     $("#sidebar").html(temp);
 };
 
+//Creates a new Client with the field values
 ctrl.createClient = function() {
     var formData = $("#createClientForm").serializeArray();
     formData[1].value = formData[1].value.toUpperCase();
-    console.log(formData);
+
     facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
         ctrl.index();
     });
 };
 
+//Displays the create client page
 ctrl.getEditClient = function(id) {
     facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
@@ -63,6 +69,7 @@ ctrl.getEditClient = function(id) {
     });
 };
 
+//Edit a Client with the field values
 ctrl.editClient = function(id) {
     var formData = $("#editClientForm").serializeArray();
     formData[1].value = formData[1].value.toUpperCase();

@@ -21,12 +21,14 @@ register.getJob = function(id) {
     });
 };
 
+////Gets the specifed job and includes the client
 register.getJobFull = function(id){
     return orm.job.findById(id,{include: [orm.client]}).then(function(query) {
         return query.get({plain:true});
     });
 };
 
+////Gets a job of a specified client
 register.getJobfromClient = function(clientId, jobId){
     return orm.client.findById(id,{
         include:[{
@@ -40,7 +42,8 @@ register.getJobfromClient = function(clientId, jobId){
     });
 };
 
-////Advanced Search
+//Advanced Search
+////Gets the jobs of the specified date
 register.getDayJobs = function(from)
 {
     var searchParams = {
@@ -51,10 +54,13 @@ register.getDayJobs = function(from)
     return register.FindJobs(register.generateQuery(searchParams), "timeBooked ASC", 0);
 };
 
+////Searches jobs with the specified parameters.
+////It allows for pagination and order specification
 register.FindJobs = function(searchParams, orderParams, page) {
     if(!Number.isInteger(page)) {
-         page = 0;
-     }
+        page = 0;
+    }
+
     return orm.job.findAll({
         include: [orm.client],
         where: searchParams,
@@ -78,6 +84,7 @@ register.FindJobs = function(searchParams, orderParams, page) {
     });
 };
 
+////Gets the jobs from a client
 register.getClientJobs = function(searchParams, orderParams, page){
     if(orderParams === "") {
         orderParams = "timeBooked DESC";
@@ -86,6 +93,7 @@ register.getClientJobs = function(searchParams, orderParams, page){
     return register.FindJobs(register.generateQuery(searchParams), orderParams, page);
 };
 
+//Returns Jobs for the specified month
 register.getMonthJobs = function(clientId, year, month){
     var from = new Date.today().set({year: year, month: month, day: 1});
     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
@@ -111,6 +119,7 @@ register.getMonthJobs = function(clientId, year, month){
     });
 };
 
+////Searches for jobs
 register.searchJobs = function(searchParams, orderParams, page) {
     if(orderParams === "") {
         orderParams = "timeBooked DESC";
@@ -119,6 +128,7 @@ register.searchJobs = function(searchParams, orderParams, page) {
     return register.FindJobs(register.generateQuery(searchParams), orderParams, page);
 };
 
+////Gets the count of the jobs for a specified search
 register.getJobPageCount = function(searchParams){
     return orm.job.count({
         where: searchParams
@@ -161,14 +171,14 @@ register.generateQuery = function(searchParams) {
     return query;
 };
 
-////Create Functions
+//Create Functions
 register.createJob = function(jobname, timebooked, payment, clientid) {
     return orm.client.findById(clientid).then(function(client) {
         return client.addNewJob(jobname, timebooked, payment);
     });
 };
 
-////Edit Function
+//Edit Function
 register.editJob = function(id, data){
     return orm.job.findById(id).then(function(job){
         for (var i = 0; i < data.length; i++) {
@@ -185,23 +195,23 @@ register.editJob = function(id, data){
     });
 };
 
-//////State Machine for single objects
+//State Machine for single objects
+register.placed = function(id){
+    var formData = [];
+
+    formData.push({
+        name: "state",
+        value: "Placed"
+    });
+    return register.editJob(id, formData);
+};
+
 register.done = function(id){
     var formData = [];
 
     formData.push({
         name: "state",
         value: "Done"
-    });
-    return register.editJob(id, formData);
-};
-
-register.undone = function(id){
-    var formData = [];
-
-    formData.push({
-        name: "state",
-        value: "Placed"
     });
     return register.editJob(id, formData);
 };
@@ -216,32 +226,12 @@ register.invoice = function(id) {
     return register.editJob(id, formData);
 };
 
-register.uninvoice = function(id){
-    var formData = [];
-
-    formData.push({
-        name: "state",
-        value: "Done"
-    });
-    return register.editJob(id, formData);
-};
-
 register.paid = function(id){
     var formData = [];
 
     formData.push({
         name: "state",
         value: "Paid"
-    });
-    return register.editJob(id, formData);
-};
-
-register.unpaid = function(id){
-    var formData = [];
-
-    formData.push({
-        name: "state",
-        value: "Invoiced"
     });
     return register.editJob(id, formData);
 };

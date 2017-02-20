@@ -18,6 +18,7 @@ facade.getClient = function(id){
     return clientRegister.getClient(id);
 };
 
+//////Get the client including the job and jobSchemes
 facade.getClientFull = function(id) {
     return clientRegister.getClientFull(id);
 };
@@ -51,6 +52,7 @@ facade.getJob =  function(id) {
     return jobRegister.getJob(id);
 };
 
+//////Get a job that includes the client
 facade.getJobFull = function(id){
     return jobRegister.getJobFull(id);
 };
@@ -60,18 +62,22 @@ facade.getDayJobs = function(from) {
     return jobRegister.getDayJobs(from);
 };
 
+//////Get Jobs that belong to the specified client
 facade.getClientJobs = function(searchParams, orderParams, page){
     return jobRegister.getClientJobs(searchParams, orderParams, page);
 };
 
+//////Get jobs for the month given
 facade.getMonthJobs = function(clientId, year, month){
     return jobRegister.getMonthJobs(clientId, year, month);
 };
 
+//////Get jobs based on the given search params
 facade.searchJobs = function(searchParams, orderParams, page) {
     return jobRegister.searchJobs(searchParams, orderParams, page);
 };
 
+//////Returns the number of pages
 facade.getJobPageCount = function(searchParams){
     return getJobPageCount(searchParams);
 };
@@ -86,55 +92,55 @@ facade.editJob = function(id, data){
     return jobRegister.editJob(id, data);
 };
 
-//////State Machine for single objects
+////State Machine for single objects
+
+//////Changes the state to placed
+facade.placed = function(id){
+    return jobRegister.placed(id);
+};
+
+//////Changes the state to done
 facade.done = function(id){
     return jobRegister.done(id);
 };
 
-facade.undone = function(id){
-    return jobRegister.undone(id);
-};
-
 //TODO: Maybe I won't need these
+//////Changes the state to invoice
 facade.invoice = function(id) {
     return jobRegister.invoice(id);
 };
 
-facade.uninvoice = function(id){
-    return jobRegister.uninvoice(id);
-};
-
+//////Changes the state to paid
 facade.paid = function(id){
     return jobRegister.paid(id);
 };
 
-facade.unpaid = function(id){
-    return jobRegister.unpaid(id);
-};
-
 //List State Machine
+//////Changes the state to done
 facade.jobListDone = function(idList) {
     return jobRegister.jobListDone(idList);
 };
 
+//////Changes the state to inboiced
 facade.jobListInvoiced = function(idList) {
     return jobRegister.jobListInvoiced(idList);
 };
 
+//////Changes the state to paid
 facade.jobListPaid = function(idList) {
     return jobRegister.jobListPaid(idList);
 };
 
 ////Remove Functions
+//////Removes a single job object
 facade.removeJob = function(id){
     return jobRegister.removeJob(id);
 };
 
+//////Removed a list of job objects
 facade.bulkDeleteJobs = function(idList) {
     return jobRegister.bulkDeleteJobs(idList);
 };
-
-
 
 //JobScheme Functions
 ////Search Functions
@@ -143,6 +149,7 @@ facade.getJobScheme = function(id) {
     return schemeRegister.getJobScheme(id);
 };
 
+//////Gets the specified jobScheme and includes the client
 facade.getJobSchemeFull = function(id){
     return schemeRegister.getJobSchemeFull(id);
 };

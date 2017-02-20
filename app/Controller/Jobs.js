@@ -12,7 +12,6 @@ ctrl.searchParams = {};
 //Properties for selection
 ctrl.selectedList = [];
 
-//TODO: Fix the check all checkbox on the UI
 //TODO: Add ordering
 
 //Creates the index page for Jobs and loads all the jobs
@@ -58,9 +57,9 @@ ctrl.searchJobs = function() {
     ctrl.currentPage = 0;
 
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
-    obj[item.name] = item.value;
-    return obj;
-},{});
+        obj[item.name] = item.value;
+        return obj;
+    },{});
 
     if($('#fromDatepicker :input').val() !== "") {
         formData.from = Date.parse($('#fromDatepicker :input').val());
@@ -78,6 +77,7 @@ ctrl.searchJobs = function() {
     });
 };
 
+//Updates the list of selected jobs
 ctrl.updateSelectedList = function() {
     var tdList = $("#indexJobTable :checked");
     ctrl.selectedList = [];
@@ -92,6 +92,7 @@ ctrl.updateSelectedList = function() {
 
 };
 
+//Updates all the checkboxes depending on the top one, and then updates the list
 ctrl.updateAllCheckboxes = function() {
     var checked = $("#jobAllCheckbox").is(":checked");
     var tdList = $("#indexJobTable :checkbox");
@@ -223,6 +224,12 @@ ctrl.rebookJob = function(id){
 };
 
 //State Machine
+ctrl.placed = function(id){
+    facade.placed(id).then(function(data){
+        ctrl.jobDetails(id);
+    });
+};
+
 ctrl.done = function(id){
     facade.done(id).then(function(data){
         ctrl.jobDetails(id);
@@ -242,6 +249,10 @@ ctrl.paid = function(id){
 };
 
 //List State Machine
+ctrl.jobListPlaced = function() {
+    facade.jobListPlaced(ctrl.selectedList);
+};
+
 ctrl.jobListDone = function() {
     facade.jobListDone(ctrl.selectedList);
 };

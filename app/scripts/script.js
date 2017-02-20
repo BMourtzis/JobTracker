@@ -9,7 +9,7 @@ uiFunctions.home = function() {
     uiFunctions.changeActive(0);
 };
 uiFunctions.homeJobDone = function(id) { ctrl.Home.done(id); };
-uiFunctions.homeJobUndone = function(id) { ctrl.Home.undone(id); };
+uiFunctions.homeJobUndone = function(id) { ctrl.Home.placed(id); };
 uiFunctions.previousDay = function() { ctrl.Home.previousDay(); };
 uiFunctions.nextDay = function() { ctrl.Home.nextDay(); };
 

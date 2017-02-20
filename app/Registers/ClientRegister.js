@@ -24,6 +24,7 @@ register.getClient = function(id){
 
 //TODO: Use query sorting
 //TODO: Fix the orm.Job and orm.JobScheme issue
+//////Gets the specfied client and includes the Jobs and JobSchemes
 register.getClientFull = function(id) {
     return orm.client.findById(id,{include: [orm.job, orm.jobScheme]}).then(function(query){
         return query.get({plain:true});

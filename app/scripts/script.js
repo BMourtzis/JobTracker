@@ -65,6 +65,7 @@ uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 uiFunctions.disableJobScheme = function(id) { ctrl.JobSchemes.disableJobScheme(id); };
 uiFunctions.enableJobScheme = function(id) { ctrl.JobSchemes.enableJobScheme(id); };
 uiFunctions.getEditJobScheme = function(id) { ctrl.JobSchemes.getEditJobScheme(id); };
+uiFunctions.editJobScheme = function(id) { ctrl.JobSchemes.editJobScheme(id); };
 
 uiFunctions.invoices = function() {
     uiFunctions.changeActive(3);

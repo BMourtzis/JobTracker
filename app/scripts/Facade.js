@@ -171,6 +171,14 @@ facade.editJobScheme = function(id, data){
     return schemeRegister.editJobScheme(id, data);
 };
 
+facade.disableJobScheme = function(id) {
+    return schemeRegister.disableJobScheme(id);
+};
+
+facade.enableJobScheme = function(id) {
+    return schemeRegister.enableJobScheme(id);
+};
+
 ////GenerateJobs
 facade.generateJobs = function(id, month) {
     return schemeRegister.generateJobs(id, month);

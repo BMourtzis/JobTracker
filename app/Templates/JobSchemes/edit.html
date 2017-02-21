@@ -2,7 +2,7 @@
 <div class="row">
     <h1 class="float-left">Edit {{:jobName}}</h1>
 </div>
-<form id="createJobSchemeForm">
+<form id="editJobSchemeForm">
     <div class="row">
         <div class="form-group large-field">
             <label for="jobName">Job Name</label>
@@ -38,6 +38,6 @@
         <!-- Where the repetition values are added -->
     </div>
     <div class="row">
-        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions">Submit</button>
+        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.editJobScheme({{:id}})">Submit</button>
     </div>
 </form>

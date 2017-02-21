@@ -42,7 +42,6 @@ register.getJobSchemeFull = function(id) {
 
         data.repetitionValues = JSON.parse(data.repetitionValues);
         data.repetitionValues.forEach(jobSchemeHelper);
-        console.log(data.repetitionValues);
         return data;
     });
 };
@@ -50,7 +49,6 @@ register.getJobSchemeFull = function(id) {
 function jobSchemeHelper(data) {
         data.week = Math.floor(data.day/7);
         data.day %= 7;
-        console.log(data.day);
 
         switch (data.day) {
             case 0:
@@ -109,6 +107,14 @@ register.editJobScheme = function(id, data) {
         }
         return js.save();
     });
+};
+
+register.disableJobScheme = function(id) {
+    return register.editJobScheme(id, [{name: "enabled", value: false}]);
+};
+
+register.enableJobScheme = function(id) {
+    return register.editJobScheme(id, [{name: "enabled", value: true}]);
 };
 
 //GenerateJobs

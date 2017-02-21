@@ -28,7 +28,7 @@ register.getClientFull = function(id) {
     return orm.client.findById(id,{include: [orm.job, orm.jobScheme]}).then(function(query){
         return query.get({plain:true});
     }).then(function(data){
-        
+
         //Sorts the jobs by time
         data.jobs.sort(function(a,b){
             return b.timeBooked - a.timeBooked;

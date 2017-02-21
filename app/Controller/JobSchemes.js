@@ -130,8 +130,6 @@ ctrl.removeRepValues = function() {
     }
 };
 
-//TODO: add edit page and functionality
-
 //Displays the edit job scheme page
 ctrl.getEditJobScheme = function(id) {
     facade.getJobScheme(id).then(function(data) {
@@ -163,17 +161,27 @@ ctrl.getEditJobScheme = function(id) {
 
 //Edit a job scheme based on the field values
 ctrl.editJobScheme = function(id) {
+    var formData = $("#editJobSchemeForm").serializeArray();
+    formData.splice(3,4);
+    formData.push({
+        name: "repetitionValues",
+        value: ctrl.getRepValues()
+    });
+
+    facade.editJobScheme(id, formData).then(function(data){
+        ctrl.jobSchemeDetails(id);
+    });
 
 };
 
 //Disables a jobScheme
 ctrl.disableJobScheme = function(id){
-    facade.editJobScheme(id, [{name: "enabled", value: false}]);
+    facade.disableJobScheme(id);
 };
 
 //Enables a jobScheme
 ctrl.enableJobScheme = function(id){
-    facade.editJobScheme(id, [{name: "enabled", value: true}]);
+    facade.enableJobScheme(id);
 };
 
 module.exports = ctrl;

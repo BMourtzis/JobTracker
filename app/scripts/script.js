@@ -64,6 +64,7 @@ uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 uiFunctions.disableJobScheme = function(id) { ctrl.JobSchemes.disableJobScheme(id); };
 uiFunctions.enableJobScheme = function(id) { ctrl.JobSchemes.enableJobScheme(id); };
+uiFunctions.getEditJobScheme = function(id) { ctrl.JobSchemes.getEditJobScheme(id); };
 
 uiFunctions.invoices = function() {
     uiFunctions.changeActive(3);

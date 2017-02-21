@@ -25,6 +25,12 @@ ctrl.loadDayJobs = function() {
         data.next = new Date(ctrl.selectedDate).add(1).day().toString("dd/MM/yyyy");
         data.previous = new Date(ctrl.selectedDate).add(-1).day().toString("dd/MM/yyyy");
 
+        data.sum = 0;
+
+        for(var i = 0; i < data.jobs.length; i++){
+            data.sum += data.jobs[i].total;
+        }
+
         var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
         var table = tableTemp(data);
         $("#homeDailyTable").html(table);

@@ -23,8 +23,11 @@ gen.generateInvoice = function(client, year, month){
     client.issueDate = new Date.today().toString("dd-MM-yyyy");
     client.invoicePeriod = period.toString("MMMM yyyy");
 
-    // TODO: Fix the next month problem, send a Date object
-    facade.getMonthJobs(client.id, year, month+1).then(function(data){
+    var nextMonth = new Date(period).next().month();
+    console.log(nextMonth);
+
+    // TODO: Test if this works fine
+    facade.getMonthJobs(client.id, nextMonth).then(function(data){
         var nextServ = [];
         for(var i = 0; i < data.length; i++){
             nextServ.push(new Date(data[i].timeBooked).toString("dd/MM/yyyy"));

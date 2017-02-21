@@ -12,7 +12,6 @@ ctrl.index = function() {
 
 };
 
-//TODO: Add repvalues to the details
 //Get and Displays the jobScheme details on the sidebar
 ctrl.jobSchemeDetails = function(id) {
     facade.getJobSchemeFull(id).then(function(data) {
@@ -135,13 +134,30 @@ ctrl.removeRepValues = function() {
 
 //Displays the edit job scheme page
 ctrl.getEditJobScheme = function(id) {
-    facade.getClient(id).then(function(data) {
+    facade.getJobScheme(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
-        var client = data.get({
-            plain: true
-        });
-        var html = temp(client);
+        var html = temp(data);
         $("#sidebar").html(html);
+
+        var innerhtml = "";
+        data.repetitionValues.forEach(function(value){
+
+            switch (data.repetition) {
+                case "Monthly":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/MonthlyRepValuesEdit.html')(value);
+                    break;
+                case "Fortnightly":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/FortnightlyRepValuesEdit.html')(value);
+                    break;
+                case "Weekly":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/WeeklyRepValuesEdit.html')(value);
+                    break;
+                case "Daily":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/DailyRepValuesEdit.html')(value);
+                    break;
+            }
+        });
+        $("#repValuesDiv").html(innerhtml);
     });
 };
 

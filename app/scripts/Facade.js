@@ -68,8 +68,8 @@ facade.getClientJobs = function(searchParams, orderParams, page){
 };
 
 //////Get jobs for the month given
-facade.getMonthJobs = function(clientId, year, month){
-    return jobRegister.getMonthJobs(clientId, year, month);
+facade.getMonthJobs = function(clientId, date){
+    return jobRegister.getMonthJobs(clientId, date);
 };
 
 //////Get jobs based on the given search params

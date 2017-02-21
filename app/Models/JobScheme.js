@@ -45,7 +45,7 @@ function getJobScheme(){
         classMethods: {
 
         },
-        instanceMethods: { //TODO: Check if this is correct on all of them.
+        instanceMethods: {
             generateJobs: function generateJobs(month){
                 if (this.enabled) {
                     var date = Date.today().set({
@@ -126,7 +126,6 @@ function getJobScheme(){
                 }
             },
             creteJob: function createJob(jobDate) {
-                //TODO: create a job via the client
                 this.job.create({
                     jobName: this.jobName,
                     timeBooked: jobDate,

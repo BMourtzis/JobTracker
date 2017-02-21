@@ -27,7 +27,7 @@ ctrl.index = function() {
 //Shows client the selected client on the sidebar
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
-        data.jobs = data.jobs.slice(0,9);
+
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
         var html = temp(data);
         $("#sidebar").html(html);

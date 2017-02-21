@@ -1,25 +1,17 @@
 <!DOCTYPE html>
 <div class="row">
-    <h1 class="float-left">New Job Scheme</h1>
+    <h1 class="float-left">Edit {{:jobName}}</h1>
 </div>
 <form id="createJobSchemeForm">
     <div class="row">
-        <div class="form-group extra-large-field">
-            <label for="client">Client</label>
-            <select class="form-control" name="clientSelect">
-                <option value="{{:id}}" selected>{{:businessName}}</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
         <div class="form-group large-field">
             <label for="jobName">Job Name</label>
-            <input type="text" class="form-control" name="jobName" placeholder="Job Name">
+            <input type="text" class="form-control" name="jobName" placeholder="Job Name" value="{{:jobName}}">
         </div>
         <div class="form-group small-field">
             <label for="payment">Payment</label>
             <div class="input-group">
-                <input type="text" class="form-control" name="payment" placeholder="Eg. 50">
+                <input type="text" class="form-control" name="payment" placeholder="Eg. 50" value="{{:payment}}">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-usd"></span>
                 </span>
@@ -28,14 +20,12 @@
     </div>
     <div class="row">
         <div class="form-group medium-field">
-            <!-- Could be Generated based on Enum values -->
             <label for="repeatition">Repeatition</label>
             <select id ="repetitionSelector" class="form-control" name="repeatitionSelect" onchange="UIFunctions.updateRepFields()">
-                <option value="" selected disabled>Select Repeatition</option>
-                <option value="Monthly">Monthly</option>
-                <option value="Fortnightly">Fortnightly</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Daily">Daily</option>
+                <option value="Monthly" {{if repetition === "Monthly"}} selected{{/if}}>Monthly</option>
+                <option value="Fortnightly" {{if repetition === "Fortnightly"}} selected{{/if}}>Fortnightly</option>
+                <option value="Weekly" {{if repetition === "Weekly"}} selected{{/if}}>Weekly</option>
+                <option value="Daily" {{if repetition === "Daily"}} selected{{/if}}>Daily</option>
             </select>
         </div>
         <!-- Button to add repetition fields -->
@@ -48,6 +38,6 @@
         <!-- Where the repetition values are added -->
     </div>
     <div class="row">
-        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJobScheme()">Submit</button>
+        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions">Submit</button>
     </div>
 </form>

@@ -2,7 +2,7 @@
 <div class="row">
     <h2 class="details-heading float-left">{{:jobName}}</h2>
     <div class="custom-button">
-        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditJobSchemes({{:id}})">
+        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditJobScheme({{:id}})">
             <span class="glyphicon glyphicon-pencil"></span>
             Edit
         </button>
@@ -18,14 +18,45 @@
         {{:client.businessName}}
     </p>
     <p>
+        <strong>Repetition:</strong>
+        {{:repetition}}
+    </p>
+    <p>
         <strong>Total:</strong>
-        {{:payment}}
+        {{:payment}}$
     </p>
     <p>
         <strong>Enabled:</strong>
         {{:enabled}}
     </p>
 </div>
+<div class="row">
+    <h4>Repetition Values:</h4>
+</div>
+<!-- TODO: Fix UI -->
+
+{{for repetitionValues}}
+<div class="row sub-details">
+    <div class="col-md-1"><h5>{{:#index+1}}.</h5></div>
+    <div class="col-md-offset-1">
+    {{if #parent.parent.data.repetition === "Monthly" || #parent.parent.data.repetition === "Fortnightly"}}
+    <p>
+        <strong>Week:</strong>
+        {{:week+1}}
+    </p>
+    {{/if}}
+    {{if #parent.parent.data.repetition !== "Daily"}}
+    <p>
+        <strong>Day:</strong>
+        {{:day}}
+    </p>
+    {{/if}}
+    <p>
+        <strong>Time:</strong>
+        {{:hour}}:{{:minute}}
+    </p></div>
+</div>
+{{/for}}
 <div class="row">
     <div class="custom-button">
         {{if enabled}}

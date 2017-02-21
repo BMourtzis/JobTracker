@@ -94,9 +94,10 @@ register.getClientJobs = function(searchParams, orderParams, page){
 };
 
 //Returns Jobs for the specified month
-register.getMonthJobs = function(clientId, year, month){
-    var from = new Date.today().set({year: year, month: month, day: 1});
+register.getMonthJobs = function(clientId, date){
+    var from = new Date(date).set({day: 1});
     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
+    console.log(from, to);
 
     return orm.job.findAll({
         where:{

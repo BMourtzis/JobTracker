@@ -1,3 +1,5 @@
+var ctrl = require("../Controller/Controllers.js");
+
 var uiFunctions = { };
 
 uiFunctions.ContrDir = "../Controller/";
@@ -7,7 +9,7 @@ uiFunctions.home = function() {
     uiFunctions.changeActive(0);
 };
 uiFunctions.homeJobDone = function(id) { ctrl.Home.done(id); };
-uiFunctions.homeJobUndone = function(id) { ctrl.Home.undone(id); };
+uiFunctions.homeJobUndone = function(id) { ctrl.Home.placed(id); };
 uiFunctions.previousDay = function() { ctrl.Home.previousDay(); };
 uiFunctions.nextDay = function() { ctrl.Home.nextDay(); };
 
@@ -37,6 +39,7 @@ uiFunctions.jobListDelete = function() { ctrl.Jobs.bulkDelete(); };
 uiFunctions.searchJobs = function() { ctrl.Jobs.searchJobs(); };
 uiFunctions.gotoJobPage = function(page) { ctrl.Jobs.gotoPage(page); };
 uiFunctions.updateJobSelectedList = function() { ctrl.Jobs.updateSelectedList(); };
+uiFunctions.updateAllCheckboxes = function() { ctrl.Jobs.updateAllCheckboxes(); };
 
 uiFunctions.clients = function() {
     ctrl.Clients.index();
@@ -61,6 +64,8 @@ uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 uiFunctions.disableJobScheme = function(id) { ctrl.JobSchemes.disableJobScheme(id); };
 uiFunctions.enableJobScheme = function(id) { ctrl.JobSchemes.enableJobScheme(id); };
+uiFunctions.getEditJobScheme = function(id) { ctrl.JobSchemes.getEditJobScheme(id); };
+uiFunctions.editJobScheme = function(id) { ctrl.JobSchemes.editJobScheme(id); };
 
 uiFunctions.invoices = function() {
     uiFunctions.changeActive(3);

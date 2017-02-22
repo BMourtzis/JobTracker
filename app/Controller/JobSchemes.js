@@ -1,3 +1,5 @@
+var facade = require('../scripts/Facade.js');
+
 var ctrl = {};
 
 ctrl.ctrlName = "JobSchemes";
@@ -5,29 +7,12 @@ ctrl.templateDir = "./app/Templates/";
 ctrl.repval = 0;
 ctrl.selectedRep = "";
 
-//TODO: Add pagination
-
+//Copied from other controllers, might not need it
 ctrl.index = function() {
-    facade.getAllClients().then(function(query) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
-        var data = {
-            clients: []
-        };
-        for (var i = 0; i < query.length; i++) {
-            data.clients.push(query[i].get({
-                plain: true
-            }));
-        }
-        var html = temp(data);
-        $("#content").html(html);
 
-        $("#client-table.clickable-row").click(function() {
-            var id = $(this).data("id");
-            ctrl.clientDetails(id);
-        });
-    });
 };
 
+//Get and Displays the jobScheme details on the sidebar
 ctrl.jobSchemeDetails = function(id) {
     facade.getJobSchemeFull(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
@@ -36,16 +21,19 @@ ctrl.jobSchemeDetails = function(id) {
     });
 };
 
-ctrl.generateJobs = function(id) {
-    facade.generateJobs(id);
+//Generates Jobs for the month given, based on the jobScheme
+ctrl.generateJobs = function(id, month) {
+    facade.generateJobs(id, month);
 };
 
+//Generates Jobs based on the jobScheme for the next month
 ctrl.generateNextMonthsJobs = function(id) {
     var date = new Date.today();
     var month = parseInt(Date.today().toString("M"));
     facade.generateJobs(id, month);
 };
 
+//Displays the create job scheme page
 ctrl.getCreateJobScheme = function(id) {
     facade.getClient(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
@@ -56,6 +44,7 @@ ctrl.getCreateJobScheme = function(id) {
     });
 };
 
+//create a new job scheme based on the field values
 ctrl.createJobScheme = function() {
     var formData = $("#createJobSchemeForm").serializeArray();
     var repvalues = ctrl.getRepValues();
@@ -125,6 +114,8 @@ ctrl.addRepValues = function() {
     }
 };
 
+//Checks if the repetition value has changed.
+//If yes, it will remove all the repValues
 ctrl.changeRepFields = function() {
     if (ctrl.selectedRep !== $("#repetitionSelector").val()) {
         $("#repValuesDiv").html("");
@@ -132,34 +123,65 @@ ctrl.changeRepFields = function() {
     ctrl.selectedRep = $("#repetitionSelector").val();
 };
 
+//Remove the specified repValue
 ctrl.removeRepValues = function() {
     if(ctrl.repval > 0) {
         ctrl.repval--;
     }
 };
 
-ctrl.getEditClient = function(id) {
-    facade.getClient(id).then(function(data) {
+//Displays the edit job scheme page
+ctrl.getEditJobScheme = function(id) {
+    facade.getJobScheme(id).then(function(data) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
-        var client = data.get({
-            plain: true
-        });
-        var html = temp(client);
+        var html = temp(data);
         $("#sidebar").html(html);
+
+        var innerhtml = "";
+        data.repetitionValues.forEach(function(value){
+
+            switch (data.repetition) {
+                case "Monthly":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/MonthlyRepValuesEdit.html')(value);
+                    break;
+                case "Fortnightly":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/FortnightlyRepValuesEdit.html')(value);
+                    break;
+                case "Weekly":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/WeeklyRepValuesEdit.html')(value);
+                    break;
+                case "Daily":
+                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/DailyRepValuesEdit.html')(value);
+                    break;
+            }
+        });
+        $("#repValuesDiv").html(innerhtml);
     });
 };
 
+//Edit a job scheme based on the field values
+ctrl.editJobScheme = function(id) {
+    var formData = $("#editJobSchemeForm").serializeArray();
+    formData.splice(3,4);
+    formData.push({
+        name: "repetitionValues",
+        value: ctrl.getRepValues()
+    });
+
+    facade.editJobScheme(id, formData).then(function(data){
+        ctrl.jobSchemeDetails(id);
+    });
+
+};
+
+//Disables a jobScheme
 ctrl.disableJobScheme = function(id){
-    facade.editJobScheme(id, [{name: "enabled", value: false}]);
+    facade.disableJobScheme(id);
 };
 
+//Enables a jobScheme
 ctrl.enableJobScheme = function(id){
-    facade.editJobScheme(id, [{name: "enabled", value: true}]);
-};
-
-ctrl.editClient = function(id) {
-    var formData = $("#editClientForm").serializeArray();
-    facade.editClient(id, formData);
+    facade.enableJobScheme(id);
 };
 
 module.exports = ctrl;

@@ -1,3 +1,5 @@
+var facade = require('../scripts/Facade.js');
+
 var ctrl = {};
 
 ctrl.ctrlName = "Jobs";
@@ -10,7 +12,6 @@ ctrl.searchParams = {};
 //Properties for selection
 ctrl.selectedList = [];
 
-//TODO: Add select all checkbox
 //TODO: Add ordering
 
 //Creates the index page for Jobs and loads all the jobs
@@ -37,8 +38,8 @@ ctrl.initiatePage = function(){
 //Queries all the jobs based on the client id
 ctrl.getClientJobs = function(id){
     ctrl.initiatePage().then(function(){
-        ctrl.searchParams = {clientSelect: id};
-        facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+        ctrl.searchParams = {clientID: id};
+        facade.getClientJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
             ctrl.loadTable(data);
         });
     });
@@ -56,9 +57,9 @@ ctrl.searchJobs = function() {
     ctrl.currentPage = 0;
 
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
-    obj[item.name] = item.value;
-    return obj;
-},{});
+        obj[item.name] = item.value;
+        return obj;
+    },{});
 
     if($('#fromDatepicker :input').val() !== "") {
         formData.from = Date.parse($('#fromDatepicker :input').val());
@@ -68,20 +69,22 @@ ctrl.searchJobs = function() {
         formData.to = Date.parse($('#toDatepicker :input').val());
     }
 
-    formData.clientSelect = parseInt(formData.clientSelect);
+    formData.client = parseInt(formData.client);
 
     ctrl.searchParams = formData;
-    facade.searchJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };
 
+//Updates the list of selected jobs
 ctrl.updateSelectedList = function() {
     var tdList = $("#indexJobTable :checked");
     ctrl.selectedList = [];
-    for(var i = 0; i < tdList.length; i++){
-        ctrl.selectedList.push(parseInt($(tdList[i]).val()));
-    }
+
+    tdList.each(function(){
+        ctrl.selectedList.push(parseInt($(this).val()));
+    });
 
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/selectedListOptions.html');
     var html = temp({count: ctrl.selectedList.length});
@@ -89,10 +92,22 @@ ctrl.updateSelectedList = function() {
 
 };
 
+//Updates all the checkboxes depending on the top one, and then updates the list
+ctrl.updateAllCheckboxes = function() {
+    var checked = $("#jobAllCheckbox").is(":checked");
+    var tdList = $("#indexJobTable :checkbox");
+
+    tdList.each(function(){
+        $(this).prop("checked", checked);
+    });
+
+    ctrl.updateSelectedList();
+};
+
 //Loads the next page of the table
 ctrl.gotoPage = function(page) {
     ctrl.currentPage = page;
-    facade.FindJobs(ctrl.searchParams, {}, ctrl.currentPage).then(function(data){
+    facade.FindJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };
@@ -178,6 +193,7 @@ ctrl.getEditJob = function(id) {
 //Updates the details of the job based on the edits made
 ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
+    formData[1].value = parseFloat(formData[1].value);
     facade.editJob(id, formData);
 };
 
@@ -208,6 +224,12 @@ ctrl.rebookJob = function(id){
 };
 
 //State Machine
+ctrl.placed = function(id){
+    facade.placed(id).then(function(data){
+        ctrl.jobDetails(id);
+    });
+};
+
 ctrl.done = function(id){
     facade.done(id).then(function(data){
         ctrl.jobDetails(id);
@@ -227,6 +249,10 @@ ctrl.paid = function(id){
 };
 
 //List State Machine
+ctrl.jobListPlaced = function() {
+    facade.jobListPlaced(ctrl.selectedList);
+};
+
 ctrl.jobListDone = function() {
     facade.jobListDone(ctrl.selectedList);
 };

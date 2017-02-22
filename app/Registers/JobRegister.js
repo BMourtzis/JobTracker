@@ -97,7 +97,6 @@ register.getClientJobs = function(searchParams, orderParams, page){
 register.getMonthJobs = function(clientId, date){
     var from = new Date(date).set({day: 1});
     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
-    console.log(from, to);
 
     return orm.job.findAll({
         where:{
@@ -161,12 +160,12 @@ register.generateQuery = function(searchParams) {
         }
     }
 
-    if(searchParams.statusSelect !== "" && searchParams.statusSelect !== undefined){
-        query.state = searchParams.statusSelect;
+    if(searchParams.state !== "" && searchParams.state !== undefined){
+        query.state = searchParams.state;
     }
 
-    if(!Number.isNaN(searchParams.clientSelect) && searchParams.clientSelect !== undefined){
-        query.clientID = searchParams.clientSelect;
+    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined){
+        query.clientID = searchParams.clientID;
     }
 
     return query;

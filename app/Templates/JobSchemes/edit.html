@@ -21,7 +21,7 @@
     <div class="row">
         <div class="form-group medium-field">
             <label for="repeatition">Repeatition</label>
-            <select id ="repetitionSelector" class="form-control" name="repeatitionSelect" onchange="UIFunctions.updateRepFields()">
+            <select id ="repetitionSelector" class="form-control" name="repetition" onchange="UIFunctions.updateRepFields()">
                 <option value="Monthly" {{if repetition === "Monthly"}} selected{{/if}}>Monthly</option>
                 <option value="Fortnightly" {{if repetition === "Fortnightly"}} selected{{/if}}>Fortnightly</option>
                 <option value="Weekly" {{if repetition === "Weekly"}} selected{{/if}}>Weekly</option>

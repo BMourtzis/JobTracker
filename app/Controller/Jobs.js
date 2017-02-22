@@ -38,7 +38,7 @@ ctrl.initiatePage = function(){
 //Queries all the jobs based on the client id
 ctrl.getClientJobs = function(id){
     ctrl.initiatePage().then(function(){
-        ctrl.searchParams = {clientSelect: id};
+        ctrl.searchParams = {clientID: id};
         facade.getClientJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
             ctrl.loadTable(data);
         });
@@ -69,7 +69,7 @@ ctrl.searchJobs = function() {
         formData.to = Date.parse($('#toDatepicker :input').val());
     }
 
-    formData.clientSelect = parseInt(formData.clientSelect);
+    formData.client = parseInt(formData.client);
 
     ctrl.searchParams = formData;
     facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){

@@ -13,17 +13,7 @@ orm.connStr = new sequelize(null, null, null, {
     storage: './app/db/jobs.db'
 });
 
-//Utility Functions
-orm.testConnection = function() {
-    orm.connStr
-        .authenticate()
-        .then(function(err) {
-            console.log('Connection has been established successfully.');
-        })
-        .catch(function(err) {
-            console.log('Unable to connect to the database:', err);
-        });
-};
+
 
 orm.client =  orm.connStr.define('client', {
     id: {
@@ -280,6 +270,18 @@ orm.jobScheme = orm.connStr.define('jobScheme', {
         }
     }
 });
+
+//Utility Functions
+orm.testConnection = function() {
+    orm.connStr
+        .authenticate()
+        .then(function(err) {
+            console.log('Connection has been established successfully.');
+        })
+        .catch(function(err) {
+            console.log('Unable to connect to the database:', err);
+        });
+};
 
 orm.jobScheme.belongsTo(orm.client);
 orm.job.belongsTo(orm.client);

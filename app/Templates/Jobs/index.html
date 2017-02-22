@@ -47,7 +47,7 @@
                     <div class="form-group">
                         <!-- Copy from Create -->
                         <label for="client">Client</label>
-                        <select class="form-control" name="clientSelect">
+                        <select class="form-control" name="clientID">
                             <option value="" selected></option>
                             {{for clients}}
                                 <option value="{{:id}}">{{:businessName}}</option>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label for="state">Status</label>
-                        <select class="form-control" name="statusSelect">
+                        <select class="form-control" name="status">
                             <option value="" selected></option>
                             <option value="Placed">Placed</option>
                             <option value="Done">Done</option>

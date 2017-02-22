@@ -23,6 +23,8 @@ window.UIFunctions = require('./app/scripts/script.js');
 require('./app/scripts/JSRenderExtensions.js');
 // window.RG = require('./app/scripts/invoiceGenerator.js');
 
+window.orm = require("./app/scripts/orm.js");
+// orm.reinitializeTables();
 // orm.testConnection();
 
 UIFunctions.home();

@@ -71,7 +71,7 @@ orm.client =  orm.connStr.define('client', {
                 payment: payment,
                 state: 'Placed',
                 clientID: this.id,
-                total: parseFloat(payment) + (0.1 * payment)
+                gst: (0.1 * payment)
             });
         },
         addNewJobScheme: function addNewJobScheme(jobname, payment, repetition, repetitionvalues){
@@ -112,10 +112,10 @@ orm.job = orm.connStr.define('job', {
         allowNull: false,
         field: 'payment'
     },
-    total: {
+    gst: {
         type: sequelize.DECIMAL,
         allowNull: false,
-        field: 'total'
+        field: 'gst'
     },
     state: {
         type: sequelize.ENUM('Placed', 'Done', 'Invoiced', 'Paid'),
@@ -163,15 +163,14 @@ orm.jobScheme = orm.connStr.define('jobScheme', {
     repetition: {
         type: sequelize.ENUM('Daily', 'Weekly', 'Fortnightly', 'Monthly'),
         allowNull: false,
-        field: 'repeatition'
+        field: 'repetition'
     },
     repetitionValues: {
         type: sequelize.JSON,
-        field: 'repeatitionValues'
+        field: 'repetitionValues'
     },
     clientID: {
         type: sequelize.INTEGER,
-        field: "ClientID",
         references: {
             model: this.client,
             key: 'id'
@@ -271,6 +270,11 @@ orm.jobScheme = orm.connStr.define('jobScheme', {
     }
 });
 
+orm.jobScheme.belongsTo(orm.client);
+orm.job.belongsTo(orm.client);
+orm.client.hasMany(orm.job);
+orm.client.hasMany(orm.jobScheme);
+
 //Utility Functions
 orm.testConnection = function() {
     orm.connStr
@@ -283,15 +287,11 @@ orm.testConnection = function() {
         });
 };
 
-orm.jobScheme.belongsTo(orm.client);
-orm.job.belongsTo(orm.client);
-orm.client.hasMany(orm.job);
-orm.client.hasMany(orm.jobScheme);
-
 orm.reinitializeTables = function() {
-    // orm.Client.sync({force: true});
-    // orm.Job.sync({force: true});
-    // orm.JobScheme.sync({force: true});
+
+    // orm.client.sync();
+    // orm.job.sync();
+    // orm.jobScheme.sync();
 };
 
 module.exports = orm;

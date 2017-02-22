@@ -28,7 +28,7 @@ ctrl.loadDayJobs = function() {
         data.sum = 0;
 
         for(var i = 0; i < data.jobs.length; i++){
-            data.sum += data.jobs[i].total;
+            data.sum += data.jobs[i].payment + data.jobs[i].gst;
         }
 
         var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');

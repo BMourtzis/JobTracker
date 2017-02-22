@@ -56,8 +56,8 @@ register.createClient = function(firstname, lastname, businessname, shortname, a
         businessName: businessname,
         shortName: shortname,
         address: address,
-        Email: email,
-        Phone: phone,
+        email: email,
+        phone: phone,
      });
 };
 

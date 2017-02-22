@@ -31,7 +31,7 @@
             <td>{{:jobName}}</td>
             <td>{{:client.businessName}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>{{:total}}$</td>
+            <td>{{:payment + gst}}$</td>
             <td>
                 {{if state === "Placed"}}
                 <input type="checkbox" onclick="UIFunctions.homeJobDone({{:id}})">

@@ -62,7 +62,7 @@ register.FindJobs = function(searchParams, orderParams, page) {
     }
 
     return orm.job.findAll({
-        include: [orm.client],
+        include: [orm.client, orm.invoice],
         where: searchParams,
         order: orderParams,
         offset: page*100,
@@ -78,7 +78,7 @@ register.FindJobs = function(searchParams, orderParams, page) {
                 count: count,
                 jobs: jobs
             };
-
+            console.log(data);
             return data;
         });
     });
@@ -237,23 +237,23 @@ register.paid = function(id){
 };
 
 //List State Machine
-register.bulkUpdateJobList = function(idList, state){
+register.bulkUpdateJobList = function(idList, updateList){
     var query = {
         id: {$in: idList}
     };
-    return orm.job.update({state: state}, {where: query});
+    return orm.job.update(updateList, {where: query});
 };
 
 register.jobListDone = function(idList) {
-    return register.bulkUpdateJobList(idList, "Done");
+    return register.bulkUpdateJobList(idList, {state: "Done"});
 };
 
-register.jobListInvoiced = function(idList) {
-    return register.bulkUpdateJobList(idList, "Invoiced");
+register.jobListInvoiced = function(idList, invoiceId) {
+    return register.bulkUpdateJobList(idList, {state: "Invoiced", invoiceId: invoiceId});
 };
 
 register.jobListPaid = function(idList) {
-    return register.bulkUpdateJobList(idList, "Paid");
+    return register.bulkUpdateJobList(idList, {state: "Paid"});
 };
 
 ////Remove Functions

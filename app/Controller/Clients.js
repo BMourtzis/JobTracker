@@ -54,6 +54,8 @@ ctrl.getCreateClient = function() {
 ctrl.createClient = function() {
     var formData = $("#createClientForm").serializeArray();
     formData[1].value = formData[1].value.toUpperCase();
+    formData[6].value =  parseInt(formData[6].value);
+    if(Number.isNaN(formData[6].value)){ formData[6].value = null; }
 
     facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
         ctrl.index();

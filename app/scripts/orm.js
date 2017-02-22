@@ -70,7 +70,7 @@ orm.client =  orm.connStr.define('client', {
                 timeBooked: timebooked,
                 payment: payment,
                 state: 'Placed',
-                clientID: this.id,
+                clientId: this.id,
                 gst: (0.1 * payment)
             });
         },
@@ -81,9 +81,20 @@ orm.client =  orm.connStr.define('client', {
                 payment: payment,
                 repetition: repetition,
                 repetitionValues: repetitionvalues,
-                clientID: this.id
+                clientId: this.id
             });
         },
+        addNewInvoice: function addNewInvoice(year, month, total){
+            return orm.invoice.create({
+                year: year,
+                month: month,
+                total: total,
+                paid: false,
+                clientId: this.id
+            }).then(function(data){
+                return data.get({plain: true});
+            }, function(data){console.log(data);});
+        }
     }
 });
 
@@ -121,13 +132,6 @@ orm.job = orm.connStr.define('job', {
         type: sequelize.ENUM('Placed', 'Done', 'Invoiced', 'Paid'),
         allowNull: false,
         field: 'state'
-    },
-    clientID: {
-        type: sequelize.INTEGER,
-        references: {
-            model: this.client,
-            key: 'id'
-        }
     }
 }, {
     classMethods: {
@@ -168,13 +172,6 @@ orm.jobScheme = orm.connStr.define('jobScheme', {
     repetitionValues: {
         type: sequelize.JSON,
         field: 'repetitionValues'
-    },
-    clientID: {
-        type: sequelize.INTEGER,
-        references: {
-            model: this.client,
-            key: 'id'
-        }
     }
 }, {
     classMethods: {
@@ -263,17 +260,74 @@ orm.jobScheme = orm.connStr.define('jobScheme', {
         createJob: function createJob(jobDate) {
             var payment = this.payment;
             var jobName = this.jobName;
-            orm.client.findById(this.clientID).then(function(client){
+            orm.client.findById(this.clientId).then(function(client){
                 client.addNewJob(jobName, jobDate, payment);
             });
         }
     }
 });
 
+orm.invoice = orm.connStr.define('invoice', {
+    id: {
+        type: sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: 'id'
+    },
+    year: {
+        type: sequelize.INTEGER,
+        allowNull: false,
+        field: 'year'
+    },
+    month: {
+        type: sequelize.INTEGER,
+        allowNull: false,
+        field: 'month'
+    },
+    paidAt: {
+        type: sequelize.DATE,
+        allowNull: true,
+        field: 'paidAt',
+        get: function() {
+            return moment(this.getDataValue('timeBooked'));
+        }
+    },
+    total: {
+        type: sequelize.DECIMAL,
+        allowNull: false,
+        field: 'total'
+    },
+    paid: {
+        type: sequelize.BOOLEAN,
+        allowNull: false,
+        field: 'paid'
+    },
+    clientId: {
+        type: sequelize.INTEGER,
+        field: "clientId"
+    }
+}, {
+    indexes:[{
+        unique:true,
+        fields:['year', 'month', 'clientId']
+    }],
+    classMethods: {
+
+    },
+    instanceMethods: {
+
+    }
+});
+
+//Association Definitions
 orm.jobScheme.belongsTo(orm.client);
 orm.job.belongsTo(orm.client);
+orm.job.belongsTo(orm.invoice);
+orm.invoice.belongsTo(orm.client, {foreignKey: "clientId"});
 orm.client.hasMany(orm.job);
 orm.client.hasMany(orm.jobScheme);
+orm.client.hasMany(orm.invoice);
+orm.invoice.hasMany(orm.job);
 
 //Utility Functions
 orm.testConnection = function() {
@@ -288,10 +342,10 @@ orm.testConnection = function() {
 };
 
 orm.reinitializeTables = function() {
-
-    // orm.client.sync();
-    // orm.job.sync();
-    // orm.jobScheme.sync();
+    orm.invoice.sync({force: true});
+    orm.client.sync({force: true});
+    orm.job.sync({force: true});
+    orm.jobScheme.sync({force: true});
 };
 
 module.exports = orm;

@@ -311,6 +311,14 @@ orm.invoice = orm.connStr.define('invoice', {
     clientId: {
         type: sequelize.INTEGER,
         field: "clientId"
+    },
+    createdAt: {
+        type: sequelize.DATE,
+        allowNull: false,
+        field: 'createdAt',
+        get: function() {
+            return moment(this.getDataValue('timeBooked'));
+        }
     }
 }, {
     indexes:[{
@@ -348,7 +356,7 @@ orm.testConnection = function() {
 };
 
 orm.reinitializeTables = function() {
-    // orm.invoice.sync({force: true});
+    orm.invoice.sync();
     // orm.client.sync({force: true});
     // orm.job.sync({force: true});
     // orm.jobScheme.sync({force: true});

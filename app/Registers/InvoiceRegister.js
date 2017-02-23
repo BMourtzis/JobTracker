@@ -10,6 +10,25 @@ register.getInvoice = function(id){
     });
 };
 
+register.getCurrentInvoices = function() {
+    return register.findInvoices(false);
+};
+
+register.findInvoices = function(paid){
+    return orm.invoice.findAll({
+        where:{
+            paid: paid
+        },
+        include:[orm.job, orm.client]
+    }).then(function(data){
+        var invoices = [];
+        data.forEach(function(invoice){
+            invoices.push(invoice.get({plain:true}));
+        });
+        return invoices;
+    });
+};
+
 register.createInvoice = function(year, month, clientId) {
     getJobs(year, month, clientId, "Done").then(function(client) {
         if(client){
@@ -30,6 +49,10 @@ register.createInvoice = function(year, month, clientId) {
             }
         }
     });
+};
+
+register.printInvoice = function(invoiceId){
+    return generateInvoice(invoiceId);
 };
 
 function getJobs(year, month, clientId, state) {
@@ -116,11 +139,11 @@ function generateInvoice(invoiceId) {
             doc.render();
 
             var buf = doc.getZip().generate({type: "nodebuffer"});
-            fs.writeFileSync(path.resolve("./app/Misc/", invoice.client.businessName+".docx"), buf);
+            fs.writeFileSync(path.resolve("./app/Misc/"+period.toString("yyyy")+"/"+period.toString("MMMM")+"/", invoice.client.businessName+".docx"), buf);
+
+            return true;
         });
     });
-
-
 }
 
 module.exports = register;

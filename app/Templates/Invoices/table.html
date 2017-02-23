@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Client</th>
+            <th>Invoice No</th>
+            <th>Issue Date</th>
+            <th>Paid</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{for invoices}}
+        <tr id="client-table" class="clickable-row" data-id="{{:id}}">
+            <td>{{:client.businessName}}</td>
+            <td>{{:invoiceNo}}</td>
+            <td>{{:createdAt.format("DD/MM/YYYY")}}</td>
+            <td>
+                {{if paid === false}}
+                    {{:paid}}
+                {{else}}
+                    {{:paidAt}}
+                {{/if}}
+            </td>
+        </tr>
+        {{/for}}
+    </tbody>
+</table>

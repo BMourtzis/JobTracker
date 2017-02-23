@@ -1,6 +1,7 @@
 var clientRegister = require('../Registers/ClientRegister.js');
 var jobRegister = require('../Registers/JobRegister.js');
 var schemeRegister = require('../Registers/JobSchemeRegister.js');
+var invoiceRegister = require('../Registers/InvoiceRegister.js');
 
 var facade = { };
 
@@ -185,71 +186,8 @@ facade.generateJobs = function(id, month) {
 };
 
 
-//TODO: Move these to another file
-//Invoice
-// facade.generateMonthInvoices = function(year, month){
-//     var from = new Date.today().set({year: year, month: month, day: 1});
-//     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
-//
-//     return orm.Client.findAll({
-//         include:[{
-//             model: orm.Job,
-//             where: {
-//                 state: "Done",
-//                 timeBooked: {
-//                     gt:from,
-//                     lt: to
-//                 }
-//             }
-//         }]
-//     }).then(function(data){
-//         if(data.length > 0) {
-//             var clients = [];
-//             for(var i = 0; i < data.length; i++)
-//             {
-//                 clients.push(data[i].get({plain: true}));
-//             }
-//             return clients;
-//         }
-//         return data;
-//     }).then(function(data){
-//         if(data){
-//             RG.generateMultipleInvoices(data, year, month);
-//         }
-//
-//     });
-// };
-//
-// facade.generateClientInvoice = function(client, year, month){
-//     var from = new Date.today().set({year: year, month: month, day: 1});
-//     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
-//
-//     return orm.Client.findOne({
-//         include:[{
-//             model: orm.Job,
-//             where: {
-//                 state: "Done",
-//                 timeBooked: {
-//                     gt:from,
-//                     lt: to
-//                 },
-//             }
-//         }],
-//         where: {
-//             id: client
-//         }
-//     }).then(function(data){
-//         if(data) {
-//             return data.get({plain: true});
-//         }
-//         return data;
-//     }).then(function(data){
-//         if(data){
-//             RG.generateInvoice(data, year, month);
-//         }
-//
-//     });
-//
-// };
+facade.getCurrentInvoices = function() {
+    return invoiceRegister.getCurrentInvoices();
+};
 
 module.exports = facade;

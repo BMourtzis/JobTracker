@@ -72,7 +72,7 @@ uiFunctions.editJobScheme = function(id) { ctrl.JobSchemes.editJobScheme(id); };
 
 uiFunctions.invoices = function() {
     uiFunctions.changeActive(3);
-    ctrl.Misc.comingsoon();
+    ctrl.Invoices.index();
 };
 
 uiFunctions.timetable = function() {

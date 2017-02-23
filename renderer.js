@@ -25,7 +25,5 @@ require('./app/scripts/JSRenderExtensions.js');
 
 window.orm = require("./app/scripts/orm.js");
 
-window.register = require('./app/Registers/InvoiceRegister.js');
-
 
 UIFunctions.home();

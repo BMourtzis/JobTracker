@@ -36,7 +36,10 @@ uiFunctions.jobListInvoiced = function() { ctrl.Jobs.jobListInvoiced(); };
 uiFunctions.jobListPaid = function() { ctrl.Jobs.jobListPaid(); };
 uiFunctions.jobListDelete = function() { ctrl.Jobs.bulkDelete(); };
 
-uiFunctions.searchJobs = function() { ctrl.Jobs.searchJobs(); };
+uiFunctions.searchJobs = function() {
+    $("#advSearchModal").modal('hide');
+    ctrl.Jobs.searchJobs();
+};
 uiFunctions.gotoJobPage = function(page) { ctrl.Jobs.gotoPage(page); };
 uiFunctions.updateJobSelectedList = function() { ctrl.Jobs.updateSelectedList(); };
 uiFunctions.updateAllCheckboxes = function() { ctrl.Jobs.updateAllCheckboxes(); };

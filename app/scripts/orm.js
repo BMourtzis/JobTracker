@@ -84,12 +84,13 @@ orm.client =  orm.connStr.define('client', {
                 clientId: this.id
             });
         },
-        addNewInvoice: function addNewInvoice(year, month, total){
+        addNewInvoice: function addNewInvoice(year, month, total, invoiceNo){
             return orm.invoice.create({
                 year: year,
                 month: month,
                 total: total,
                 paid: false,
+                invoiceNo: invoiceNo,
                 clientId: this.id
             }).then(function(data){
                 return data.get({plain: true});
@@ -274,6 +275,11 @@ orm.invoice = orm.connStr.define('invoice', {
         autoIncrement: true,
         field: 'id'
     },
+    invoiceNo: {
+        type: sequelize.STRING(7),
+        allowNull: false,
+        field: 'invoiceno'
+    },
     year: {
         type: sequelize.INTEGER,
         allowNull: false,
@@ -342,10 +348,10 @@ orm.testConnection = function() {
 };
 
 orm.reinitializeTables = function() {
-    orm.invoice.sync({force: true});
-    orm.client.sync({force: true});
-    orm.job.sync({force: true});
-    orm.jobScheme.sync({force: true});
+    // orm.invoice.sync({force: true});
+    // orm.client.sync({force: true});
+    // orm.job.sync({force: true});
+    // orm.jobScheme.sync({force: true});
 };
 
 module.exports = orm;

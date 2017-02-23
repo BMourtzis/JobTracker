@@ -78,7 +78,7 @@ register.FindJobs = function(searchParams, orderParams, page) {
                 count: count,
                 jobs: jobs
             };
-            console.log(data);
+            
             return data;
         });
     });

@@ -24,11 +24,8 @@ require('./app/scripts/JSRenderExtensions.js');
 // window.RG = require('./app/scripts/invoiceGenerator.js');
 
 window.orm = require("./app/scripts/orm.js");
-// orm.reinitializeTables();
-// orm.testConnection();
 
 window.register = require('./app/Registers/InvoiceRegister.js');
-// register.getInvoice(10);
-register.createInvoice(2017, 3, 1);
+
 
 UIFunctions.home();

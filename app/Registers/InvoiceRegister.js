@@ -11,23 +11,31 @@ register.getInvoice = function(id){
 };
 
 register.getCurrentInvoices = function() {
-    return register.findInvoices(false);
+    return findInvoices(generateQuery({paid: false}));
 };
 
-register.findInvoices = function(paid){
-    return orm.invoice.findAll({
-        where:{
-            paid: paid
-        },
-        include:[orm.job, orm.client]
-    }).then(function(data){
-        var invoices = [];
-        data.forEach(function(invoice){
-            invoices.push(invoice.get({plain:true}));
-        });
-        return invoices;
-    });
+register.invoiceSearchOptions = function(searchParams) {
+    return findInvoices(generateQuery(searchParams));
 };
+
+register.invoiceGeneration = function(id, year, month) {
+    if(id === 0){
+        return generateAllInvoices(year, month);
+    }
+    else {
+        return register.createInvoice(year, month, id);
+    }
+};
+
+function generateAllInvoices(year, month) {
+    return orm.client.findAll().then(function(data){
+        var returns = [];
+        data.forEach(function(client){
+            var clientData = client.get({plain:true});
+            returns.push(register.createInvoice(year, month, clientData.id));
+        });
+    });
+}
 
 register.createInvoice = function(year, month, clientId) {
     getJobs(year, month, clientId, "Done").then(function(client) {
@@ -43,7 +51,7 @@ register.createInvoice = function(year, month, clientId) {
             if(client.jobs.length > 0) {
                 client.addNewInvoice(year, month, sum, invoiceNo).then(function(data) {
                     InvoiceJobList(clientData.jobs, data.id).then(function(smth){
-                        return generateInvoice(data.id);
+                        return register.generateInvoice(data.id);
                     });
                 });
             }
@@ -51,51 +59,29 @@ register.createInvoice = function(year, month, clientId) {
     });
 };
 
-register.printInvoice = function(invoiceId){
+register.printInvoice = function(invoiceId) {
     return generateInvoice(invoiceId);
 };
 
-function getJobs(year, month, clientId, state) {
-    var from = new Date.today().set({year: year, month: month-1, day: 1});
-    var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
+register.invoicePaid = function(invoiceId) {
+    return orm.invoice.findById(invoiceId, {include:[orm.job]}).then(function(invoice) {
+        invoice.paid = true;
+        invoice.paidAt = new Date.today();
 
-    return orm.client.findOne({
-        id: clientId,
-        include:[{
-            model: orm.job,
-            where:{
-                timeBooked:{
-                    gt: from,
-                    lt: to
-                },
-                state: state
-            }
-        }]
+        return invoice.save().then(function(data){
+            return data.get({plain:true});
+        });
+
+    }).then(function(data){
+        PaidJobList(data.jobs).then(function(){
+            return data;
+        });
     });
-}
+};
 
-function updateJobList(jobs, updateList) {
-    var idList = [];
-    jobs.forEach(function(job){
-        idList.push(job.id);
-    });
-
-    return orm.job.update(updateList, {
-        where: {
-            id: {$in: idList}
-        }
-    });
-}
-
-function InvoiceJobList(jobs, invoiceId) {
-    return updateJobList(jobs, {state: "Invoiced", invoiceId: invoiceId});
-}
-
-function PaidJobList(jobs, invoiceId) {
-    return updateJobList(jobs, {state: "Paid"});
-}
-
-function generateInvoice(invoiceId) {
+//TODO: add directory creation
+//TODO: fix the next service bug
+register.generateInvoice = function(invoiceId) {
     //dependencies
     var JSZip = require('jszip');
     var docxtemplater = require('docxtemplater');
@@ -139,11 +125,126 @@ function generateInvoice(invoiceId) {
             doc.render();
 
             var buf = doc.getZip().generate({type: "nodebuffer"});
-            fs.writeFileSync(path.resolve("./app/Misc/"+period.toString("yyyy")+"/"+period.toString("MMMM")+"/", invoice.client.businessName+".docx"), buf);
+            // +period.toString("yyyy")+"/"+period.toString("MMMM")+"/"
+            fs.writeFileSync(path.resolve("./app/Misc/", invoice.client.businessName+".docx"), buf);
 
             return true;
         });
     });
+};
+
+//TODO: add the Delete function
+//NOTE: get the jobs, change the state to Done, delete the invoiced id, then delete the invoice
+register.deleteInvoice = function(invoiceId) {
+
+};
+
+function generateQuery(searchParams) {
+    var query = {};
+
+    if(searchParams.from !== undefined && searchParams.to !== undefined){
+        if(searchParams.from === undefined){
+            query.year = {
+                lt: parseInt(searchParams.to.toString("yyyy"))
+            };
+
+            query.month = {
+                lt: parseInt(searchParams.to.toString("MM"))
+            };
+        }
+        else if(searchParams.to === undefined){
+            query.year = {
+                gt: parseInt(searchParams.from.toString("yyyy"))
+            };
+
+            query.month = {
+                gt: parseInt(searchParams.from.toString("MM"))
+            };
+        }
+        else{
+            query.year = {
+                lt: parseInt(searchParams.to.toString("yyyy")),
+                gt: parseInt(searchParams.from.toString("yyyy"))
+            };
+
+            if(query.year.lt === query.year.gt) {
+                query.year = parseInt(searchParams.to.toString("yyyy"));
+            }
+
+            query.month = {
+                lt: parseInt(searchParams.to.toString("MM"))+1,
+                gt: parseInt(searchParams.from.toString("MM"))
+            };
+
+            if(query.month.lt === query.month.gt) {
+                query.month = parseInt(searchParams.to.toString("MM"));
+            }
+        }
+    }
+
+    //make into paid
+    if(searchParams.paid !== "" && searchParams.paid !== undefined){
+        query.paid = searchParams.paid;
+    }
+
+    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== ""){
+        query.clientID = searchParams.clientID;
+    }
+
+    return query;
+}
+
+function findInvoices(searchParams){
+    return orm.invoice.findAll({
+        where: searchParams,
+        include:[orm.client]
+    }).then(function(data){
+        var invoices = [];
+        data.forEach(function(invoice){
+            invoices.push(invoice.get({plain:true}));
+        });
+        return invoices;
+    });
+}
+
+function getJobs(year, month, clientId, state) {
+    var from = new Date.today().set({year: year, month: month-1, day: 1});
+    var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
+
+    return orm.client.findOne({
+        id: clientId,
+        include:[{
+            model: orm.job,
+            where:{
+                timeBooked:{
+                    gt: from,
+                    lt: to
+                },
+                state: state
+            }
+        }]
+    });
+}
+
+function updateJobList(jobs, updateList) {
+    var idList = [];
+    jobs.forEach(function(job){
+        idList.push(job.id);
+    });
+
+    return orm.job.update(updateList, {
+        where: {
+            id: {$in: idList}
+        }
+    });
+}
+
+function InvoiceJobList(jobs, invoiceId) {
+    return updateJobList(jobs, {state: "Invoiced", invoiceId: invoiceId});
+}
+
+function PaidJobList(jobs) {
+    return updateJobList(jobs, {state: "Paid"});
 }
 
 module.exports = register;

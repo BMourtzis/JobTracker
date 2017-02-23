@@ -185,9 +185,29 @@ facade.generateJobs = function(id, month) {
     return schemeRegister.generateJobs(id, month);
 };
 
-
+//Invoice
 facade.getCurrentInvoices = function() {
     return invoiceRegister.getCurrentInvoices();
+};
+
+facade.getInvoice = function(invoiceId) {
+    return invoiceRegister.getInvoice(invoiceId);
+};
+
+facade.invoicePaid = function(invoiceId) {
+    return invoiceRegister.invoicePaid(invoiceId);
+};
+
+facade.createInvoice =  function(id, year, month){
+    return invoiceRegister.invoiceGeneration(id, year, month);
+};
+
+facade.generateInvoice = function(invoiceId) {
+    return invoiceRegister.generateInvoice(invoiceId);
+};
+
+facade.invoiceSearchOptions = function(formData){
+    return invoiceRegister.invoiceSearchOptions(formData);
 };
 
 module.exports = facade;

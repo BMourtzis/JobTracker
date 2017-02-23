@@ -74,6 +74,16 @@ uiFunctions.invoices = function() {
     uiFunctions.changeActive(3);
     ctrl.Invoices.index();
 };
+uiFunctions.invoicePaid = function(id) { ctrl.Invoices.invoicePaid(id); };
+uiFunctions.getCreateInvoice = function() { ctrl.Invoices.getCreateInvoice(); };
+uiFunctions.addYear = function() { ctrl.Invoices.addYear(); };
+uiFunctions.subtractYear = function() { ctrl.Invoices.subtractYear(); };
+uiFunctions.createInvoice = function() { ctrl.Invoices.createInvoice(); };
+uiFunctions.generateInvoice = function(id) { ctrl.Invoices.generateInvoice(id); };
+uiFunctions.searchOptions = function() {
+    $("#advSearchModal").modal('hide');
+    ctrl.Invoices.searchOptions();
+};
 
 uiFunctions.timetable = function() {
     uiFunctions.changeActive(4);

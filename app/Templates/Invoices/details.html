@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<div class="row">
+    <h2 class="details-heading float-left">{{:invoiceNo}}</h2>
+    <div class="custom-button">
+        {{if paid === false}}
+        <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.invoicePaid({{:id}})">
+            Paid
+        </button>
+        {{/if}}
+        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.generateInvoice({{:id}})">
+            <span class="glyphicon glyphicon-print"></span>
+            Print Invoice
+        </button>
+    </div>
+</div>
+<div class="row">
+    <p>
+        <strong>Business Name:</strong>
+        {{:client.businessName}}
+    </p>
+    <p>
+        <strong>Issue Date:</strong>
+        {{:createdAt.format("DD/MM/YYYY")}}
+    </p>
+    <p>
+        <strong>Total:</strong>
+        {{:total}}$
+    </p>
+    <p>
+        <strong>Paid:</strong>
+        {{:paid}}
+    </p>
+    {{if paid === true}}
+    <p>
+        <strong>Paid At:</strong>
+        {{:paidAt.format("DD/MM/YYYY")}}
+    </p>
+    {{/if}}
+</div>
+<div class="row">
+    <table class="table">
+        <thead class="details-heading">
+            <tr>
+                <th>Job Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{for jobs}}
+            <tr id="client-job-table" class="clickable-row" data-id="{{:id}}">
+                <td>{{:jobName}}</td>
+                <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
+                <td>{{:timeBooked.format("HH:mm")}}</td>
+                <td>{{:payment + gst}}$</td>
+                <td>{{:state}}</td>
+            </tr>
+            {{/for }}
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="custom-button">
+        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJob({{:id}}, {{:client.id}})">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+    </div>
+</div>

@@ -6,14 +6,6 @@
         <button id="done-button" type="button" class="btn btn-success" onclick="UIFunctions.jobDone({{:id}})">
             Done
         </button>
-        {{else state === "Done"}}
-        <button id="invoice-button" type="button" class="btn btn-success" onclick="UIFunctions.jobInvoiced({{:id}})">
-            Invoiced
-        </button>
-        {{else state === "Invoiced"}}
-        <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.jobPaid({{:id}})">
-            Paid
-        </button>
         {{/if}}
         <button id="rebook-button" type="button" class="btn btn-info" onclick="UIFunctions.getRebookJob({{:id}})">
             <span class="glyphicon glyphicon-time"></span>

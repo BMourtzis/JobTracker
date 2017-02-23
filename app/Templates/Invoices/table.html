@@ -10,7 +10,7 @@
     </thead>
     <tbody>
         {{for invoices}}
-        <tr id="client-table" class="clickable-row" data-id="{{:id}}">
+        <tr id="invoice-table" class="clickable-row" data-id="{{:id}}">
             <td>{{:client.businessName}}</td>
             <td>{{:invoiceNo}}</td>
             <td>{{:createdAt.format("DD/MM/YYYY")}}</td>
@@ -18,7 +18,7 @@
                 {{if paid === false}}
                     {{:paid}}
                 {{else}}
-                    {{:paidAt}}
+                    {{:paidAt.format("DD/MM/YYYY")}}
                 {{/if}}
             </td>
         </tr>

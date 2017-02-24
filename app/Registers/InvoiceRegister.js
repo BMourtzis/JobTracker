@@ -38,7 +38,7 @@ function generateAllInvoices(year, month) {
 }
 
 register.createInvoice = function(year, month, clientId) {
-    getJobs(year, month, clientId, "Done").then(function(client) {
+    return getJobs(year, month, clientId, "Done").then(function(client) {
         if(client){
             var clientData = client.get({plain: true});
             var sum = 0;
@@ -133,9 +133,14 @@ register.generateInvoice = function(invoiceId) {
     });
 };
 
-//TODO: add the Delete function
-//NOTE: get the jobs, change the state to Done, delete the invoiced id, then delete the invoice
 register.deleteInvoice = function(invoiceId) {
+    return orm.invoice.findById(invoiceId, {include:[orm.client, orm.job]}).then(function(invoice){
+        var invoiceData = invoice.get({plain:true});
+        console.log(invoiceData);
+        return DoneJobList(invoiceData.jobs, invoiceId).then(function(){
+            return invoice.destroy();
+        });
+    });
 
 };
 
@@ -228,15 +233,21 @@ function getJobs(year, month, clientId, state) {
 
 function updateJobList(jobs, updateList) {
     var idList = [];
-    jobs.forEach(function(job){
-        idList.push(job.id);
-    });
+    if(jobs.length > 0){
+        jobs.forEach(function(job){
+            idList.push(job.id);
+        });
+    }
 
     return orm.job.update(updateList, {
         where: {
             id: {$in: idList}
         }
     });
+}
+
+function DoneJobList(jobs, invoiceId) {
+    return updateJobList(jobs, {state: "Done", invoiceId: null});
 }
 
 function InvoiceJobList(jobs, invoiceId) {

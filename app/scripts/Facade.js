@@ -5,8 +5,6 @@ var invoiceRegister = require('../Registers/InvoiceRegister.js');
 
 var facade = { };
 
-// TODO: Remove invoice and paid functionality from jobs. Invoices will do that. Invoices will change the state to invoiced or paid accordingly.
-
 //Client Functions
 ////Get all Clients
 facade.getAllClients = function() {
@@ -208,6 +206,10 @@ facade.generateInvoice = function(invoiceId) {
 
 facade.invoiceSearchOptions = function(formData){
     return invoiceRegister.invoiceSearchOptions(formData);
+};
+
+facade.deleteInvoice = function(invoiceId) {
+    return invoiceRegister.deleteInvoice(invoiceId);
 };
 
 module.exports = facade;

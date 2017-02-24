@@ -122,6 +122,14 @@ ctrl.printInvoice = function(id) {
 
 };
 
+//TODO: add delete confirmation for all delete functionality
+ctrl.deleteInvoice = function(invoiceId) {
+    facade.deleteInvoice(invoiceId).then(function(data){
+        $("#sidebar").html(" ");
+        ctrl.index();
+    });
+};
+
 ctrl.invoicePaid = function(invoiceId) {
     facade.invoicePaid(invoiceId).then(function(invoice){
         ctrl.invoiceDetails(invoiceId);

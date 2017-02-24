@@ -80,6 +80,7 @@ uiFunctions.addYear = function() { ctrl.Invoices.addYear(); };
 uiFunctions.subtractYear = function() { ctrl.Invoices.subtractYear(); };
 uiFunctions.createInvoice = function() { ctrl.Invoices.createInvoice(); };
 uiFunctions.generateInvoice = function(id) { ctrl.Invoices.generateInvoice(id); };
+uiFunctions.deleteInvoice = function(id) { ctrl.Invoices.deleteInvoice(id); };
 uiFunctions.searchOptions = function() {
     $("#advSearchModal").modal('hide');
     ctrl.Invoices.searchOptions();

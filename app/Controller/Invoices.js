@@ -13,7 +13,13 @@ ctrl.searchParams = {};
 ctrl.year = 0 ;
 
 ctrl.index = function() {
-    facade.getAllClients().then(function(query) {
+    ctrl.initiatePage().then(function() {
+        ctrl.loadCurrentInvoices();
+    });
+};
+
+ctrl.initiatePage = function() {
+    return facade.getAllClients().then(function(query) {
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/index.html');
         var html = temp({clients: query});
         $("#content").html(html);
@@ -21,21 +27,23 @@ ctrl.index = function() {
         $('#fromDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
         $('#toDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
 
-        ctrl.loadCurrentInvoices();
+        ctrl.currentPage = 0;
     });
 };
 
 ctrl.loadCurrentInvoices = function() {
     facade.getCurrentInvoices().then(function(invoices){
+        ctrl.searchParams.paid = false;
         ctrl.loadTable(invoices);
     });
 };
 
 //TODO: add pagination
 //TODO: save searchParams and currentPage
-ctrl.loadTable = function(invoices) {
+ctrl.loadTable = function(data) {
+    data.currentPage = ctrl.currentPage;
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/table.html');
-    var html = temp({invoices: invoices});
+    var html = temp(data);
     $("#indexInvoiceTable").html(html);
 
     $("#invoice-table.clickable-row").click(function() {
@@ -65,7 +73,17 @@ ctrl.searchOptions = function() {
         formData.to =  Date.parse($("#toDatepicker :input").val());
     }
 
-    return facade.invoiceSearchOptions(formData).then(function(data){
+    ctrl.searchParams = formData;
+    ctrl.currentPage = 0;
+
+    return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+        ctrl.loadTable(data);
+    });
+};
+
+ctrl.gotoPage = function(page) {
+    ctrl.currentPage = page;
+    facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };

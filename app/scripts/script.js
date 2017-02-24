@@ -58,10 +58,7 @@ uiFunctions.getClientJobs = function(id) {ctrl.Jobs.getClientJobs(id); };
 uiFunctions.getCreateJobScheme = function(id) { ctrl.JobSchemes.getCreateJobScheme(id); };
 uiFunctions.createJobScheme = function() { ctrl.JobSchemes.createJobScheme(); };
 uiFunctions.addRepValues = function() { ctrl.JobSchemes.addRepValues(); };
-uiFunctions.removeRepValues = function(data) {
-    $(data).parent().remove();
-    ctrl.JobSchemes.removeRepValues();
-};
+uiFunctions.removeRepValues = function(data) { ctrl.JobSchemes.removeRepValues(data); };
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
 uiFunctions.generateJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs(id); };
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };

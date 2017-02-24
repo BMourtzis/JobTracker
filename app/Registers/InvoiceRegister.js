@@ -11,11 +11,11 @@ register.getInvoice = function(id){
 };
 
 register.getCurrentInvoices = function() {
-    return findInvoices(generateQuery({paid: false}));
+    return findInvoices(generateQuery({paid: false}),"", 0);
 };
 
-register.invoiceSearchOptions = function(searchParams) {
-    return findInvoices(generateQuery(searchParams));
+register.invoiceSearchOptions = function(searchParams, orderParams, page) {
+    return findInvoices(generateQuery(searchParams), orderParams, page);
 };
 
 register.invoiceGeneration = function(id, year, month) {
@@ -26,16 +26,6 @@ register.invoiceGeneration = function(id, year, month) {
         return register.createInvoice(year, month, id);
     }
 };
-
-function generateAllInvoices(year, month) {
-    return orm.client.findAll().then(function(data){
-        var returns = [];
-        data.forEach(function(client){
-            var clientData = client.get({plain:true});
-            returns.push(register.createInvoice(year, month, clientData.id));
-        });
-    });
-}
 
 register.createInvoice = function(year, month, clientId) {
     return getJobs(year, month, clientId, "Done").then(function(client) {
@@ -144,6 +134,16 @@ register.deleteInvoice = function(invoiceId) {
 
 };
 
+function generateAllInvoices(year, month) {
+    return orm.client.findAll().then(function(data){
+        var returns = [];
+        data.forEach(function(client){
+            var clientData = client.get({plain:true});
+            returns.push(register.createInvoice(year, month, clientData.id));
+        });
+    });
+}
+
 function generateQuery(searchParams) {
     var query = {};
 
@@ -199,16 +199,30 @@ function generateQuery(searchParams) {
     return query;
 }
 
-function findInvoices(searchParams){
+function findInvoices(searchParams, orderParams, page){
     return orm.invoice.findAll({
         where: searchParams,
-        include:[orm.client]
-    }).then(function(data){
-        var invoices = [];
-        data.forEach(function(invoice){
-            invoices.push(invoice.get({plain:true}));
+        include:[orm.client],
+        offset: page*100,
+        limit: 100
+    }).then(function(query) {
+        return getInvoiceCount(searchParams).then(function(count){
+            var data = {};
+            data.count = count;
+            data.invoices = [];
+            query.forEach(function(invoice){
+                data.invoices.push(invoice.get({plain:true}));
+            });
+            return data;
         });
-        return invoices;
+    });
+}
+
+function getInvoiceCount(searchParams) {
+    return orm.invoice.count({
+        where: searchParams
+    }).then(function (count) {
+        return Math.floor(count/100);
     });
 }
 

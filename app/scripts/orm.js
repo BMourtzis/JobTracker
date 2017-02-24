@@ -99,6 +99,8 @@ orm.client =  orm.connStr.define('client', {
     }
 });
 
+//TODO: add notes and what needs to be done.
+
 orm.job = orm.connStr.define('job', {
     id: {
         type: sequelize.INTEGER,

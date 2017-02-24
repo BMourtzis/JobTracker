@@ -54,6 +54,7 @@ ctrl.getCreateClient = function() {
 ctrl.createClient = function() {
     var formData = $("#createClientForm").serializeArray();
     formData[1].value = formData[1].value.toUpperCase();
+    if(formData[5].value === "") { formData[5].value = null; }
     formData[6].value =  parseInt(formData[6].value);
     if(Number.isNaN(formData[6].value)){ formData[6].value = null; }
 
@@ -81,5 +82,7 @@ ctrl.editClient = function(id) {
         ctrl.clientDetails(id);
     });
 };
+
+//TODO: add remove client funcitonality
 
 module.exports = ctrl;

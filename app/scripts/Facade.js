@@ -204,8 +204,8 @@ facade.generateInvoice = function(invoiceId) {
     return invoiceRegister.generateInvoice(invoiceId);
 };
 
-facade.invoiceSearchOptions = function(formData){
-    return invoiceRegister.invoiceSearchOptions(formData);
+facade.invoiceSearchOptions = function(searchParams, orderParams, page){
+    return invoiceRegister.invoiceSearchOptions(searchParams, orderParams, page);
 };
 
 facade.deleteInvoice = function(invoiceId) {

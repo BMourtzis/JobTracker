@@ -85,7 +85,7 @@ ctrl.getRepValues = function(){
 ctrl.addRepValues = function() {
     var selected = $("#repetitionSelector").val();
 
-    if(ctrl.repval < 6 && selected !== null)
+    if(ctrl.repval < 7 && selected !== null)
     {
         var repValuesTmpl = "/";
         switch (selected) {
@@ -119,12 +119,14 @@ ctrl.addRepValues = function() {
 ctrl.changeRepFields = function() {
     if (ctrl.selectedRep !== $("#repetitionSelector").val()) {
         $("#repValuesDiv").html("");
+        ctrl.repval = 0;
     }
     ctrl.selectedRep = $("#repetitionSelector").val();
 };
 
 //Remove the specified repValue
-ctrl.removeRepValues = function() {
+ctrl.removeRepValues = function(data) {
+    $(data).parent().remove();
     if(ctrl.repval > 0) {
         ctrl.repval--;
     }
@@ -183,5 +185,7 @@ ctrl.disableJobScheme = function(id){
 ctrl.enableJobScheme = function(id){
     facade.enableJobScheme(id);
 };
+
+//TODO: add remove client funcitonality
 
 module.exports = ctrl;

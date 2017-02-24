@@ -41,9 +41,25 @@
 </div>
 <div class="row">
     <div class="custom-button">
-        <button id="delete-button" type="button" class="btn btn-danger" onclick="UIFunctions.removeJob({{:id}}, {{:client.id}})">
+        <button id="delete-button" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
             <span class="glyphicon glyphicon-trash"></span>
             Delete
         </button>
     </div>
+</div>
+
+<!-- Delete confirmation Modal -->
+<div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-medium" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title modalLabel">Are you sure you want to delete {{:jobName}}</h4>
+        </div>
+        <div class="modal-body">
+            <button type="button" class="btn btn-danger" onclick="UIFunctions.removeJob({{:id}}, {{:client.id}})">Delete Job</button>
+            <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
 </div>

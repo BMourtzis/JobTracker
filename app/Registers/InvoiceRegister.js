@@ -71,11 +71,16 @@ register.invoicePaid = function(invoiceId) {
 };
 
 //TODO: add directory creation
-//TODO: fix the next service bug
 register.generateInvoice = function(invoiceId) {
     //dependencies
     var JSZip = require('jszip');
     var docxtemplater = require('docxtemplater');
+
+    if(!fs.existsSync(path.resolve("./app/Misc/", "Receipt_Template.docx"))) {
+        console.log("in");
+        var err = "Receipt doesn't exists";
+        throw err;
+    }
 
     var content = fs.readFileSync(path.resolve("./app/Misc/", "Receipt_Template.docx"), "binary");
     var zip = new JSZip(content);
@@ -115,8 +120,8 @@ register.generateInvoice = function(invoiceId) {
             doc.render();
 
             var buf = doc.getZip().generate({type: "nodebuffer"});
-            // +period.toString("yyyy")+"/"+period.toString("MMMM")+"/"
-            fs.writeFileSync(path.resolve("./app/Misc/", invoice.client.businessName+".docx"), buf);
+            checkCreateDirectory(period.toString("yyyy"), period.toString("MMMM"));
+            fs.writeFileSync(path.resolve("./app/Misc/", period.toString("yyyy")+"/", period.toString("MMMM")+"/", invoice.client.businessName+".docx"), buf);
 
             return true;
         });
@@ -131,6 +136,24 @@ register.deleteInvoice = function(invoiceId) {
         });
     });
 };
+
+function checkCreateDirectory(year,month) {
+    var dir = path.resolve("./app/Misc/");
+
+    if(!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+
+    dir = path.resolve(dir, year+"/");
+    if(!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+
+    dir = path.resolve(dir, month+"/");
+    if(!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+}
 
 function generateAllInvoices(year, month) {
     return orm.client.findAll().then(function(data){

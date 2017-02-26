@@ -83,6 +83,11 @@ ctrl.editClient = function(id) {
     });
 };
 
-//TODO: add remove client funcitonality
+ctrl.removeClient = function(id) {
+    facade.removeClient(id).then(function(){
+        $("#sidebar").html(" ");
+        ctrl.index();
+    });
+};
 
 module.exports = ctrl;

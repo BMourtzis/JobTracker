@@ -124,4 +124,11 @@ register.generateJobs = function(id, year, month) {
     });
 };
 
+//Delete jobScheme
+register.removeJobScheme = function(id) {
+    return orm.jobScheme.findById(id).then(function(jobScheme){
+        return jobScheme.destroy();
+    });
+};
+
 module.exports = register;

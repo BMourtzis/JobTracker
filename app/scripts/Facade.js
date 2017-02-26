@@ -39,6 +39,10 @@ facade.editClient = function(id, data){
     return clientRegister.editClient(id, data);
 };
 
+facade.removeClient = function(id){
+    return clientRegister.removeClient(id);
+};
+
 //Job Functions
 ////Get all Clients
 facade.getAllJobs = function(){
@@ -103,7 +107,7 @@ facade.done = function(id){
     return jobRegister.done(id);
 };
 
-//TODO: Maybe I won't need these
+//NOTE: Maybe I won't need these
 //////Changes the state to invoice
 facade.invoice = function(id) {
     return jobRegister.invoice(id);
@@ -168,6 +172,10 @@ facade.createJobScheme = function(jobname, payment, repetition, repetitionvalues
 ////Edit Function
 facade.editJobScheme = function(id, data){
     return schemeRegister.editJobScheme(id, data);
+};
+
+facade.removeJobScheme = function(id) {
+    return schemeRegister.removeJobScheme(id);
 };
 
 facade.disableJobScheme = function(id) {

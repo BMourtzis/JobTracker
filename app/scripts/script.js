@@ -57,12 +57,32 @@ uiFunctions.clientDetails = function(id) { ctrl.Clients.clientDetails(id); };
 uiFunctions.getEditClient = function(id) { ctrl.Clients.getEditClient(id); };
 uiFunctions.editClient = function(id) { ctrl.Clients.editClient(id); };
 uiFunctions.getClientJobs = function(id) {ctrl.Jobs.getClientJobs(id); };
+uiFunctions.removeClient = function(id) {
+    $("#deleteConfirmationModal").modal('hide');
+    new Promise(function(resolve, reject){
+        $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+            resolve();
+        });
+    }).then(function(){
+        ctrl.Clients.removeClient(id);
+    });
+};
 
 uiFunctions.getCreateJobScheme = function(id) { ctrl.JobSchemes.getCreateJobScheme(id); };
 uiFunctions.createJobScheme = function() { ctrl.JobSchemes.createJobScheme(); };
 uiFunctions.addRepValues = function() { ctrl.JobSchemes.addRepValues(); };
 uiFunctions.removeRepValues = function(data) { ctrl.JobSchemes.removeRepValues(data); };
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
+uiFunctions.removeJobScheme = function(id) {
+    $("#deleteConfirmationModal").modal('hide');
+    new Promise(function(resolve, reject){
+        $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+            resolve();
+        });
+    }).then(function(){
+        ctrl.JobSchemes.removeJobScheme(id);
+    });
+};
 uiFunctions.generateJobs = function(id) {
     $("#generateJobsOptionsModal").modal('hide');
     ctrl.JobSchemes.generateJobs(id);

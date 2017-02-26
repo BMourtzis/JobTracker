@@ -131,7 +131,7 @@ ctrl.invoiceDetails = function(id) {
     });
 };
 
-//TODO: Options for invoice generation
+
 ctrl.generateInvoice = function(invoiceId) {
     facade.generateInvoice(invoiceId);
 };
@@ -140,7 +140,6 @@ ctrl.printInvoice = function(id) {
 
 };
 
-//TODO: add delete confirmation for all delete functionality
 ctrl.deleteInvoice = function(invoiceId) {
     facade.deleteInvoice(invoiceId).then(function(data){
         $("#sidebar").html(" ");

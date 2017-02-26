@@ -70,14 +70,12 @@ register.invoicePaid = function(invoiceId) {
     });
 };
 
-//TODO: add directory creation
 register.generateInvoice = function(invoiceId) {
     //dependencies
     var JSZip = require('jszip');
     var docxtemplater = require('docxtemplater');
 
     if(!fs.existsSync(path.resolve("./app/Misc/", "Receipt_Template.docx"))) {
-        console.log("in");
         var err = "Receipt doesn't exists";
         throw err;
     }
@@ -101,7 +99,6 @@ register.generateInvoice = function(invoiceId) {
         invoice.invoicePeriod = period.toString("MMMM yyyy");
         invoice.address = invoice.client.address;
 
-        // TODO: Test if this works fine
         return getJobs(invoice.year, invoice.month+1, invoice.clientId, "Placed").then(function(data){
             if(data) {
                 data = data.get({plain: true});

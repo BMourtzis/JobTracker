@@ -75,4 +75,10 @@ register.editClient = function(id, data){
     });
 };
 
+register.removeClient = function(id) {
+    return orm.client.findById(id).then(function(client){
+        return client.destroy();
+    });
+};
+
 module.exports = register;

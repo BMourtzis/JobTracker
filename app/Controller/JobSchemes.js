@@ -10,7 +10,7 @@ ctrl.selectedRep = "";
 //var for generateJobs page;
 ctrl.year = 0 ;
 
-//Copied from other controllers, might not need it
+//TODO: add a new page for Job Schemes
 ctrl.index = function() {
 
 };
@@ -204,6 +204,10 @@ ctrl.enableJobScheme = function(id){
     facade.enableJobScheme(id);
 };
 
-//TODO: add remove client funcitonality
+ctrl.removeJobScheme = function(id) {
+    facade.removeJobScheme(id).then(function() {
+        $("#sidebar").html(" ");
+    });
+};
 
 module.exports = ctrl;

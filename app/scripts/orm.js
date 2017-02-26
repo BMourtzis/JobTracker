@@ -94,7 +94,7 @@ orm.client =  orm.connStr.define('client', {
                 clientId: this.id
             }).then(function(data){
                 return data.get({plain: true});
-            }, function(data){console.log(data);});
+            });
         }
     }
 });

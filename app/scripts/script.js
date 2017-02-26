@@ -20,7 +20,10 @@ uiFunctions.jobs = function() {
 uiFunctions.getCreateJob = function() { ctrl.Jobs.getCreateJob(); };
 uiFunctions.getCreateJob = function(id) { ctrl.Jobs.getCreateJob(id); };
 uiFunctions.createJob = function() { ctrl.Jobs.createJob(); };
-uiFunctions.removeJob = function(id, clientID) { ctrl.Jobs.removeJob(id,clientID); };
+uiFunctions.removeJob = function(id, clientID) {
+    $("#deleteConfirmationModal").modal('hide');
+    ctrl.Jobs.removeJob(id,clientID);
+};
 uiFunctions.jobDetails = function(id) { ctrl.Jobs.jobDetails(id); };
 uiFunctions.getEditJob = function(id) { ctrl.Jobs.getEditJob(id); };
 uiFunctions.editJob = function(id) { ctrl.Jobs.editJob(id); };
@@ -77,7 +80,16 @@ uiFunctions.addYear = function() { ctrl.Invoices.addYear(); };
 uiFunctions.subtractYear = function() { ctrl.Invoices.subtractYear(); };
 uiFunctions.createInvoice = function() { ctrl.Invoices.createInvoice(); };
 uiFunctions.generateInvoice = function(id) { ctrl.Invoices.generateInvoice(id); };
-uiFunctions.deleteInvoice = function(id) { ctrl.Invoices.deleteInvoice(id); };
+uiFunctions.deleteInvoice = function(id) {
+    $("#deleteConfirmationModal").modal('hide');
+    new Promise(function(resolve, reject){
+        $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+            resolve();
+        });
+    }).then(function(){
+        ctrl.Invoices.deleteInvoice(id);
+    });
+};
 uiFunctions.searchOptions = function() {
     $("#advSearchModal").modal('hide');
     ctrl.Invoices.searchOptions();

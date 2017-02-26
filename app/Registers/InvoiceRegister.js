@@ -27,6 +27,7 @@ register.invoiceGeneration = function(id, year, month) {
     }
 };
 
+
 register.createInvoice = function(year, month, clientId) {
     return getJobs(year, month, clientId, "Done").then(function(client) {
         if(client){
@@ -39,11 +40,11 @@ register.createInvoice = function(year, month, clientId) {
             var invoiceNo = clientData.shortName + date.toString("yy") + date.toString("MM");
 
             if(client.jobs.length > 0) {
-                client.addNewInvoice(year, month, sum, invoiceNo).then(function(data) {
-                    InvoiceJobList(clientData.jobs, data.id).then(function(smth){
+                return client.addNewInvoice(year, month, sum, invoiceNo).then(function(data) {
+                    return InvoiceJobList(clientData.jobs, data.id).then(function(smth){
                         return register.generateInvoice(data.id);
                     });
-                });
+                }, function(err){ console.log(err);});
             }
         }
     });
@@ -126,7 +127,6 @@ register.generateInvoice = function(invoiceId) {
 register.deleteInvoice = function(invoiceId) {
     return orm.invoice.findById(invoiceId, {include:[orm.client, orm.job]}).then(function(invoice){
         var invoiceData = invoice.get({plain:true});
-        console.log(invoiceData);
         return DoneJobList(invoiceData.jobs, invoiceId).then(function(){
             return invoice.destroy();
         });
@@ -136,10 +136,23 @@ register.deleteInvoice = function(invoiceId) {
 
 function generateAllInvoices(year, month) {
     return orm.client.findAll().then(function(data){
-        var returns = [];
-        data.forEach(function(client){
-            var clientData = client.get({plain:true});
-            returns.push(register.createInvoice(year, month, clientData.id));
+        var promises = [];
+        return Promise.resolve(0).then(function loop(i){
+            if(i < data.length){
+                return createInvoicePromiseHelper(i, data, year, month).then(function(){
+                    i++;
+                    return loop(i);
+                });
+            }
+        });
+    });
+}
+
+function createInvoicePromiseHelper(i, data, year, month) {
+    return new Promise(function(resolve){
+        var clientData = data[i].get({plain: true});
+        return register.createInvoice(year, month, clientData.id).then(function(){
+            resolve();
         });
     });
 }

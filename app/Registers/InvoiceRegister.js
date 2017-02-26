@@ -82,7 +82,7 @@ register.generateInvoice = function(invoiceId) {
     var doc = new docxtemplater();
     doc.loadZip(zip);
 
-    register.getInvoice(invoiceId).then(function(invoice){
+    return register.getInvoice(invoiceId).then(function(invoice){
         invoice.subtotal = 0;
         for(var i = 0; i< invoice.jobs.length; i++){
             invoice.jobs[i].timeBooked = new Date(invoice.jobs[i].timeBooked).toString("dd/MM/yyyy");
@@ -96,10 +96,9 @@ register.generateInvoice = function(invoiceId) {
         invoice.invoicePeriod = period.toString("MMMM yyyy");
         invoice.address = invoice.client.address;
 
-
         // TODO: Test if this works fine
-        getJobs(invoice.year, invoice.month+1, invoice.client.id, "Placed").then(function(data){
-            if(data){
+        return getJobs(invoice.year, invoice.month+1, invoice.clientId, "Placed").then(function(data){
+            if(data) {
                 data = data.get({plain: true});
                 var nextServ = [];
                 for(var i = 0; i < data.jobs.length; i++){
@@ -131,7 +130,6 @@ register.deleteInvoice = function(invoiceId) {
             return invoice.destroy();
         });
     });
-
 };
 
 function generateAllInvoices(year, month) {
@@ -244,7 +242,9 @@ function getJobs(year, month, clientId, state) {
     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
 
     return orm.client.findOne({
-        id: clientId,
+        where:{
+            id: clientId
+        },
         include:[{
             model: orm.job,
             where:{
@@ -254,7 +254,8 @@ function getJobs(year, month, clientId, state) {
                 },
                 state: state
             }
-        }]
+        }],
+        order: "timeBooked ASC"
     });
 }
 

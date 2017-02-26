@@ -12,6 +12,7 @@ uiFunctions.homeJobDone = function(id) { ctrl.Home.done(id); };
 uiFunctions.homeJobUndone = function(id) { ctrl.Home.placed(id); };
 uiFunctions.previousDay = function() { ctrl.Home.previousDay(); };
 uiFunctions.nextDay = function() { ctrl.Home.nextDay(); };
+uiFunctions.reloadDayJobs = function() { ctrl.Home.loadDayJobs(); };
 
 uiFunctions.jobs = function() {
     ctrl.Jobs.index();
@@ -103,7 +104,7 @@ uiFunctions.getCreateInvoice = function() { ctrl.Invoices.getCreateInvoice(); };
 uiFunctions.addYear = function() { ctrl.Invoices.addYear(); };
 uiFunctions.subtractYear = function() { ctrl.Invoices.subtractYear(); };
 uiFunctions.createInvoice = function() { ctrl.Invoices.createInvoice(); };
-uiFunctions.generateInvoice = function(id) { ctrl.Invoices.generateInvoice(id); };
+uiFunctions.printInvoice = function(id) { ctrl.Invoices.printInvoice(id); };
 uiFunctions.deleteInvoice = function(id) {
     $("#deleteConfirmationModal").modal('hide');
     new Promise(function(resolve, reject){

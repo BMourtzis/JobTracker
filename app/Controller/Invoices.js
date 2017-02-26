@@ -38,8 +38,6 @@ ctrl.loadCurrentInvoices = function() {
     });
 };
 
-//TODO: add pagination
-//TODO: save searchParams and currentPage
 ctrl.loadTable = function(data) {
     data.currentPage = ctrl.currentPage;
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/table.html');
@@ -132,12 +130,8 @@ ctrl.invoiceDetails = function(id) {
 };
 
 
-ctrl.generateInvoice = function(invoiceId) {
+ctrl.printInvoice = function(invoiceId) {
     facade.generateInvoice(invoiceId);
-};
-
-ctrl.printInvoice = function(id) {
-
 };
 
 ctrl.deleteInvoice = function(invoiceId) {

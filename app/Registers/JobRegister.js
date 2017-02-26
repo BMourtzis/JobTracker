@@ -78,7 +78,7 @@ register.FindJobs = function(searchParams, orderParams, page) {
                 count: count,
                 jobs: jobs
             };
-            
+
             return data;
         });
     });
@@ -164,7 +164,7 @@ register.generateQuery = function(searchParams) {
         query.state = searchParams.state;
     }
 
-    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined){
+    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== ""){
         query.clientID = searchParams.clientID;
     }
 

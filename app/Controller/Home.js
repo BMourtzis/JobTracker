@@ -6,8 +6,6 @@ ctrl.ctrlName = "Home";
 ctrl.templateDir = "./app/Templates/";
 ctrl.selectedDate = Date.today();
 
-//TODO: Add functionlity to reload the specific date viewed
-
 //Renders the index page for Home
 ctrl.index = function() {
     var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/index.html');

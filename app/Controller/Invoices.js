@@ -9,7 +9,7 @@ ctrl.templateDir = "./app/Templates/";
 ctrl.currentPage = 0;
 ctrl.searchParams = {};
 
-//
+//var for generateInvoice page;
 ctrl.year = 0 ;
 
 ctrl.index = function() {
@@ -66,11 +66,11 @@ ctrl.searchOptions = function() {
     }
 
     if($("#fromDatepicker :input").val() !== ""){
-        formData.from =  Date.parse($("#fromDatepicker :input").val());
+        formData.from = Date.parse($("#fromDatepicker :input").val());
     }
 
     if($("#toDatepicker :input").val() !== ""){
-        formData.to =  Date.parse($("#toDatepicker :input").val());
+        formData.to = Date.parse($("#toDatepicker :input").val());
     }
 
     ctrl.searchParams = formData;

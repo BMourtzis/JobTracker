@@ -179,8 +179,8 @@ facade.enableJobScheme = function(id) {
 };
 
 ////GenerateJobs
-facade.generateJobs = function(id, month) {
-    return schemeRegister.generateJobs(id, month);
+facade.generateJobs = function(id, year, month) {
+    return schemeRegister.generateJobs(id, year, month);
 };
 
 //Invoice

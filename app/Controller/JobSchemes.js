@@ -7,6 +7,9 @@ ctrl.templateDir = "./app/Templates/";
 ctrl.repval = 0;
 ctrl.selectedRep = "";
 
+//var for generateJobs page;
+ctrl.year = 0 ;
+
 //Copied from other controllers, might not need it
 ctrl.index = function() {
 
@@ -15,22 +18,37 @@ ctrl.index = function() {
 //Get and Displays the jobScheme details on the sidebar
 ctrl.jobSchemeDetails = function(id) {
     facade.getJobSchemeFull(id).then(function(data) {
+        ctrl.year = parseInt(new Date.today().toString("yyyy"));
+        data.year = ctrl.year;
+
         var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
         var html = temp(data);
         $("#sidebar").html(html);
     });
 };
 
+ctrl.addYear = function() {
+    ctrl.year++;
+    $("#yearCounter").val(ctrl.year);
+};
+
+ctrl.subtractYear = function() {
+    ctrl.year--;
+    $("#yearCounter").val(ctrl.year);
+};
+
 //Generates Jobs for the month given, based on the jobScheme
-ctrl.generateJobs = function(id, month) {
-    facade.generateJobs(id, month);
+ctrl.generateJobs = function(id) {
+    var formData = $("#JobGenerationForm").serializeArray();
+    facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
+        // UIFunctions.jobs();
+    });
 };
 
 //Generates Jobs based on the jobScheme for the next month
 ctrl.generateNextMonthsJobs = function(id) {
     var date = new Date.today();
-    var month = parseInt(Date.today().toString("M"));
-    facade.generateJobs(id, month);
+    facade.generateJobs(id, parseInt(Date.today().toString("yyyy")), parseInt(Date.today().toString("M")));
 };
 
 //Displays the create job scheme page

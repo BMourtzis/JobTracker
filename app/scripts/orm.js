@@ -181,9 +181,10 @@ orm.jobScheme = orm.connStr.define('jobScheme', {
 
     },
     instanceMethods: {
-        generateJobs: function generateJobs(month){
+        generateJobs: function generateJobs(year, month){
             if (this.enabled) {
                 var date = Date.today().set({
+                    year: year,
                     month: month,
                     day: 1
                 }).first().sunday();

@@ -6,10 +6,11 @@
             <span class="glyphicon glyphicon-pencil"></span>
             Edit
         </button>
-        <button id="generate-button" type="button" class="btn btn-success" onclick="UIFunctions.generateJobs({{:id}})">
+        <button id="generate-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#generateJobsOptionsModal">
             <span class="glyphicon glyphicon-cog"></span>
             Generate Jobs
         </button>
+        <button type="button" class="btn btn-success" onclick="UIFunctions.generateNextMonthsJobs({{:id}})">Generate for Next Month</button>
     </div>
 </div>
 <div class="row">
@@ -90,4 +91,52 @@
         </div>
     </div>
   </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="generateJobsOptionsModal" tabindex="" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-medium" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title modalLabel">Job Generation Options</h4>
+            </div>
+            <div class="modal-body">
+                <form id="JobGenerationForm">
+                    <div class="form-group medium-field">
+                        <label for="client">Year</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="UIFunctions.subtractYear()"><span class="glyphicon glyphicon-minus"></span></button>
+                            </span>
+                            <input id="yearCounter" type="text" class="form-control" name="year" value="{{:year}}"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="UIFunctions.addYear()"><span class="glyphicon glyphicon-plus"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group medium-field">
+                        <label for="client">Month</label>
+                        <select class="form-control" name="month">
+                            <option value="0" selected>January</option>
+                            <option value="1">February</option>
+                            <option value="2">March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8">September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="UIFunctions.generateJobs({{:id}})">Generate Job</button>
+            </div>
+        </div>
+    </div>
 </div>

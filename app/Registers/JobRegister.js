@@ -1,4 +1,4 @@
-var orm = require('../scripts/orm.js');
+var orm;
 
 var register = {};
 
@@ -270,4 +270,10 @@ register.bulkDeleteJobs = function(idList) {
 };
 
 
-module.exports = register;
+
+module.exports = function getRegister(){
+    return require('../scripts/orm.js')().then(function(data){
+        orm = data;
+        return register;
+    });
+};

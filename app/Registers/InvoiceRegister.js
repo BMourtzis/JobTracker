@@ -306,4 +306,9 @@ function PaidJobList(jobs) {
     return updateJobList(jobs, {state: "Paid"});
 }
 
-module.exports = register;
+module.exports = function getRegister(){
+    return require('../scripts/orm.js')().then(function(data){
+        orm = data;
+        return register;
+    });
+};

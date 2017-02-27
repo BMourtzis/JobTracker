@@ -1,14 +1,16 @@
-var facade = require('../scripts/Facade.js');
+var facade;
 
 var ctrl = {};
 
 ctrl.ctrlName = "Clients";
-ctrl.templateDir = "./app/Templates/";
+ctrl.templateDir = "../Templates/";
 
 //Shows a table of all the clients
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
+        
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
+        var temp = jsrender.templates(templatePath);
         var data = {
             clients: query
         };
@@ -28,7 +30,8 @@ ctrl.index = function() {
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
 
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
 
@@ -46,7 +49,8 @@ ctrl.clientDetails = function(id) {
 
 //Displays the create client page
 ctrl.getCreateClient = function() {
-    var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+    var temp = jsrender.templates(templatePath);
     $("#sidebar").html(temp);
 };
 
@@ -66,7 +70,8 @@ ctrl.createClient = function() {
 //Displays the create client page
 ctrl.getEditClient = function(id) {
     facade.getClient(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
     });
@@ -90,4 +95,9 @@ ctrl.removeClient = function(id) {
     });
 };
 
-module.exports = ctrl;
+module.exports = function getController() {
+    return require('../scripts/Facade.js')().then(function(data){
+        facade = data;
+        return ctrl;
+    });
+};

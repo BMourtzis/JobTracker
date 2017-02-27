@@ -1,5 +1,5 @@
 var clientRegister = require('../Registers/ClientRegister.js');
-var jobRegister = require('../Registers/JobRegister.js');
+var jobRegister;
 var schemeRegister = require('../Registers/JobSchemeRegister.js');
 var invoiceRegister = require('../Registers/InvoiceRegister.js');
 
@@ -220,4 +220,25 @@ facade.deleteInvoice = function(invoiceId) {
     return invoiceRegister.deleteInvoice(invoiceId);
 };
 
-module.exports = facade;
+
+module.exports = function getFacade() {
+    var clients = require('../Registers/ClientRegister.js')().then(function(data) {
+        clientRegister = data;
+    });
+
+    var jobs = require('../Registers/JobRegister.js')().then(function(data) {
+        jobRegister = data;
+    });
+
+    var schemes = require('../Registers/JobSchemeRegister.js')().then(function(data) {
+        schemeRegister = data;
+    });
+
+    var invoices = require('../Registers/InvoiceRegister.js')().then(function(data) {
+        invoiceRegister = data;
+    });
+
+    return Promise.all([clients, jobs, schemes, invoices]).then(function(data){
+        return facade;
+    });
+};

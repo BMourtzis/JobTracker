@@ -143,4 +143,9 @@ uiFunctions.changeActive = function(itemNo) {
     $(listItems[itemNo]).addClass("active");
 };
 
-module.exports = uiFunctions;
+module.exports = function getScripts() {
+    return require("../Controller/Controllers.js")().then(function(data) {
+        ctrl = data;
+        return uiFunctions;
+    });
+};

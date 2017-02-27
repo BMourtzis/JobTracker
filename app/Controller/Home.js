@@ -1,14 +1,16 @@
-var facade = require('../scripts/Facade.js');
+var facade;
 
 var ctrl = { };
 
 ctrl.ctrlName = "Home";
-ctrl.templateDir = "./app/Templates/";
+ctrl.templateDir = "../Templates/";
 ctrl.selectedDate = Date.today();
 
 //Renders the index page for Home
 ctrl.index = function() {
-    var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/index.html');
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
+    
+    var temp = jsrender.templates(templatePath);
     var html = temp();
     $("#content").html(html);
 
@@ -29,7 +31,9 @@ ctrl.loadDayJobs = function() {
             data.sum += data.jobs[i].payment + data.jobs[i].gst;
         }
 
-        var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
+
+        var tableTemp = jsrender.templates(templatePath);
         var table = tableTemp(data);
         $("#homeDailyTable").html(table);
     });
@@ -61,4 +65,9 @@ ctrl.placed = function(id){
     });
 };
 
-module.exports = ctrl;
+module.exports = function getController() {
+    return require('../scripts/Facade.js')().then(function(data){
+        facade = data;
+        return ctrl;
+    });
+};

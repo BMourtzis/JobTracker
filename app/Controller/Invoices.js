@@ -1,9 +1,9 @@
-var facade = require('../scripts/Facade.js');
+var facade;
 
 var ctrl = { };
 
 ctrl.ctrlName = "Invoices";
-ctrl.templateDir = "./app/Templates/";
+ctrl.templateDir = "../Templates/";
 
 //Properties for searching
 ctrl.currentPage = 0;
@@ -20,7 +20,8 @@ ctrl.index = function() {
 
 ctrl.initiatePage = function() {
     return facade.getAllClients().then(function(query) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/index.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp({clients: query});
         $("#content").html(html);
 
@@ -40,7 +41,8 @@ ctrl.loadCurrentInvoices = function() {
 
 ctrl.loadTable = function(data) {
     data.currentPage = ctrl.currentPage;
-    var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/table.html');
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
+    var temp = jsrender.templates(templatePath);
     var html = temp(data);
     $("#indexInvoiceTable").html(html);
 
@@ -89,7 +91,9 @@ ctrl.gotoPage = function(page) {
 ctrl.getCreateInvoice = function() {
     facade.getAllClients().then(function(query) {
         ctrl.year = parseInt(new Date.today().toString("yyyy"));
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/create.html');
+
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp({clients: query, year: ctrl.year});
         $("#sidebar").html(html);
     });
@@ -118,7 +122,8 @@ ctrl.createInvoice = function() {
 
 ctrl.invoiceDetails = function(id) {
     facade.getInvoice(id).then(function(invoice){
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName+'/details.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(invoice);
         $("#sidebar").html(html);
 
@@ -147,4 +152,9 @@ ctrl.invoicePaid = function(invoiceId) {
     });
 };
 
-module.exports = ctrl;
+module.exports = function getController() {
+    return require('../scripts/Facade.js')().then(function(data){
+        facade = data;
+        return ctrl;
+    });
+};

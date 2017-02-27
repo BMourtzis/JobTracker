@@ -1,9 +1,9 @@
-var facade = require('../scripts/Facade.js');
+var facade;
 
 var ctrl = {};
 
 ctrl.ctrlName = "JobSchemes";
-ctrl.templateDir = "./app/Templates/";
+ctrl.templateDir = "../Templates/";
 ctrl.repval = 0;
 ctrl.selectedRep = "";
 
@@ -21,7 +21,8 @@ ctrl.jobSchemeDetails = function(id) {
         ctrl.year = parseInt(new Date.today().toString("yyyy"));
         data.year = ctrl.year;
 
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
     });
@@ -54,7 +55,8 @@ ctrl.generateNextMonthsJobs = function(id) {
 //Displays the create job scheme page
 ctrl.getCreateJobScheme = function(id) {
     facade.getClient(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
 
@@ -122,7 +124,8 @@ ctrl.addRepValues = function() {
         }
         repValuesTmpl += "RepValues.html";
 
-        var row = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + repValuesTmpl);
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + repValuesTmpl);
+        var temp = jsrender.templates(templatePath);
         ctrl.repval++;
         var data = { no: ctrl.repval };
         var html = row(data);
@@ -153,25 +156,25 @@ ctrl.removeRepValues = function(data) {
 //Displays the edit job scheme page
 ctrl.getEditJobScheme = function(id) {
     facade.getJobScheme(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
 
         var innerhtml = "";
         data.repetitionValues.forEach(function(value){
-
             switch (data.repetition) {
                 case "Monthly":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/MonthlyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/MonthlyRepValuesEdit.html"))(value);
                     break;
                 case "Fortnightly":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/FortnightlyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/FortnightlyRepValuesEdit.html"))(value);
                     break;
                 case "Weekly":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/WeeklyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/WeeklyRepValuesEdit.html"))(value);
                     break;
                 case "Daily":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/DailyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/DailyRepValuesEdit.html"))(value);
                     break;
             }
         });
@@ -210,4 +213,9 @@ ctrl.removeJobScheme = function(id) {
     });
 };
 
-module.exports = ctrl;
+module.exports = function getController() {
+    return require('../scripts/Facade.js')().then(function(data){
+        facade = data;
+        return ctrl;
+    });
+};

@@ -2,278 +2,381 @@
 
 var orm = {};
 
-orm.connStr = new sequelize(null, null, null, {
-    host: 'localhost',
-    dialect: 'sqlite',
-    pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-    },
-    storage: './app/db/jobs.db'
-});
+orm.dbDirectory = "";
 
-
-
-orm.client =  orm.connStr.define('client', {
-    id: {
-        type: sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        field: 'id'
-    },
-    firstName: {
-        type: sequelize.STRING,
-        field: 'firstname',
-        allowNull: false
-    },
-    lastName: {
-        type: sequelize.STRING,
-        field: 'lastname',
-        allowNull: false
-    },
-    businessName: {
-        type: sequelize.STRING,
-        field: 'businessname',
-        allowNull: false
-    },
-    shortName: {
-        type: sequelize.STRING(3),
-        field: 'shortname',
-        unique: true,
-        allowNull: false
-    },
-    address: {
-        type: sequelize.STRING(150),
-        allowNull: false,
-        field: 'address'
-    },
-    email: {
-        type: sequelize.STRING(50),
-        field: 'email',
-        validate: {
-            isEmail: true
-        }
-    },
-    phone: {
-        type: sequelize.INTEGER(10),
-        field: 'phone'
-    }
-}, {
-    classMethods: {
-
-    },
-    instanceMethods: {
-        addNewJob: function(jobname, timebooked, payment){
-            return orm.job.create({
-                jobName: jobname,
-                timeBooked: timebooked,
-                payment: payment,
-                state: 'Placed',
-                clientID: this.id,
-                gst: (0.1 * payment)
-            });
+function connectionInitialization() {
+    orm.connStr = new sequelize(null, null, null, {
+        host: 'localhost',
+        dialect: 'sqlite',
+        pool: {
+            max: 5,
+            min: 0,
+            idle: 10000
         },
-        addNewJobScheme: function addNewJobScheme(jobname, payment, repetition, repetitionvalues){
-            return orm.jobScheme.create({
-                jobName: jobname,
-                enabled: true,
-                payment: payment,
-                repetition: repetition,
-                repetitionValues: repetitionvalues,
-                clientID: this.id
-            });
+        storage: orm.dbDirectory
+    });
+    initializeModels();
+}
+
+function initializeModels() {
+    orm.client = orm.connStr.define('client', {
+        id: {
+            type: sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            field: 'id'
         },
-    }
-});
-
-orm.job = orm.connStr.define('job', {
-    id: {
-        type: sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        field: 'id'
-    },
-    jobName: {
-        type: sequelize.STRING(100),
-        allowNull: false,
-        field: 'jobName'
-    },
-    timeBooked: {
-        type: sequelize.DATE,
-        allowNull: false,
-        field: 'timeBooked',
-        get: function() {
-            return moment(this.getDataValue('timeBooked'));
+        firstName: {
+            type: sequelize.STRING,
+            field: 'firstname',
+            allowNull: false
+        },
+        lastName: {
+            type: sequelize.STRING,
+            field: 'lastname',
+            allowNull: false
+        },
+        businessName: {
+            type: sequelize.STRING,
+            field: 'businessname',
+            allowNull: false
+        },
+        shortName: {
+            type: sequelize.STRING(3),
+            field: 'shortname',
+            unique: true,
+            allowNull: false
+        },
+        address: {
+            type: sequelize.STRING(150),
+            allowNull: false,
+            field: 'address'
+        },
+        email: {
+            type: sequelize.STRING(50),
+            field: 'email',
+            validate: {
+                isEmail: true
+            }
+        },
+        phone: {
+            type: sequelize.INTEGER(10),
+            field: 'phone'
         }
-    },
-    payment: {
-        type: sequelize.DECIMAL,
-        allowNull: false,
-        field: 'payment'
-    },
-    gst: {
-        type: sequelize.DECIMAL,
-        allowNull: false,
-        field: 'gst'
-    },
-    state: {
-        type: sequelize.ENUM('Placed', 'Done', 'Invoiced', 'Paid'),
-        allowNull: false,
-        field: 'state'
-    },
-    clientID: {
-        type: sequelize.INTEGER,
-        references: {
-            model: this.client,
-            key: 'id'
-        }
-    }
-}, {
-    classMethods: {
+    }, {
+        classMethods: {
 
-    },
-    instanceMethods: {
-
-    }
-});
-
-orm.jobScheme = orm.connStr.define('jobScheme', {
-    id: {
-        type: sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        field: 'id'
-    },
-    jobName: {
-        type: sequelize.STRING(100),
-        allowNull: false,
-        field: 'jobName'
-    },
-    enabled: {
-        type: sequelize.BOOLEAN,
-        allowNull: false,
-        field: 'enabled'
-    },
-    payment: {
-        type: sequelize.DECIMAL,
-        allowNull: false,
-        field: 'payment'
-    },
-    repetition: {
-        type: sequelize.ENUM('Daily', 'Weekly', 'Fortnightly', 'Monthly'),
-        allowNull: false,
-        field: 'repetition'
-    },
-    repetitionValues: {
-        type: sequelize.JSON,
-        field: 'repetitionValues'
-    },
-    clientID: {
-        type: sequelize.INTEGER,
-        references: {
-            model: this.client,
-            key: 'id'
-        }
-    }
-}, {
-    classMethods: {
-
-    },
-    instanceMethods: {
-        generateJobs: function generateJobs(month){
-            if (this.enabled) {
-                var date = Date.today().set({
+        },
+        instanceMethods: {
+            addNewJob: function(jobname, timebooked, payment) {
+                return orm.job.create({
+                    jobName: jobname,
+                    timeBooked: timebooked,
+                    payment: payment,
+                    state: 'Placed',
+                    clientId: this.id,
+                    gst: (0.1 * payment)
+                });
+            },
+            addNewJobScheme: function addNewJobScheme(jobname, payment, repetition, repetitionvalues) {
+                return orm.jobScheme.create({
+                    jobName: jobname,
+                    enabled: true,
+                    payment: payment,
+                    repetition: repetition,
+                    repetitionValues: repetitionvalues,
+                    clientId: this.id
+                });
+            },
+            addNewInvoice: function addNewInvoice(year, month, total, invoiceNo) {
+                return orm.invoice.create({
+                    year: year,
                     month: month,
-                    day: 1
-                }).first().sunday();
-
-                month += 2;
-                switch (this.repetition) {
-                    case "Daily":
-                        this.dailyGenerator(date, month);
-                        break;
-                    case "Weekly":
-                        this.weeklyGenerator(date, month);
-                        break;
-                    case "Fortnightly":
-                        this.fortnightlyGenerator(date, month);
-                        break;
-                    case "Monthly":
-                        this.monthlyGenerator(date, month);
-                        break;
-                    default:
-                }
-            }
-        },
-        dailyGenerator: function dailyGenerator(date, nextMonth) {
-            var repvalues = JSON.parse(this.repetitionValues);
-            date.at({
-                hour: repvalues[i].hour,
-                minute: repvalues[i].minute
-            });
-
-            for (; date.toString("M") < (nextMonth); date.next().day()) {
-                this.createJob(date);
-            }
-        },
-        weeklyGenerator: function weeklyGenerator(date, nextMonth) {
-            var repvalues = JSON.parse(this.repetitionValues);
-
-            for (; date.toString("M") < (nextMonth); date.next().sunday()) {
-                for (var i = 0; i < repvalues.length; i++) {
-                    var jobDate = new Date(date);
-                    jobDate.add(repvalues[i].day).day().at({
-                        hour: repvalues[i].hour,
-                        minute: repvalues[i].minute
+                    total: total,
+                    paid: false,
+                    invoiceNo: invoiceNo,
+                    clientId: this.id
+                }).then(function(data) {
+                    return data.get({
+                        plain: true
                     });
+                });
+            }
+        }
+    });
 
-                    this.createJob(jobDate);
-                }
+    //TODO: add notes and what needs to be done.
+    orm.job = orm.connStr.define('job', {
+        id: {
+            type: sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            field: 'id'
+        },
+        jobName: {
+            type: sequelize.STRING(100),
+            allowNull: false,
+            field: 'jobName'
+        },
+        timeBooked: {
+            type: sequelize.DATE,
+            allowNull: false,
+            field: 'timeBooked',
+            get: function() {
+                return moment(this.getDataValue('timeBooked'));
             }
         },
-        fortnightlyGenerator: function fortnightlyGenerator(date, nextMonth) {
-            var repvalues = JSON.parse(this.repetitionValues);
-
-            for (; date.toString("M") < (nextMonth); date.next().sunday().next().sunday()) {
-                for (var i = 0; i < repvalues.length; i++) {
-                    var jobDate = new Date(date);
-                    jobDate.add(repvalues[i].day).day().at({
-                        hour: repvalues[i].hour,
-                        minute: repvalues[i].minute
-                    });
-
-                    this.createJob(jobDate);
-                }
-            }
+        payment: {
+            type: sequelize.DECIMAL,
+            allowNull: false,
+            field: 'payment'
         },
-        monthlyGenerator: function monthlyGenerator(date, nextMonth) {
-            var repvalues = JSON.parse(this.repetitionValues);
+        gst: {
+            type: sequelize.DECIMAL,
+            allowNull: false,
+            field: 'gst'
+        },
+        clientId: {
+            type: sequelize.INTEGER,
+            field: "clientId"
+        },
+        invoiceId: {
+            type: sequelize.INTEGER,
+            field: "invoiceId"
+        },
+        state: {
+            type: sequelize.ENUM('Placed', 'Done', 'Invoiced', 'Paid'),
+            allowNull: false,
+            field: 'state'
+        }
+    }, {
+        classMethods: {
 
-            for (var i = 0; i < repvalues.length; i++) {
-                var jobDate = new Date(date);
-                jobDate.add(repvalues[i].day).day().at({
+        },
+        instanceMethods: {
+
+        }
+    });
+
+    orm.jobScheme = orm.connStr.define('jobScheme', {
+        id: {
+            type: sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            field: 'id'
+        },
+        jobName: {
+            type: sequelize.STRING(100),
+            allowNull: false,
+            field: 'jobName'
+        },
+        enabled: {
+            type: sequelize.BOOLEAN,
+            allowNull: false,
+            field: 'enabled'
+        },
+        payment: {
+            type: sequelize.DECIMAL,
+            allowNull: false,
+            field: 'payment'
+        },
+        repetition: {
+            type: sequelize.ENUM('Daily', 'Weekly', 'Fortnightly', 'Monthly'),
+            allowNull: false,
+            field: 'repetition'
+        },
+        repetitionValues: {
+            type: sequelize.JSON,
+            field: 'repetitionValues'
+        },
+        clientId: {
+            type: sequelize.INTEGER,
+            field: "clientId"
+        },
+    }, {
+        classMethods: {
+
+        },
+        instanceMethods: {
+            generateJobs: function generateJobs(year, month) {
+                if (this.enabled) {
+                    var date = Date.today().set({
+                        year: year,
+                        month: month,
+                        day: 1
+                    }).first().sunday();
+
+                    month += 2;
+                    switch (this.repetition) {
+                        case "Daily":
+                            this.dailyGenerator(date, month);
+                            break;
+                        case "Weekly":
+                            this.weeklyGenerator(date, month);
+                            break;
+                        case "Fortnightly":
+                            this.fortnightlyGenerator(date, month);
+                            break;
+                        case "Monthly":
+                            this.monthlyGenerator(date, month);
+                            break;
+                        default:
+                    }
+                }
+            },
+            dailyGenerator: function dailyGenerator(date, nextMonth) {
+                var repvalues = JSON.parse(this.repetitionValues);
+                date.at({
                     hour: repvalues[i].hour,
                     minute: repvalues[i].minute
                 });
 
-                this.createJob(jobDate);
+                for (; date.toString("M") < (nextMonth); date.next().day()) {
+                    this.createJob(date);
+                }
+            },
+            weeklyGenerator: function weeklyGenerator(date, nextMonth) {
+                var repvalues = JSON.parse(this.repetitionValues);
+
+                for (; date.toString("M") < (nextMonth); date.next().sunday()) {
+                    for (var i = 0; i < repvalues.length; i++) {
+                        var jobDate = new Date(date);
+                        jobDate.add(repvalues[i].day).day().at({
+                            hour: repvalues[i].hour,
+                            minute: repvalues[i].minute
+                        });
+
+                        this.createJob(jobDate);
+                    }
+                }
+            },
+            fortnightlyGenerator: function fortnightlyGenerator(date, nextMonth) {
+                var repvalues = JSON.parse(this.repetitionValues);
+
+                for (; date.toString("M") < (nextMonth); date.next().sunday().next().sunday()) {
+                    for (var i = 0; i < repvalues.length; i++) {
+                        var jobDate = new Date(date);
+                        jobDate.add(repvalues[i].day).day().at({
+                            hour: repvalues[i].hour,
+                            minute: repvalues[i].minute
+                        });
+
+                        this.createJob(jobDate);
+                    }
+                }
+            },
+            monthlyGenerator: function monthlyGenerator(date, nextMonth) {
+                var repvalues = JSON.parse(this.repetitionValues);
+
+                for (var i = 0; i < repvalues.length; i++) {
+                    var jobDate = new Date(date);
+                    jobDate.add(repvalues[i].day).day().at({
+                        hour: repvalues[i].hour,
+                        minute: repvalues[i].minute
+                    });
+
+                    this.createJob(jobDate);
+                }
+            },
+            createJob: function createJob(jobDate) {
+                var payment = this.payment;
+                var jobName = this.jobName;
+                orm.client.findById(this.clientId).then(function(client) {
+                    client.addNewJob(jobName, jobDate, payment);
+                });
+            }
+        }
+    });
+
+    orm.invoice = orm.connStr.define('invoice', {
+        id: {
+            type: sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+            field: 'id'
+        },
+        invoiceNo: {
+            type: sequelize.STRING(7),
+            allowNull: false,
+            field: 'invoiceno'
+        },
+        year: {
+            type: sequelize.INTEGER,
+            allowNull: false,
+            field: 'year'
+        },
+        month: {
+            type: sequelize.INTEGER,
+            allowNull: false,
+            field: 'month'
+        },
+        paidAt: {
+            type: sequelize.DATE,
+            allowNull: true,
+            field: 'paidAt',
+            get: function() {
+                return moment(this.getDataValue('timeBooked'));
             }
         },
-        createJob: function createJob(jobDate) {
-            var payment = this.payment;
-            var jobName = this.jobName;
-            orm.client.findById(this.clientID).then(function(client){
-                client.addNewJob(jobName, jobDate, payment);
-            });
+        total: {
+            type: sequelize.DECIMAL,
+            allowNull: false,
+            field: 'total'
+        },
+        paid: {
+            type: sequelize.BOOLEAN,
+            allowNull: false,
+            field: 'paid'
+        },
+        clientId: {
+            type: sequelize.INTEGER,
+            field: "clientId"
+        },
+        createdAt: {
+            type: sequelize.DATE,
+            allowNull: false,
+            field: 'createdAt',
+            get: function() {
+                return moment(this.getDataValue('timeBooked'));
+            }
         }
-    }
-});
+    }, {
+        indexes: [{
+            unique: true,
+            fields: ['year', 'month', 'clientId']
+        }],
+        classMethods: {
 
-orm.jobScheme.belongsTo(orm.client);
-orm.job.belongsTo(orm.client);
-orm.client.hasMany(orm.job);
-orm.client.hasMany(orm.jobScheme);
+        },
+        instanceMethods: {
+
+        }
+    });
+}
+
+//Association Definitions
+function createAssociations() {
+    return Promise.all([
+        orm.client.hasMany(orm.job),
+        orm.client.hasMany(orm.jobScheme),
+        orm.client.hasMany(orm.invoice),
+        orm.invoice.hasMany(orm.job),
+        orm.jobScheme.belongsTo(orm.client, {
+            foreignKey: "clientId"
+        }),
+        orm.job.belongsTo(orm.client, {
+            foreignKey: "clientId"
+        }),
+        orm.job.belongsTo(orm.invoice, {
+            foreignKey: "invoiceId"
+        }),
+        orm.invoice.belongsTo(orm.client, {
+            foreignKey: "clientId"
+        })
+    ]);
+}
+
+
 
 //Utility Functions
 orm.testConnection = function() {
@@ -287,11 +390,52 @@ orm.testConnection = function() {
         });
 };
 
-orm.reinitializeTables = function() {
+function reinitializeTables() {
+    return Promise.all([
+        orm.job.sync(),
+        orm.client.sync(),
+        orm.jobScheme.sync(),
+        orm.invoice.sync()
+    ]);
+}
 
-    // orm.client.sync();
-    // orm.job.sync();
-    // orm.jobScheme.sync();
+function validateDB() {
+    var exists = true;
+    orm.dbDirectory = path.resolve(__dirname, "../../..");
+
+    if (!fs.existsSync(orm.dbDirectory)) {
+        fs.mkdirSync(orm.dbDirectory);
+    }
+
+    orm.dbDirectory = path.resolve(orm.dbDirectory, "db/");
+    if (!fs.existsSync(orm.dbDirectory)) {
+        fs.mkdirSync(orm.dbDirectory);
+    }
+
+    orm.dbDirectory = path.resolve(orm.dbDirectory, "jobs.db");
+    if (!fs.existsSync(orm.dbDirectory)) {
+        exists = false;
+        var sqlite = require("sqlite3");
+        var db = new sqlite.Database(orm.dbDirectory, [sqlite3.OPEN_CREATE]);
+        db.close();
+    }
+
+    connectionInitialization();
+
+    if(!exists){
+        return reinitializeTables().then(function(){
+            return createAssociations().then(function() {
+                return orm;
+            });
+        });
+    }
+    else {
+        return createAssociations().then(function() {
+            return orm;
+        });
+    }
+}
+
+module.exports = function getORM() {
+    return Promise.resolve(validateDB());
 };
-
-module.exports = orm;

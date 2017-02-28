@@ -1,4 +1,4 @@
-var orm = require('../scripts/orm.js');
+var orm;
 
 var register = {};
 
@@ -62,7 +62,7 @@ register.FindJobs = function(searchParams, orderParams, page) {
     }
 
     return orm.job.findAll({
-        include: [orm.client],
+        include: [orm.client, orm.invoice],
         where: searchParams,
         order: orderParams,
         offset: page*100,
@@ -164,7 +164,7 @@ register.generateQuery = function(searchParams) {
         query.state = searchParams.state;
     }
 
-    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined){
+    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== ""){
         query.clientID = searchParams.clientID;
     }
 
@@ -237,23 +237,23 @@ register.paid = function(id){
 };
 
 //List State Machine
-register.bulkUpdateJobList = function(idList, state){
+register.bulkUpdateJobList = function(idList, updateList){
     var query = {
         id: {$in: idList}
     };
-    return orm.job.update({state: state}, {where: query});
+    return orm.job.update(updateList, {where: query});
 };
 
 register.jobListDone = function(idList) {
-    return register.bulkUpdateJobList(idList, "Done");
+    return register.bulkUpdateJobList(idList, {state: "Done"});
 };
 
-register.jobListInvoiced = function(idList) {
-    return register.bulkUpdateJobList(idList, "Invoiced");
+register.jobListInvoiced = function(idList, invoiceId) {
+    return register.bulkUpdateJobList(idList, {state: "Invoiced", invoiceId: invoiceId});
 };
 
 register.jobListPaid = function(idList) {
-    return register.bulkUpdateJobList(idList, "Paid");
+    return register.bulkUpdateJobList(idList, {state: "Paid"});
 };
 
 ////Remove Functions
@@ -269,5 +269,9 @@ register.bulkDeleteJobs = function(idList) {
     });
 };
 
-
-module.exports = register;
+module.exports = function getRegister(){
+    return require('../scripts/orm.js')().then(function(data){
+        orm = data;
+        return register;
+    });
+};

@@ -1,9 +1,9 @@
-var facade = require('../scripts/Facade.js');
+var facade;
 
 var ctrl = {};
 
 ctrl.ctrlName = "Jobs";
-ctrl.templateDir = "./app/Templates/";
+ctrl.templateDir = "../Templates/";
 
 //Properties for searching
 ctrl.currentPage = 0;
@@ -24,7 +24,8 @@ ctrl.index = function() {
 //Adds the heading, buttons and the modal
 ctrl.initiatePage = function(){
     return facade.getAllClients().then(function(query) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/index.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp({clients: query});
         $("#content").html(html);
 
@@ -47,7 +48,11 @@ ctrl.getClientJobs = function(id){
 
 //Loads all Jobs
 ctrl.loadAllJobs = function(){
-    facade.getAllJobs().then(function(query) {
+    ctrl.searchParams = {
+        from: Date.today().last().year().set({month: 0, day: 1}),
+        to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
+    };
+    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(query) {
         ctrl.loadTable(query);
     });
 };
@@ -86,7 +91,8 @@ ctrl.updateSelectedList = function() {
         ctrl.selectedList.push(parseInt($(this).val()));
     });
 
-    var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/selectedListOptions.html');
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
+    var temp = jsrender.templates(templatePath);
     var html = temp({count: ctrl.selectedList.length});
     $("#sidebar").html(html);
 
@@ -107,7 +113,7 @@ ctrl.updateAllCheckboxes = function() {
 //Loads the next page of the table
 ctrl.gotoPage = function(page) {
     ctrl.currentPage = page;
-    facade.FindJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };
@@ -116,7 +122,8 @@ ctrl.gotoPage = function(page) {
 ctrl.loadTable = function(data){
     data.currentPage = ctrl.currentPage;
 
-    var tableTemp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/table.html');
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
+    var tableTemp = jsrender.templates(templatePath);
     var table = tableTemp(data);
     $("#indexJobTable").html(table);
 };
@@ -124,7 +131,8 @@ ctrl.loadTable = function(data){
 //Gets the client details and loads them on the sidebar
 ctrl.jobDetails = function(id) {
     facade.getJobFull(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
     });
@@ -133,7 +141,8 @@ ctrl.jobDetails = function(id) {
 //Creates the createJob page
 ctrl.getCreateJob = function(id) {
     facade.getAllClients().then(function(query) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+        var temp = jsrender.templates(templatePath);
         var data = {
             clients: query
         };
@@ -184,7 +193,8 @@ ctrl.bulkDelete = function() {
 //Creates the edit details page
 ctrl.getEditJob = function(id) {
     facade.getJob(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
     });
@@ -200,7 +210,8 @@ ctrl.editJob = function(id) {
 //Creates the Rebook job page
 ctrl.getRebookJob = function(id) {
     facade.getJob(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/rebook.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/rebook.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
 
@@ -265,4 +276,9 @@ ctrl.jobListPaid = function() {
     facade.jobListPaid(ctrl.selectedList);
 };
 
-module.exports = ctrl;
+module.exports = function getController() {
+    return require('../scripts/Facade.js')().then(function(data){
+        facade = data;
+        return ctrl;
+    });
+};

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<div class="row">
+    <h2 class="details-heading float-left">{{:invoiceNo}}</h2>
+    <div class="custom-button">
+        {{if paid === false}}
+        <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.invoicePaid({{:id}})">
+            Paid
+        </button>
+        {{/if}}
+        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.printInvoice({{:id}})">
+            <span class="glyphicon glyphicon-print"></span>
+            Print Invoice
+        </button>
+    </div>
+</div>
+<div class="row">
+    <p>
+        <strong>Business Name:</strong>
+        {{:client.businessName}}
+    </p>
+    <p>
+        <strong>Issue Date:</strong>
+        {{:createdAt.format("DD/MM/YYYY")}}
+    </p>
+    <p>
+        <strong>Total:</strong>
+        {{:total}}$
+    </p>
+    <p>
+        <strong>Paid:</strong>
+        {{:paid}}
+    </p>
+    {{if paid === true}}
+    <p>
+        <strong>Paid At:</strong>
+        {{:paidAt.format("DD/MM/YYYY")}}
+    </p>
+    {{/if}}
+</div>
+<div class="row">
+    <table class="table">
+        <thead class="details-heading">
+            <tr>
+                <th>Job Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{for jobs}}
+            <tr id="client-job-table" class="clickable-row" data-id="{{:id}}">
+                <td>{{:jobName}}</td>
+                <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
+                <td>{{:timeBooked.format("HH:mm")}}</td>
+                <td>{{:payment + gst}}$</td>
+                <td>{{:state}}</td>
+            </tr>
+            {{/for }}
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="custom-button">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+        </button>
+    </div>
+</div>
+
+<!-- Delete confirmation Modal -->
+<div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-medium" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title modalLabel">Are you sure you want to delete {{:invoiceNo}}</h4>
+        </div>
+        <div class="modal-body">
+            <button type="button" class="btn btn-danger" onclick="UIFunctions.deleteInvoice({{:id}})">Delete Invoice</button>
+            <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>

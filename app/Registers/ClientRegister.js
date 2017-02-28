@@ -56,8 +56,8 @@ register.createClient = function(firstname, lastname, businessname, shortname, a
         businessName: businessname,
         shortName: shortname,
         address: address,
-        Email: email,
-        Phone: phone,
+        email: email,
+        phone: phone,
      });
 };
 
@@ -75,4 +75,15 @@ register.editClient = function(id, data){
     });
 };
 
-module.exports = register;
+register.removeClient = function(id) {
+    return orm.client.findById(id).then(function(client){
+        return client.destroy();
+    });
+};
+
+module.exports = function getRegister(){
+    return require('../scripts/orm.js')().then(function(data){
+        orm = data;
+        return register;
+    });
+};

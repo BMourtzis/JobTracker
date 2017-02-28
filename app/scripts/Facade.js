@@ -1,10 +1,9 @@
 var clientRegister = require('../Registers/ClientRegister.js');
-var jobRegister = require('../Registers/JobRegister.js');
+var jobRegister;
 var schemeRegister = require('../Registers/JobSchemeRegister.js');
+var invoiceRegister = require('../Registers/InvoiceRegister.js');
 
 var facade = { };
-
-// TODO: Remove invoice and paid functionality from jobs. Invoices will do that. Invoices will change the state to invoiced or paid accordingly.
 
 //Client Functions
 ////Get all Clients
@@ -38,6 +37,10 @@ facade.createClient = function(firstname, lastname, businessname, shortname, add
 ////Edit Function
 facade.editClient = function(id, data){
     return clientRegister.editClient(id, data);
+};
+
+facade.removeClient = function(id){
+    return clientRegister.removeClient(id);
 };
 
 //Job Functions
@@ -104,7 +107,7 @@ facade.done = function(id){
     return jobRegister.done(id);
 };
 
-//TODO: Maybe I won't need these
+//NOTE: Maybe I won't need these
 //////Changes the state to invoice
 facade.invoice = function(id) {
     return jobRegister.invoice(id);
@@ -171,6 +174,10 @@ facade.editJobScheme = function(id, data){
     return schemeRegister.editJobScheme(id, data);
 };
 
+facade.removeJobScheme = function(id) {
+    return schemeRegister.removeJobScheme(id);
+};
+
 facade.disableJobScheme = function(id) {
     return schemeRegister.disableJobScheme(id);
 };
@@ -180,76 +187,58 @@ facade.enableJobScheme = function(id) {
 };
 
 ////GenerateJobs
-facade.generateJobs = function(id, month) {
-    return schemeRegister.generateJobs(id, month);
+facade.generateJobs = function(id, year, month) {
+    return schemeRegister.generateJobs(id, year, month);
+};
+
+//Invoice
+facade.getCurrentInvoices = function() {
+    return invoiceRegister.getCurrentInvoices();
+};
+
+facade.getInvoice = function(invoiceId) {
+    return invoiceRegister.getInvoice(invoiceId);
+};
+
+facade.invoicePaid = function(invoiceId) {
+    return invoiceRegister.invoicePaid(invoiceId);
+};
+
+facade.createInvoice =  function(id, year, month){
+    return invoiceRegister.invoiceGeneration(id, year, month);
+};
+
+facade.generateInvoice = function(invoiceId) {
+    return invoiceRegister.generateInvoice(invoiceId);
+};
+
+facade.invoiceSearchOptions = function(searchParams, orderParams, page){
+    return invoiceRegister.invoiceSearchOptions(searchParams, orderParams, page);
+};
+
+facade.deleteInvoice = function(invoiceId) {
+    return invoiceRegister.deleteInvoice(invoiceId);
 };
 
 
-//TODO: Move these to another file
-//Invoice
-// facade.generateMonthInvoices = function(year, month){
-//     var from = new Date.today().set({year: year, month: month, day: 1});
-//     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
-//
-//     return orm.Client.findAll({
-//         include:[{
-//             model: orm.Job,
-//             where: {
-//                 state: "Done",
-//                 timeBooked: {
-//                     gt:from,
-//                     lt: to
-//                 }
-//             }
-//         }]
-//     }).then(function(data){
-//         if(data.length > 0) {
-//             var clients = [];
-//             for(var i = 0; i < data.length; i++)
-//             {
-//                 clients.push(data[i].get({plain: true}));
-//             }
-//             return clients;
-//         }
-//         return data;
-//     }).then(function(data){
-//         if(data){
-//             RG.generateMultipleInvoices(data, year, month);
-//         }
-//
-//     });
-// };
-//
-// facade.generateClientInvoice = function(client, year, month){
-//     var from = new Date.today().set({year: year, month: month, day: 1});
-//     var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
-//
-//     return orm.Client.findOne({
-//         include:[{
-//             model: orm.Job,
-//             where: {
-//                 state: "Done",
-//                 timeBooked: {
-//                     gt:from,
-//                     lt: to
-//                 },
-//             }
-//         }],
-//         where: {
-//             id: client
-//         }
-//     }).then(function(data){
-//         if(data) {
-//             return data.get({plain: true});
-//         }
-//         return data;
-//     }).then(function(data){
-//         if(data){
-//             RG.generateInvoice(data, year, month);
-//         }
-//
-//     });
-//
-// };
+module.exports = function getFacade() {
+    var clients = require('../Registers/ClientRegister.js')().then(function(data) {
+        clientRegister = data;
+    });
 
-module.exports = facade;
+    var jobs = require('../Registers/JobRegister.js')().then(function(data) {
+        jobRegister = data;
+    });
+
+    var schemes = require('../Registers/JobSchemeRegister.js')().then(function(data) {
+        schemeRegister = data;
+    });
+
+    var invoices = require('../Registers/InvoiceRegister.js')().then(function(data) {
+        invoiceRegister = data;
+    });
+
+    return Promise.all([clients, jobs, schemes, invoices]).then(function(data){
+        return facade;
+    });
+};

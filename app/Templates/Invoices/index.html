@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <div class="row">
-    <h1 class="float-left">Jobs</h1>
-</div>
-<div class="row">
-    <input id="jobAllCheckbox" type="checkbox" onclick="UIFunctions.updateAllCheckboxes()">
-    <div class="content-custom-button">
+    <h1 class="float-left">Invoices</h1>
+    <div class="custom-button">
         <button id="advance-search-button" type="button" class="btn btn-default" data-toggle="modal" data-target="#advSearchModal">
             <span class="glyphicon glyphicon-search"></span> Advance Search
         </button>
-        <button id="create-button" type="button" class="btn btn-primary" onclick="UIFunctions.getCreateJob()">
-            <span class="glyphicon glyphicon-plus"></span> Create
+        <button id="create-button" type="button" class="btn btn-primary" onclick="UIFunctions.getCreateInvoice()">
+            <span class="glyphicon glyphicon-plus"></span> Generate
         </button>
     </div>
-    <!-- <input type="checkbox"> -->
 </div>
-<div id="indexJobTable" class="row"></div>
+<div id="indexInvoiceTable" class="row"></div>
 
 <!-- Modal -->
 <div class="modal fade" id="advSearchModal" tabindex="" role="dialog" aria-labelledby="myModalLabel">
@@ -45,7 +41,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <!-- Copy from Create -->
                         <label for="client">Client</label>
                         <select class="form-control" name="clientID">
                             <option value="" selected></option>
@@ -55,19 +50,17 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="state">Status</label>
-                        <select class="form-control" name="status">
+                        <label for="state">Paid</label>
+                        <select class="form-control" name="paid">
                             <option value="" selected></option>
-                            <option value="Placed">Placed</option>
-                            <option value="Done">Done</option>
-                            <option value="Invoiced">Invoiced</option>
-                            <option value="Paid">Paid</option>
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
                         </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="UIFunctions.searchJobs()">Search</button>
+                <button type="button" class="btn btn-primary" onclick="UIFunctions.searchOptions()">Search</button>
             </div>
         </div>
     </div>

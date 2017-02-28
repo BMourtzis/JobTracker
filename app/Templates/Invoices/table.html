@@ -2,30 +2,27 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Select</th>
             <th>Client</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Total</th>
-            <th>Status</th>
+            <th>Invoice No</th>
+            <th>Issue Date</th>
+            <th>Paid</th>
         </tr>
     </thead>
     <tbody>
-        {{for jobs}}
-        <tr>
-            <td> <input type="checkbox" onclick="UIFunctions.updateJobSelectedList()" value="{{:id}}"></td>
+        {{for invoices}}
+        <tr id="invoice-table" class="clickable-row" data-id="{{:id}}">
             <td>{{:client.businessName}}</td>
-            <td>{{:jobName}}</td>
-            <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
-            <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>{{:payment + gst}}$</td>
-            <td>{{:state}}</td>
+            <td>{{:invoiceNo}}</td>
+            <td>{{:createdAt.format("DD/MM/YYYY")}}</td>
             <td>
-                <button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.jobDetails({{:id}})">More...</button>
+                {{if paid === false}}
+                    {{:paid}}
+                {{else}}
+                    {{:paidAt.format("DD/MM/YYYY")}}
+                {{/if}}
             </td>
         </tr>
-        {{/for }}
+        {{/for}}
     </tbody>
 </table>
 
@@ -39,7 +36,7 @@
                 </a>
             </li>
             {{else}}
-            <li onclick="UIFunctions.gotoJobPage({{:currentPage-1}})">
+            <li onclick="UIFunctions.gotoInvoicePage({{:currentPage-1}})">
                 <a href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -52,7 +49,7 @@
                     <a href="#">{{:#getIndex()+1}}</a>
                 </li>
                 {{else}}
-                <li onclick="UIFunctions.gotoJobPage({{:#getIndex()}})">
+                <li onclick="UIFunctions.gotoInvoicePage({{:#getIndex()}})">
                     <a href="#">{{:#getIndex()+1}}</a>
                 </li>
                 {{/if}}
@@ -65,7 +62,7 @@
                 </a>
             </li>
             {{else}}
-            <li onclick="UIFunctions.gotoJobPage({{:currentPage+1}})">
+            <li onclick="UIFunctions.gotoInvoicePage({{:currentPage+1}})">
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>

@@ -1,13 +1,16 @@
-var facade = require('../scripts/Facade.js');
+var facade;
 
 var ctrl = {};
 
 ctrl.ctrlName = "JobSchemes";
-ctrl.templateDir = "./app/Templates/";
+ctrl.templateDir = "../Templates/";
 ctrl.repval = 0;
 ctrl.selectedRep = "";
 
-//Copied from other controllers, might not need it
+//var for generateJobs page;
+ctrl.year = 0 ;
+
+//TODO: add a new page for Job Schemes
 ctrl.index = function() {
 
 };
@@ -15,28 +18,45 @@ ctrl.index = function() {
 //Get and Displays the jobScheme details on the sidebar
 ctrl.jobSchemeDetails = function(id) {
     facade.getJobSchemeFull(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/details.html');
+        ctrl.year = parseInt(new Date.today().toString("yyyy"));
+        data.year = ctrl.year;
+
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
     });
 };
 
+ctrl.addYear = function() {
+    ctrl.year++;
+    $("#yearCounter").val(ctrl.year);
+};
+
+ctrl.subtractYear = function() {
+    ctrl.year--;
+    $("#yearCounter").val(ctrl.year);
+};
+
 //Generates Jobs for the month given, based on the jobScheme
-ctrl.generateJobs = function(id, month) {
-    facade.generateJobs(id, month);
+ctrl.generateJobs = function(id) {
+    var formData = $("#JobGenerationForm").serializeArray();
+    facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
+        // UIFunctions.jobs();
+    });
 };
 
 //Generates Jobs based on the jobScheme for the next month
 ctrl.generateNextMonthsJobs = function(id) {
     var date = new Date.today();
-    var month = parseInt(Date.today().toString("M"));
-    facade.generateJobs(id, month);
+    facade.generateJobs(id, parseInt(Date.today().toString("yyyy")), parseInt(Date.today().toString("M")));
 };
 
 //Displays the create job scheme page
 ctrl.getCreateJobScheme = function(id) {
     facade.getClient(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/create.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
 
@@ -85,7 +105,7 @@ ctrl.getRepValues = function(){
 ctrl.addRepValues = function() {
     var selected = $("#repetitionSelector").val();
 
-    if(ctrl.repval < 6 && selected !== null)
+    if(ctrl.repval < 7 && selected !== null)
     {
         var repValuesTmpl = "/";
         switch (selected) {
@@ -104,7 +124,8 @@ ctrl.addRepValues = function() {
         }
         repValuesTmpl += "RepValues.html";
 
-        var row = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + repValuesTmpl);
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + repValuesTmpl);
+        var temp = jsrender.templates(templatePath);
         ctrl.repval++;
         var data = { no: ctrl.repval };
         var html = row(data);
@@ -119,12 +140,14 @@ ctrl.addRepValues = function() {
 ctrl.changeRepFields = function() {
     if (ctrl.selectedRep !== $("#repetitionSelector").val()) {
         $("#repValuesDiv").html("");
+        ctrl.repval = 0;
     }
     ctrl.selectedRep = $("#repetitionSelector").val();
 };
 
 //Remove the specified repValue
-ctrl.removeRepValues = function() {
+ctrl.removeRepValues = function(data) {
+    $(data).parent().remove();
     if(ctrl.repval > 0) {
         ctrl.repval--;
     }
@@ -133,25 +156,25 @@ ctrl.removeRepValues = function() {
 //Displays the edit job scheme page
 ctrl.getEditJobScheme = function(id) {
     facade.getJobScheme(id).then(function(data) {
-        var temp = jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/edit.html');
+        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
+        var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar").html(html);
 
         var innerhtml = "";
         data.repetitionValues.forEach(function(value){
-
             switch (data.repetition) {
                 case "Monthly":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/MonthlyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/MonthlyRepValuesEdit.html"))(value);
                     break;
                 case "Fortnightly":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/FortnightlyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/FortnightlyRepValuesEdit.html"))(value);
                     break;
                 case "Weekly":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/WeeklyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/WeeklyRepValuesEdit.html"))(value);
                     break;
                 case "Daily":
-                    innerhtml += jsrender.templates(ctrl.templateDir + ctrl.ctrlName + '/DailyRepValuesEdit.html')(value);
+                    innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/DailyRepValuesEdit.html"))(value);
                     break;
             }
         });
@@ -184,4 +207,15 @@ ctrl.enableJobScheme = function(id){
     facade.enableJobScheme(id);
 };
 
-module.exports = ctrl;
+ctrl.removeJobScheme = function(id) {
+    facade.removeJobScheme(id).then(function() {
+        $("#sidebar").html(" ");
+    });
+};
+
+module.exports = function getController() {
+    return require('../scripts/Facade.js')().then(function(data){
+        facade = data;
+        return ctrl;
+    });
+};

@@ -5,7 +5,7 @@
             <span class="glyphicon glyphicon-menu-left"></span>
             Previous ({{:previous}})
         </button>
-        <button type="button" class="btn btn-success" disabled="disabled">
+        <button type="button" class="btn btn-success" onclick="UIFunctions.reloadDayJobs()">
             {{:selectedDay}}
         </button>
         <button id="edit-button" type="button" class="btn btn-default" onclick="UIFunctions.nextDay()">
@@ -18,8 +18,8 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Job</th>
             <th>Client</th>
+            <th>Job</th>
             <th>Time</th>
             <th>Payment</th>
             <th>Done</th>
@@ -28,10 +28,10 @@
     <tbody>
         {{for jobs}}
         <tr>
-            <td>{{:jobName}}</td>
             <td>{{:client.businessName}}</td>
+            <td>{{:jobName}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>{{:total}}$</td>
+            <td>{{:payment + gst}}$</td>
             <td>
                 {{if state === "Placed"}}
                 <input type="checkbox" onclick="UIFunctions.homeJobDone({{:id}})">

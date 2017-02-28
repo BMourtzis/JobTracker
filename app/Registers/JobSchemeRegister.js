@@ -118,10 +118,22 @@ register.enableJobScheme = function(id) {
 };
 
 //GenerateJobs
-register.generateJobs = function(id, month) {
+register.generateJobs = function(id, year, month) {
     return orm.jobScheme.findById(id).then(function(jobScheme) {
-        jobScheme.generateJobs(month);
+        jobScheme.generateJobs(year, month);
     });
 };
 
-module.exports = register;
+//Delete jobScheme
+register.removeJobScheme = function(id) {
+    return orm.jobScheme.findById(id).then(function(jobScheme){
+        return jobScheme.destroy();
+    });
+};
+
+module.exports = function getRegister(){
+    return require('../scripts/orm.js')().then(function(data){
+        orm = data;
+        return register;
+    });
+};

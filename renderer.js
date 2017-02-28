@@ -17,13 +17,17 @@ window.$ = window.jQuery = require('jquery');
 window.jsrender = require('jsrender');
 window.bootstrap = require('bootstrap');
 window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // window.$.fn.datetimepicker = $.fn.datetimepicker; Need this!
-window.templateHelper = require("./app/scripts/TemplateHelper.js")
+window.templateHelper = require("./app/scripts/TemplateHelper.js");
 
 //Scripts
 require('./app/scripts/script.js')().then(function(data) {
     window.UIFunctions = data;
     UIFunctions.home();
 });
+
 require('./app/scripts/JSRenderExtensions.js');
 
-// window.orm = require("./app/scripts/orm.js")();
+require('./app/Registers/InvoiceRegister.js')().then(function(data) {
+    // data.generateOldInvoices();
+    // data.updateAllInvoices();
+});

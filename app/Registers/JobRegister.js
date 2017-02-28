@@ -269,8 +269,6 @@ register.bulkDeleteJobs = function(idList) {
     });
 };
 
-
-
 module.exports = function getRegister(){
     return require('../scripts/orm.js')().then(function(data){
         orm = data;

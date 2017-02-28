@@ -119,6 +119,7 @@ uiFunctions.searchOptions = function() {
     $("#advSearchModal").modal('hide');
     ctrl.Invoices.searchOptions();
 };
+uiFunctions.gotoInvoicePage = function(page) { ctrl.Invoices.gotoPage(page); };
 
 uiFunctions.timetable = function() {
     uiFunctions.changeActive(4);

@@ -70,6 +70,7 @@ register.invoicePaid = function(invoiceId) {
     });
 };
 
+//TODO: add functionality to locate receipt template
 register.generateInvoice = function(invoiceId) {
     //dependencies
     var JSZip = require('jszip');
@@ -154,7 +155,6 @@ function checkCreateDirectory(year,month) {
 
 function generateAllInvoices(year, month) {
     return orm.client.findAll().then(function(data){
-        var promises = [];
         return Promise.resolve(0).then(function loop(i){
             if(i < data.length){
                 return createInvoicePromiseHelper(i, data, year, month).then(function(){
@@ -305,6 +305,56 @@ function InvoiceJobList(jobs, invoiceId) {
 function PaidJobList(jobs) {
     return updateJobList(jobs, {state: "Paid"});
 }
+
+//
+// register.updateAllInvoices = function() {
+//     return orm.invoice.findAll().then(function(query) {
+//         var data =  [];
+//         for (var i = 0; i < query.length; i++) {
+//             data.push(query[i].get({plain:true}));
+//         }
+//         return data;
+//     }).then(function(data){
+//         return Promise.resolve(0).then(function loop(i){
+//             if(i < data.length){
+//                 return updateOldPromiseHelper(i, data).then(function(){
+//                     i++;
+//                     return loop(i);
+//                 });
+//             }
+//         });
+//     });
+// };
+//
+// function updateOldPromiseHelper(i, data) {
+//     return new Promise(function(resolve){
+//         return register.invoicePaid(data[i].id).then(function(){
+//             resolve();
+//         });
+//     });
+// }
+//
+// //Generate previous invoices
+// register.generateOldInvoices = function(){
+//     var until = Date.today();
+//     var from  = Date.today().set({year: 2013, month: 2});
+//     return Promise.resolve(from).then(function loop(date){
+//         if(date < until) {
+//             return generateOldPromiseHelper(parseInt(date.toString("yyyy")), parseInt(date.toString("M"))).then(function(){
+//                 date.add(1).month();
+//                 return loop(date);
+//             });
+//         }
+//     });
+// };
+//
+// function generateOldPromiseHelper(year, month) {
+//     return new Promise(function(resolve){
+//         return generateAllInvoices(year, month).then(function(){
+//             resolve();
+//         });
+//     });
+// }
 
 module.exports = function getRegister(){
     return require('../scripts/orm.js')().then(function(data){

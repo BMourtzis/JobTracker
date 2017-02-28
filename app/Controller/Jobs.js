@@ -48,7 +48,11 @@ ctrl.getClientJobs = function(id){
 
 //Loads all Jobs
 ctrl.loadAllJobs = function(){
-    facade.getAllJobs().then(function(query) {
+    ctrl.searchParams = {
+        from: Date.today().last().year().set({month: 0, day: 1}),
+        to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
+    };
+    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(query) {
         ctrl.loadTable(query);
     });
 };
@@ -109,7 +113,7 @@ ctrl.updateAllCheckboxes = function() {
 //Loads the next page of the table
 ctrl.gotoPage = function(page) {
     ctrl.currentPage = page;
-    facade.FindJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };

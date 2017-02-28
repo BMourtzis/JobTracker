@@ -36,7 +36,7 @@
                 </a>
             </li>
             {{else}}
-            <li onclick="UIFunctions.gotoJobPage({{:currentPage-1}})">
+            <li onclick="UIFunctions.gotoInvoicePage({{:currentPage-1}})">
                 <a href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -49,7 +49,7 @@
                     <a href="#">{{:#getIndex()+1}}</a>
                 </li>
                 {{else}}
-                <li onclick="UIFunctions.gotoJobPage({{:#getIndex()}})">
+                <li onclick="UIFunctions.gotoInvoicePage({{:#getIndex()}})">
                     <a href="#">{{:#getIndex()+1}}</a>
                 </li>
                 {{/if}}
@@ -62,7 +62,7 @@
                 </a>
             </li>
             {{else}}
-            <li onclick="UIFunctions.gotoJobPage({{:currentPage+1}})">
+            <li onclick="UIFunctions.gotoInvoicePage({{:currentPage+1}})">
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>

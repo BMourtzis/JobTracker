@@ -78,12 +78,12 @@ register.generateInvoice = function(invoiceId) {
 
     var receiptBaseFolder = path.resolve(__dirname, "../../..", "invoice/");
 
-    if(!fs.existsSync(path.resolve(receiptBaseFolder, "Receipt_Template.docx"))) {
+    if(!fs.existsSync(settings.InvoiceTemplatePath)) {
         var err = "Receipt doesn't exists";
         throw err;
     }
 
-    var content = fs.readFileSync(path.resolve(receiptBaseFolder, "Receipt_Template.docx"), "binary");
+    var content = fs.readFileSync(settings.InvoiceTemplatePath, "binary");
     var zip = new JSZip(content);
     var doc = new docxtemplater();
     doc.loadZip(zip);
@@ -120,8 +120,8 @@ register.generateInvoice = function(invoiceId) {
             doc.render();
 
             var buf = doc.getZip().generate({type: "nodebuffer"});
-            checkCreateDirectory(period.toString("yyyy"), period.toString("MM"), receiptBaseFolder);
-            fs.writeFileSync(path.resolve(receiptBaseFolder, period.toString("yyyy")+"/", period.toString("MM")+"/", invoice.client.businessName+".docx"), buf);
+            var invoiceFolder = checkCreateDirectory(period.toString("yyyy"), period.toString("M"), settings.InvoiceOutputPath);
+            fs.writeFileSync(path.resolve(invoiceFolder, invoice.client.businessName+".docx"), buf);
 
             return true;
         });
@@ -139,22 +139,22 @@ register.deleteInvoice = function(invoiceId) {
 
 
 //TODO: add base file to settings
-function checkCreateDirectory(year,month, baseFile) {
-    var dir = baseFile;
+function checkCreateDirectory(year,month, baseFolder) {
 
-    if(!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+    if(!fs.existsSync(baseFolder)){
+        fs.mkdirSync(baseFolder);
     }
 
-    dir = path.resolve(dir, year+"/");
-    if(!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+    baseFolder = path.resolve(baseFolder, year+"/");
+    if(!fs.existsSync(baseFolder)) {
+        fs.mkdirSync(baseFolder);
     }
 
-    dir = path.resolve(dir, month+"/");
-    if(!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+    baseFolder = path.resolve(baseFolder, month+"/");
+    if(!fs.existsSync(baseFolder)){
+        fs.mkdirSync(baseFolder);
     }
+    return baseFolder;
 }
 
 function generateAllInvoices(year, month) {

@@ -133,7 +133,7 @@ uiFunctions.finances = function() {
 
 uiFunctions.settings = function() {
     uiFunctions.changeActive(6);
-    ctrl.Misc.comingsoon();
+    ctrl.Settings.index();
 };
 
 uiFunctions.changeActive = function(itemNo) {

@@ -75,7 +75,7 @@ function initializeModels() {
                     payment: payment,
                     state: 'Placed',
                     clientId: this.id,
-                    gst: (0.1 * payment)
+                    gst: (payment/settings.GSTPercentage)
                 });
             },
             addNewJobScheme: function addNewJobScheme(jobname, payment, repetition, repetitionvalues) {
@@ -402,10 +402,6 @@ function reinitializeTables() {
 function validateDB() {
     var exists = true;
     orm.dbDirectory = path.resolve(__dirname, "../../..");
-
-    if (!fs.existsSync(orm.dbDirectory)) {
-        fs.mkdirSync(orm.dbDirectory);
-    }
 
     orm.dbDirectory = path.resolve(orm.dbDirectory, "db/");
     if (!fs.existsSync(orm.dbDirectory)) {

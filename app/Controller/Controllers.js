@@ -1,10 +1,4 @@
-var ctrl = {
-    Clients: require("./Clients.js"),
-    Jobs: require("./Jobs.js"),
-    JobSchemes: require("./JobSchemes.js"),
-    Invoices: require("./Invoices.js"),
-    Misc: require("./Misc.js")
-};
+var ctrl = { };
 
 module.exports = function getControllers() {
     var home =  require("./Home.js")().then(function(data){
@@ -25,6 +19,10 @@ module.exports = function getControllers() {
 
     var invoices =  require("./Invoices.js")().then(function(data){
         ctrl.Invoices = data;
+    });
+
+    var settings =  require("./Settings.js")().then(function(data){
+        ctrl.Settings = data;
     });
 
     ctrl.Misc =  require("./Misc.js");

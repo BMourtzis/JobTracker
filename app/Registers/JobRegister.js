@@ -187,9 +187,9 @@ register.editJob = function(id, data){
                 job[data[i].name] = data[i].value;
             }
         }
-
+        //TODO: get gst percentage from settings
         if(job.changed('payment')){
-            job.total = job.payment + job.payment*0.1;
+            job.gst = job.payment/10;
         }
         return job.save();
     });

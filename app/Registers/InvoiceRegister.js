@@ -76,12 +76,14 @@ register.generateInvoice = function(invoiceId) {
     var JSZip = require('jszip');
     var docxtemplater = require('docxtemplater');
 
-    if(!fs.existsSync(path.resolve("./app/Misc/", "Receipt_Template.docx"))) {
+    var receiptBaseFolder = path.resolve(__dirname, "../../..", "invoice/");
+
+    if(!fs.existsSync(path.resolve(receiptBaseFolder, "Receipt_Template.docx"))) {
         var err = "Receipt doesn't exists";
         throw err;
     }
 
-    var content = fs.readFileSync(path.resolve("./app/Misc/", "Receipt_Template.docx"), "binary");
+    var content = fs.readFileSync(path.resolve(receiptBaseFolder, "Receipt_Template.docx"), "binary");
     var zip = new JSZip(content);
     var doc = new docxtemplater();
     doc.loadZip(zip);
@@ -118,8 +120,8 @@ register.generateInvoice = function(invoiceId) {
             doc.render();
 
             var buf = doc.getZip().generate({type: "nodebuffer"});
-            checkCreateDirectory(period.toString("yyyy"), period.toString("MMMM"));
-            fs.writeFileSync(path.resolve("./app/Misc/", period.toString("yyyy")+"/", period.toString("MMMM")+"/", invoice.client.businessName+".docx"), buf);
+            checkCreateDirectory(period.toString("yyyy"), period.toString("MM"), receiptBaseFolder);
+            fs.writeFileSync(path.resolve(receiptBaseFolder, period.toString("yyyy")+"/", period.toString("MM")+"/", invoice.client.businessName+".docx"), buf);
 
             return true;
         });
@@ -135,8 +137,10 @@ register.deleteInvoice = function(invoiceId) {
     });
 };
 
-function checkCreateDirectory(year,month) {
-    var dir = path.resolve("./app/Misc/");
+
+//TODO: add base file to settings
+function checkCreateDirectory(year,month, baseFile) {
+    var dir = baseFile;
 
     if(!fs.existsSync(dir)){
         fs.mkdirSync(dir);

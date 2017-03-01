@@ -42,7 +42,7 @@ function initializeModels() {
             allowNull: false
         },
         shortName: {
-            type: sequelize.STRING(3),
+            type: sequelize.STRING(4),
             field: 'shortname',
             unique: true,
             allowNull: false

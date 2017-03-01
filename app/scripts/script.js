@@ -136,6 +136,11 @@ uiFunctions.settings = function() {
     ctrl.Settings.index();
 };
 
+uiFunctions.UpdateInvoiceTemplatePath = function() { ctrl.Settings.UpdateInvoiceTemplatePath(); };
+uiFunctions.UpdateInvoiceOutputPath = function() { ctrl.Settings.UpdateInvoiceOutputPath(); };
+uiFunctions.UpdateBackupPath = function() { ctrl.Settings.UpdateBackupPath(); };
+uiFunctions.UpdateGSTPercentage = function() { ctrl.Settings.UpdateGSTPercentage(); };
+
 uiFunctions.changeActive = function(itemNo) {
     var listItems = $("#navbar-list").children();
     listItems.each(function(no, data) {

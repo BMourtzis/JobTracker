@@ -2,6 +2,8 @@ var register = {};
 
 var settingsPath = path.resolve(__dirname, "../../..", "settings.json");
 
+register.settings = { };
+
 register.loadSettings = function(){
     if(!fs.existsSync(settingsPath)) {
         register.createDefaultSettings();
@@ -47,7 +49,7 @@ register.createDefaultSettings = function(){
     if(!fs.existsSync(register.settings.BackupPath)) {
         fs.mkdirSync(register.settings.BackupPath);
     }
-    
+
     register.writeSettings();
 };
 

@@ -44,11 +44,10 @@ register.getJobfromClient = function(clientId, jobId){
 
 //Advanced Search
 ////Gets the jobs of the specified date
-register.getDayJobs = function(from)
-{
+register.getDayJobs = function(from) {
     var searchParams = {
-        from: from,
-        to: new Date(from).at({hour: 23, minute: 59})
+        from: moment(from),
+        to: moment(new Date(from).at({hour: 23, minute: 59}))
     };
 
     return register.FindJobs(register.generateQuery(searchParams), "timeBooked ASC", 0);
@@ -187,7 +186,7 @@ register.editJob = function(id, data){
                 job[data[i].name] = data[i].value;
             }
         }
-        
+
         if(job.changed('payment')){
             job.gst = job.payment/settings.GSTPercentage;
         }

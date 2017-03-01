@@ -235,7 +235,7 @@ facade.UpdateBackupPath = function(path) {
 };
 
 facade.UpdateGSTPercentage = function(gst){
-    // return settingsRegister.UpdateBackupPath(gst);
+    return settingsRegister.UpdateGSTPercentage(gst);
 };
 
 

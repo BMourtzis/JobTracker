@@ -311,33 +311,33 @@ function PaidJobList(jobs) {
 }
 
 //
-// register.updateAllInvoices = function() {
-//     return orm.invoice.findAll().then(function(query) {
-//         var data =  [];
-//         for (var i = 0; i < query.length; i++) {
-//             data.push(query[i].get({plain:true}));
-//         }
-//         return data;
-//     }).then(function(data){
-//         return Promise.resolve(0).then(function loop(i){
-//             if(i < data.length){
-//                 return updateOldPromiseHelper(i, data).then(function(){
-//                     i++;
-//                     return loop(i);
-//                 });
-//             }
-//         });
-//     });
-// };
-//
-// function updateOldPromiseHelper(i, data) {
-//     return new Promise(function(resolve){
-//         return register.invoicePaid(data[i].id).then(function(){
-//             resolve();
-//         });
-//     });
-// }
-//
+register.updateAllInvoices = function() {
+    return orm.invoice.findAll().then(function(query) {
+        var data =  [];
+        for (var i = 0; i < query.length; i++) {
+            data.push(query[i].get({plain:true}));
+        }
+        return data;
+    }).then(function(data){
+        return Promise.resolve(0).then(function loop(i){
+            if(i < data.length){
+                return updateOldPromiseHelper(i, data).then(function(){
+                    i++;
+                    return loop(i);
+                });
+            }
+        });
+    });
+};
+
+function updateOldPromiseHelper(i, data) {
+    return new Promise(function(resolve){
+        return register.invoicePaid(data[i].id).then(function(){
+            resolve();
+        });
+    });
+}
+
 // //Generate previous invoices
 // register.generateOldInvoices = function(){
 //     var until = Date.today();

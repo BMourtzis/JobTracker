@@ -11,27 +11,30 @@ ctrl.index = function() {
     var temp = jsrender.templates(templatePath);
     var html = temp(settings);
     $("#content").html(html);
-    ctrl.UpdateInvoiceOutputPath();
 };
 
 ctrl.UpdateInvoiceTemplatePath = function() {
     var path = dialog.showOpenDialog({ defaultPath: settings.InvoiceTemplatePath, properties: ['openFile']})[0];
     facade.UpdateInvoiceTemplatePath(path);
-    //Update Field;
+    $($("#InvoiceTemplatePath :input")[0]).val(path);
 };
 
 ctrl.UpdateInvoiceOutputPath = function(){
     var path = dialog.showOpenDialog({defaultPath: settings.InvoiceOutputPath, properties: ['openDirectory']})[0];
     facade.UpdateInvoiceOutputPath(path);
+    $($("#InvoiceOutputPath :input")[0]).val(path);
 };
 
 ctrl.UpdateBackupPath = function(){
     var path = dialog.showOpenDialog({ defaultPath: settings.BackupPath, properties: ['openDirectory']})[0];
     facade.UpdateBackupPath(path);
+    $($("#BackupPath :input")[0]).val(path);
 };
 
 ctrl.UpdateGSTPercentage = function(){
-    facade.UpdateBackupPath(gst);
+    var gst = parseInt($($("#GSTPercentage :input")[0]).val());
+    console.log(gst);
+    facade.UpdateGSTPercentage(gst);
 };
 
 module.exports = function getController() {

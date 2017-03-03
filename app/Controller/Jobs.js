@@ -247,18 +247,6 @@ ctrl.done = function(id){
     });
 };
 
-ctrl.invoice = function(id) {
-    facade.invoice(id).then(function(data){
-        ctrl.jobDetails(id);
-    });
-};
-
-ctrl.paid = function(id){
-    facade.paid(id).then(function(data){
-        ctrl.jobDetails(id);
-    });
-};
-
 //List State Machine
 ctrl.jobListPlaced = function() {
     facade.jobListPlaced(ctrl.selectedList);
@@ -266,14 +254,6 @@ ctrl.jobListPlaced = function() {
 
 ctrl.jobListDone = function() {
     facade.jobListDone(ctrl.selectedList);
-};
-
-ctrl.jobListInvoiced = function() {
-    facade.jobListInvoiced(ctrl.selectedList);
-};
-
-ctrl.jobListPaid = function() {
-    facade.jobListPaid(ctrl.selectedList);
 };
 
 module.exports = function getController() {

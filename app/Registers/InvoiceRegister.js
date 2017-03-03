@@ -36,6 +36,8 @@ register.createInvoice = function(year, month, clientId) {
             clientData.jobs.forEach(function(job) {
                 sum += job.payment + job.gst;
             });
+
+            sum = Math.round(sum*10)/10;
             var date = new Date.today().set({year: year, month: month-1, day: 1});
             var invoiceNo = clientData.shortName + date.toString("yy") + date.toString("MM");
 
@@ -70,18 +72,36 @@ register.invoicePaid = function(invoiceId) {
     });
 };
 
-//TODO: add functionality to locate receipt template
+register.invoiceInvoiced = function(invoiceId) {
+    return orm.invoice.findById(invoiceId, {include:[orm.job]}).then(function(invoice) {
+        invoice.paid = false;
+        invoice.paidAt = null;
+
+        return invoice.save().then(function(data){
+            return data.get({plain:true});
+        });
+
+    }).then(function(data){
+        InvoiceJobList(data.jobs, invoiceId).then(function(){
+            return data;
+        });
+    });
+};
+
 register.generateInvoice = function(invoiceId) {
     //dependencies
     var JSZip = require('jszip');
     var docxtemplater = require('docxtemplater');
 
-    if(!fs.existsSync(path.resolve("./app/Misc/", "Receipt_Template.docx"))) {
-        var err = "Receipt doesn't exists";
+    //TODO: find how to make proper errors
+    if(!fs.existsSync(settings.InvoiceTemplatePath)) {
+        var dialog = require('electron').remote.dialog;
+        dialog.showErrorBox("Error!", "The Receipt Template doesn't exist.");
+        var err = {Error: "Receipt Template doesn't exist."};
         throw err;
     }
 
-    var content = fs.readFileSync(path.resolve("./app/Misc/", "Receipt_Template.docx"), "binary");
+    var content = fs.readFileSync(settings.InvoiceTemplatePath, "binary");
     var zip = new JSZip(content);
     var doc = new docxtemplater();
     doc.loadZip(zip);
@@ -118,8 +138,8 @@ register.generateInvoice = function(invoiceId) {
             doc.render();
 
             var buf = doc.getZip().generate({type: "nodebuffer"});
-            checkCreateDirectory(period.toString("yyyy"), period.toString("MMMM"));
-            fs.writeFileSync(path.resolve("./app/Misc/", period.toString("yyyy")+"/", period.toString("MMMM")+"/", invoice.client.businessName+".docx"), buf);
+            var invoiceFolder = checkCreateDirectory(period.toString("yyyy"), period.toString("MM"), settings.InvoiceOutputPath);
+            fs.writeFileSync(path.resolve(invoiceFolder, invoice.client.businessName+".docx"), buf);
 
             return true;
         });
@@ -135,22 +155,23 @@ register.deleteInvoice = function(invoiceId) {
     });
 };
 
-function checkCreateDirectory(year,month) {
-    var dir = path.resolve("./app/Misc/");
 
-    if(!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+function checkCreateDirectory(year,month, baseFolder) {
+
+    if(!fs.existsSync(baseFolder)){
+        fs.mkdirSync(baseFolder);
     }
 
-    dir = path.resolve(dir, year+"/");
-    if(!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+    baseFolder = path.resolve(baseFolder, year+"/");
+    if(!fs.existsSync(baseFolder)) {
+        fs.mkdirSync(baseFolder);
     }
 
-    dir = path.resolve(dir, month+"/");
-    if(!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+    baseFolder = path.resolve(baseFolder, month+"/");
+    if(!fs.existsSync(baseFolder)){
+        fs.mkdirSync(baseFolder);
     }
+    return baseFolder;
 }
 
 function generateAllInvoices(year, month) {
@@ -234,6 +255,7 @@ function findInvoices(searchParams, orderParams, page){
     return orm.invoice.findAll({
         where: searchParams,
         include:[orm.client],
+        order: "year DESC, month DESC",
         offset: page*100,
         limit: 100
     }).then(function(query) {
@@ -307,33 +329,33 @@ function PaidJobList(jobs) {
 }
 
 //
-// register.updateAllInvoices = function() {
-//     return orm.invoice.findAll().then(function(query) {
-//         var data =  [];
-//         for (var i = 0; i < query.length; i++) {
-//             data.push(query[i].get({plain:true}));
-//         }
-//         return data;
-//     }).then(function(data){
-//         return Promise.resolve(0).then(function loop(i){
-//             if(i < data.length){
-//                 return updateOldPromiseHelper(i, data).then(function(){
-//                     i++;
-//                     return loop(i);
-//                 });
-//             }
-//         });
-//     });
-// };
-//
-// function updateOldPromiseHelper(i, data) {
-//     return new Promise(function(resolve){
-//         return register.invoicePaid(data[i].id).then(function(){
-//             resolve();
-//         });
-//     });
-// }
-//
+register.updateAllInvoices = function() {
+    return orm.invoice.findAll().then(function(query) {
+        var data =  [];
+        for (var i = 0; i < query.length; i++) {
+            data.push(query[i].get({plain:true}));
+        }
+        return data;
+    }).then(function(data){
+        return Promise.resolve(0).then(function loop(i){
+            if(i < data.length){
+                return updateOldPromiseHelper(i, data).then(function(){
+                    i++;
+                    return loop(i);
+                });
+            }
+        });
+    });
+};
+
+function updateOldPromiseHelper(i, data) {
+    return new Promise(function(resolve){
+        return register.invoicePaid(data[i].id).then(function(){
+            resolve();
+        });
+    });
+}
+
 // //Generate previous invoices
 // register.generateOldInvoices = function(){
 //     var until = Date.today();

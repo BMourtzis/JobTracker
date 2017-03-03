@@ -152,6 +152,12 @@ ctrl.invoicePaid = function(invoiceId) {
     });
 };
 
+ctrl.invoiceInvoiced = function(invoiceId) {
+    facade.invoiceInvoiced(invoiceId).then(function(invoice){
+        ctrl.invoiceDetails(invoiceId);
+    });
+};
+
 module.exports = function getController() {
     return require('../scripts/Facade.js')().then(function(data){
         facade = data;

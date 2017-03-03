@@ -100,6 +100,7 @@ uiFunctions.invoices = function() {
     ctrl.Invoices.index();
 };
 uiFunctions.invoicePaid = function(id) { ctrl.Invoices.invoicePaid(id); };
+uiFunctions.invoiceInvoiced = function(id) { ctrl.Invoices.invoiceInvoiced(id); };
 uiFunctions.getCreateInvoice = function() { ctrl.Invoices.getCreateInvoice(); };
 uiFunctions.addYear = function() { ctrl.Invoices.addYear(); };
 uiFunctions.subtractYear = function() { ctrl.Invoices.subtractYear(); };
@@ -133,8 +134,13 @@ uiFunctions.finances = function() {
 
 uiFunctions.settings = function() {
     uiFunctions.changeActive(6);
-    ctrl.Misc.comingsoon();
+    ctrl.Settings.index();
 };
+
+uiFunctions.UpdateInvoiceTemplatePath = function() { ctrl.Settings.UpdateInvoiceTemplatePath(); };
+uiFunctions.UpdateInvoiceOutputPath = function() { ctrl.Settings.UpdateInvoiceOutputPath(); };
+uiFunctions.UpdateBackupPath = function() { ctrl.Settings.UpdateBackupPath(); };
+uiFunctions.UpdateGSTPercentage = function() { ctrl.Settings.UpdateGSTPercentage(); };
 
 uiFunctions.changeActive = function(itemNo) {
     var listItems = $("#navbar-list").children();

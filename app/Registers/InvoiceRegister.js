@@ -93,9 +93,11 @@ register.generateInvoice = function(invoiceId) {
     var JSZip = require('jszip');
     var docxtemplater = require('docxtemplater');
 
-    //TODO: add dialog popup
+    //TODO: find how to make proper errors
     if(!fs.existsSync(settings.InvoiceTemplatePath)) {
-        var err = "Receipt doesn't exists";
+        var dialog = require('electron').remote.dialog;
+        dialog.showErrorBox("Error!", "The Receipt Template doesn't exist.");
+        var err = {Error: "Receipt Template doesn't exist."};
         throw err;
     }
 

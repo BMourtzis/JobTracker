@@ -3,28 +3,28 @@
     <h1>Settings</h1>
 </div>
 <div class="row">
-    <div  class="col-md-2"><label for="InvoiceTemplatePath">Invoice Template:</label></div>
+    <div  class="col-md-2 setting-label"><label for="InvoiceTemplatePath">Invoice Template :</label></div>
     <div id="InvoiceTemplatePath" class="input-group medium-field col-md-offset-2" onclick="UIFunctions.UpdateInvoiceTemplatePath()">
-        <input type="text" class="form-control" value="{{:InvoiceTemplatePath}}">
+        <input type="text" class="form-control" value="{{:InvoiceTemplatePath}}" readonly="readonly">
         <span class="input-group-addon"><span class="glyphicon glyphicon-file"></span></span>
     </div>
 </div>
 <div class="row">
-    <div  class="col-md-2"><label for="InvoiceOutputPath">Invoice Output:</label></div>
+    <div  class="col-md-2 setting-label"><label for="InvoiceOutputPath">Invoice Output :</label></div>
     <div id="InvoiceOutputPath" class="input-group medium-field col-md-offset-2" onclick="UIFunctions.UpdateInvoiceOutputPath()">
-        <input type="text" class="form-control" value="{{:InvoiceOutputPath}}">
+        <input type="text" class="form-control" value="{{:InvoiceOutputPath}}" readonly="readonly">
         <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
     </div>
 </div>
 <div class="row">
-    <div  class="col-md-2"><label for="BackupPath">Backup Path:</label></div>
+    <div  class="col-md-2 setting-label"><label for="BackupPath">Backup Path :</label></div>
     <div id="BackupPath" class="input-group medium-field col-md-offset-2" onclick="UIFunctions.UpdateBackupPath()">
-        <input type="text" class="form-control" value="{{:BackupPath}}">
+        <input type="text" class="form-control" value="{{:BackupPath}}" readonly="readonly">
         <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
     </div>
 </div>
 <div class="row">
-    <div  class="col-md-2"><label for="GSTPercentage">GST:</label></div>
+    <div  class="col-md-2 setting-label"><label for="GSTPercentage">GST :</label></div>
     <div id="GSTPercentage" class="input-group small-field col-md-offset-2" onkeypress="UIFunctions.UpdateGSTPercentage()" onkeyup="UIFunctions.UpdateGSTPercentage()">
         <input type="text" class="form-control" value="{{:GSTPercentage}}">
         <span class="input-group-addon">%</span>

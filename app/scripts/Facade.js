@@ -205,6 +205,10 @@ facade.invoicePaid = function(invoiceId) {
     return invoiceRegister.invoicePaid(invoiceId);
 };
 
+facade.invoiceInvoiced = function(invoiceId) {
+    return invoiceRegister.invoiceInvoiced(invoiceId);
+};
+
 facade.createInvoice =  function(id, year, month){
     return invoiceRegister.invoiceGeneration(id, year, month);
 };

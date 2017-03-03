@@ -6,6 +6,10 @@
         <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.invoicePaid({{:id}})">
             Paid
         </button>
+        {{else}}
+        <button id="paid-button" type="button" class="btn btn-warning" onclick="UIFunctions.invoiceInvoiced({{:id}})">
+            Cancel Paid
+        </button>
         {{/if}}
         <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.printInvoice({{:id}})">
             <span class="glyphicon glyphicon-print"></span>

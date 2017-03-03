@@ -70,6 +70,22 @@ register.invoicePaid = function(invoiceId) {
     });
 };
 
+register.invoiceInvoiced = function(invoiceId) {
+    return orm.invoice.findById(invoiceId, {include:[orm.job]}).then(function(invoice) {
+        invoice.paid = false;
+        invoice.paidAt = null;
+
+        return invoice.save().then(function(data){
+            return data.get({plain:true});
+        });
+
+    }).then(function(data){
+        InvoiceJobList(data.jobs, invoiceId).then(function(){
+            return data;
+        });
+    });
+};
+
 register.generateInvoice = function(invoiceId) {
     //dependencies
     var JSZip = require('jszip');

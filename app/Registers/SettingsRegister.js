@@ -43,6 +43,8 @@ register.createDefaultSettings = function(){
         fs.mkdirSync(basePath);
     }
 
+    register.settings.GSTPercentage = 10;
+
     register.settings.InvoiceOutputPath = path.resolve(basePath, "invoice");
     if(!fs.existsSync(register.settings.InvoiceOutputPath)) {
         fs.mkdirSync(register.settings.InvoiceOutputPath);

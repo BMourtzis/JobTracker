@@ -100,6 +100,7 @@ uiFunctions.invoices = function() {
     ctrl.Invoices.index();
 };
 uiFunctions.invoicePaid = function(id) { ctrl.Invoices.invoicePaid(id); };
+uiFunctions.invoiceInvoiced = function(id) { ctrl.Invoices.invoiceInvoiced(id); };
 uiFunctions.getCreateInvoice = function() { ctrl.Invoices.getCreateInvoice(); };
 uiFunctions.addYear = function() { ctrl.Invoices.addYear(); };
 uiFunctions.subtractYear = function() { ctrl.Invoices.subtractYear(); };

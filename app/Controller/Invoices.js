@@ -16,6 +16,8 @@ ctrl.index = function() {
     ctrl.initiatePage().then(function() {
         ctrl.loadCurrentInvoices();
     });
+    
+    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
 ctrl.initiatePage = function() {

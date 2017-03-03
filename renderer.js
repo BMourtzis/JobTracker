@@ -22,6 +22,10 @@ window.bootstrap = require('bootstrap');
 window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // window.$.fn.datetimepicker = $.fn.datetimepicker; Need this!
 window.templateHelper = require("./app/scripts/TemplateHelper.js");
 
+//Managers
+window.contentManager = new require("./app/scripts/Manager.js")();
+window.sidebarManager = new require("./app/scripts/Manager.js")();
+
 //Scripts
 require('./app/Registers/SettingsRegister.js')();
 require('./app/scripts/script.js')().then(function(data) {

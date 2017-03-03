@@ -19,6 +19,7 @@ ctrl.index = function() {
     ctrl.initiatePage().then(function(){
         ctrl.loadAllJobs();
     });
+    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
 //Adds the heading, buttons and the modal
@@ -80,6 +81,7 @@ ctrl.searchJobs = function() {
     facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
+    contentManager.add(ctrl.ctrlName, "search", ctrl.searchJobs.bind(this));
 };
 
 //Updates the list of selected jobs
@@ -136,6 +138,8 @@ ctrl.jobDetails = function(id) {
         var html = temp(data);
         $("#sidebar").html(html);
     });
+
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobDetails.bind(this));
 };
 
 //Creates the createJob page
@@ -175,6 +179,7 @@ ctrl.createJob = function() {
 
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
     facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
+        contentManager.reload();
         ctrl.jobDetails(job.id);
     });
 };
@@ -182,7 +187,7 @@ ctrl.createJob = function() {
 //Deletes the selected Job
 ctrl.removeJob = function(id, clientID) {
     facade.removeJob(id).then(function() {
-        UIFunctions.clientDetails(clientID);
+        sidebarManager.goBack();
     });
 };
 
@@ -204,7 +209,10 @@ ctrl.getEditJob = function(id) {
 ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
     formData[1].value = parseFloat(formData[1].value);
-    facade.editJob(id, formData);
+    facade.editJob(id, formData).then(function() {
+        contentManager.reload();
+        ctrl.jobDetails(id);
+    });
 };
 
 //Creates the Rebook job page
@@ -231,7 +239,10 @@ ctrl.rebookJob = function(id){
         name: "timeBooked",
         value: moment(date+" "+time, dateTimeFormat)._d
     });
-    facade.editJob(id, formData);
+    facade.editJob(id, formData).then(function() {
+        contentManager.reload();
+        ctrl.jobDetails(id);
+    });
 };
 
 //State Machine

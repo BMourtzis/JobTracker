@@ -36,6 +36,8 @@ register.createInvoice = function(year, month, clientId) {
             clientData.jobs.forEach(function(job) {
                 sum += job.payment + job.gst;
             });
+
+            sum = Math.round(sum*10)/10;
             var date = new Date.today().set({year: year, month: month-1, day: 1});
             var invoiceNo = clientData.shortName + date.toString("yy") + date.toString("MM");
 
@@ -251,6 +253,7 @@ function findInvoices(searchParams, orderParams, page){
     return orm.invoice.findAll({
         where: searchParams,
         include:[orm.client],
+        order: "year DESC, month DESC",
         offset: page*100,
         limit: 100
     }).then(function(query) {

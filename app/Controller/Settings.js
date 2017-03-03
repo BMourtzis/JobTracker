@@ -33,7 +33,6 @@ ctrl.UpdateBackupPath = function(){
 
 ctrl.UpdateGSTPercentage = function(){
     var gst = parseInt($($("#GSTPercentage :input")[0]).val());
-    console.log(gst);
     facade.UpdateGSTPercentage(gst);
 };
 

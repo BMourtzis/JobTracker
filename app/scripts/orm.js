@@ -2,8 +2,6 @@
 
 var orm = {};
 
-orm.dbDirectory = "";
-
 function connectionInitialization() {
     orm.connStr = new sequelize(null, null, null, {
         host: 'localhost',
@@ -13,7 +11,7 @@ function connectionInitialization() {
             min: 0,
             idle: 10000
         },
-        storage: orm.dbDirectory
+        storage: settings.dbFile
     });
     initializeModels();
 }
@@ -401,18 +399,11 @@ function reinitializeTables() {
 
 function validateDB() {
     var exists = true;
-    orm.dbDirectory = path.resolve(__dirname, "../../..");
 
-    orm.dbDirectory = path.resolve(orm.dbDirectory, "db/");
-    if (!fs.existsSync(orm.dbDirectory)) {
-        fs.mkdirSync(orm.dbDirectory);
-    }
-
-    orm.dbDirectory = path.resolve(orm.dbDirectory, "jobs.db");
-    if (!fs.existsSync(orm.dbDirectory)) {
+    if (!fs.existsSync(settings.dbFile)) {
         exists = false;
         var sqlite = require("sqlite3");
-        var db = new sqlite.Database(orm.dbDirectory, [sqlite3.OPEN_CREATE]);
+        var db = new sqlite.Database(settings.dbFile, [sqlite3.OPEN_CREATE]);
         db.close();
     }
 

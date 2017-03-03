@@ -1,6 +1,6 @@
 var register = {};
 
-var settingsPath = path.resolve(__dirname, "../../..", "settings.json");
+var settingsPath = path.resolve(app.getPath('userData'), "Data/settings.json");
 
 register.settings = { };
 
@@ -38,16 +38,27 @@ register.writeSettings = function(){
 };
 
 register.createDefaultSettings = function(){
-    var basePath =  path.resolve(__dirname, "../../..");
+    var basePath =  path.resolve(app.getPath('userData'), "Data");
+    if(!fs.existsSync(basePath)) {
+        fs.mkdirSync(basePath);
+    }
 
     register.settings.InvoiceOutputPath = path.resolve(basePath, "invoice");
     if(!fs.existsSync(register.settings.InvoiceOutputPath)) {
         fs.mkdirSync(register.settings.InvoiceOutputPath);
     }
 
+    register.settings.InvoiceTemplatePath = path.resolve(register.settings.InvoiceOutputPath, "Receipt_Template.docx");
+
     register.settings.BackupPath = path.resolve(basePath, "backup");
     if(!fs.existsSync(register.settings.BackupPath)) {
         fs.mkdirSync(register.settings.BackupPath);
+    }
+
+    var dbpath = path.resolve(basePath, "db");
+    register.settings.dbFile = path.resolve(dbpath, "jobs.db");
+    if(!fs.existsSync(dbpath)) {
+        fs.mkdirSync(dbpath);
     }
 
     register.writeSettings();

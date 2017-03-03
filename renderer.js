@@ -2,6 +2,8 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+window.app = require('electron').remote.app;
+
 //Back-end Modules
 window.datejs = require('datejs');
 window.fs = require('fs');
@@ -25,6 +27,8 @@ require('./app/scripts/script.js')().then(function(data) {
     window.UIFunctions = data;
     UIFunctions.home();
 });
+
+console.log(app.getPath('userData'));
 
 require('./app/scripts/JSRenderExtensions.js');
 

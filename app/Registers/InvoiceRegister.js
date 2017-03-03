@@ -70,14 +70,12 @@ register.invoicePaid = function(invoiceId) {
     });
 };
 
-//TODO: add functionality to locate receipt template
 register.generateInvoice = function(invoiceId) {
     //dependencies
     var JSZip = require('jszip');
     var docxtemplater = require('docxtemplater');
 
-    var receiptBaseFolder = path.resolve(__dirname, "../../..", "invoice/");
-
+    //TODO: add dialog popup
     if(!fs.existsSync(settings.InvoiceTemplatePath)) {
         var err = "Receipt doesn't exists";
         throw err;
@@ -120,7 +118,7 @@ register.generateInvoice = function(invoiceId) {
             doc.render();
 
             var buf = doc.getZip().generate({type: "nodebuffer"});
-            var invoiceFolder = checkCreateDirectory(period.toString("yyyy"), period.toString("M"), settings.InvoiceOutputPath);
+            var invoiceFolder = checkCreateDirectory(period.toString("yyyy"), period.toString("MM"), settings.InvoiceOutputPath);
             fs.writeFileSync(path.resolve(invoiceFolder, invoice.client.businessName+".docx"), buf);
 
             return true;
@@ -138,7 +136,6 @@ register.deleteInvoice = function(invoiceId) {
 };
 
 
-//TODO: add base file to settings
 function checkCreateDirectory(year,month, baseFolder) {
 
     if(!fs.existsSync(baseFolder)){

@@ -45,10 +45,11 @@ ctrl.getClientJobs = function(id){
             ctrl.loadTable(data);
         });
     });
+    contentManager.add(ctrl.ctrlName, "clientDetails", ctrl.getClientJobs.bind(this));
 };
 
 //Loads all Jobs
-ctrl.loadAllJobs = function(){
+ctrl.loadAllJobs = function() {
     ctrl.searchParams = {
         from: Date.today().last().year().set({month: 0, day: 1}),
         to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
@@ -77,11 +78,18 @@ ctrl.searchJobs = function() {
 
     formData.client = parseInt(formData.client);
 
+    contentManager.add(ctrl.ctrlName, "search", ctrl.reloadSearch.bind(this));
+
     ctrl.searchParams = formData;
-    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
-    contentManager.add(ctrl.ctrlName, "search", ctrl.searchJobs.bind(this));
+};
+
+ctrl.reloadSearch = function() {
+    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+        ctrl.loadTable(data);
+    });
 };
 
 //Updates the list of selected jobs
@@ -139,7 +147,7 @@ ctrl.jobDetails = function(id) {
         $("#sidebar").html(html);
     });
 
-    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobDetails.bind(this));
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobDetails.bind(this), id);
 };
 
 //Creates the createJob page

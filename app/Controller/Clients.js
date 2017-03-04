@@ -8,7 +8,7 @@ ctrl.templateDir = "../Templates/";
 //Shows a table of all the clients
 ctrl.index = function() {
     facade.getAllClients().then(function(query) {
-        
+
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
         var temp = jsrender.templates(templatePath);
         var data = {
@@ -22,6 +22,8 @@ ctrl.index = function() {
             ctrl.clientDetails(id);
         });
     });
+
+    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
 //TODO: Add pagination, maybe not
@@ -29,7 +31,6 @@ ctrl.index = function() {
 //Shows client the selected client on the sidebar
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
-
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
@@ -45,6 +46,7 @@ ctrl.clientDetails = function(id) {
             UIFunctions.jobSchemeDetails(id);
         });
     });
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.clientDetails.bind(this), id);
 };
 
 //Displays the create client page
@@ -62,8 +64,10 @@ ctrl.createClient = function() {
     formData[6].value =  parseInt(formData[6].value);
     if(Number.isNaN(formData[6].value)){ formData[6].value = null; }
 
-    facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function() {
-        ctrl.index();
+    facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function(data) {
+        data = data.get({plain: true});
+        contentManager.reload();
+        ctrl.clientDetails(data.id);
     });
 };
 
@@ -83,15 +87,15 @@ ctrl.editClient = function(id) {
     formData[1].value = formData[1].value.toUpperCase();
 
     facade.editClient(id, formData).then(function(){
-        ctrl.index();
+        contentManager.reload();
         ctrl.clientDetails(id);
     });
 };
 
 ctrl.removeClient = function(id) {
     facade.removeClient(id).then(function(){
-        $("#sidebar").html(" ");
-        ctrl.index();
+        sidebarManager.goBack();
+        contentManager.reload();
     });
 };
 

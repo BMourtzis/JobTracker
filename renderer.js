@@ -23,8 +23,8 @@ window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // win
 window.templateHelper = require("./app/scripts/TemplateHelper.js");
 
 //Managers
-window.contentManager = new require("./app/scripts/Manager.js")();
-window.sidebarManager = new require("./app/scripts/Manager.js")();
+window.contentManager = new require("./app/scripts/Manager.js")("content");
+window.sidebarManager = new require("./app/scripts/Manager.js")("sidebar");
 
 //Scripts
 require('./app/Registers/SettingsRegister.js')();

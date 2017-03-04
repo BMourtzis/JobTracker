@@ -12,7 +12,7 @@ ctrl.year = 0 ;
 
 //TODO: add a new page for Job Schemes
 ctrl.index = function() {
-
+    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
 //Get and Displays the jobScheme details on the sidebar
@@ -26,6 +26,7 @@ ctrl.jobSchemeDetails = function(id) {
         var html = temp(data);
         $("#sidebar").html(html);
     });
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobSchemeDetails.bind(this), id);
 };
 
 ctrl.addYear = function() {
@@ -38,14 +39,17 @@ ctrl.subtractYear = function() {
     $("#yearCounter").val(ctrl.year);
 };
 
+// TODO: Add add notification that jobs where generated. maybe a bootstrap popover.
 //Generates Jobs for the month given, based on the jobScheme
 ctrl.generateJobs = function(id) {
     var formData = $("#JobGenerationForm").serializeArray();
     facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
+        sidebarManager.reload();
         // UIFunctions.jobs();
     });
 };
 
+// TODO: Add add notification that jobs where generated. maybe a bootstrap popover.
 //Generates Jobs based on the jobScheme for the next month
 ctrl.generateNextMonthsJobs = function(id) {
     var date = new Date.today();
@@ -69,8 +73,10 @@ ctrl.createJobScheme = function() {
     var formData = $("#createJobSchemeForm").serializeArray();
     var repvalues = ctrl.getRepValues();
 
-    facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function() {
-        UIFunctions.clientDetails(formData[0].value);
+    facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function(data) {
+        data = data.get({plain: true});
+        contentManager.reload();
+        ctrl.jobSchemeDetails(data.id);
     });
 };
 
@@ -192,6 +198,7 @@ ctrl.editJobScheme = function(id) {
     });
 
     facade.editJobScheme(id, formData).then(function(data){
+        contentManager.reload();
         ctrl.jobSchemeDetails(id);
     });
 
@@ -199,17 +206,22 @@ ctrl.editJobScheme = function(id) {
 
 //Disables a jobScheme
 ctrl.disableJobScheme = function(id){
-    facade.disableJobScheme(id);
+    facade.disableJobScheme(id).then(function(data){
+        ctrl.jobSchemeDetails(id);
+    });
 };
 
 //Enables a jobScheme
 ctrl.enableJobScheme = function(id){
-    facade.enableJobScheme(id);
+    facade.enableJobScheme(id).then(function(data){
+        ctrl.jobSchemeDetails(id);
+    });
 };
 
 ctrl.removeJobScheme = function(id) {
     facade.removeJobScheme(id).then(function() {
-        $("#sidebar").html(" ");
+        contentManager.reload();
+        sidebarManager.goBack();
     });
 };
 

@@ -43,8 +43,8 @@ register.createInvoice = function(year, month, clientId) {
 
             if(client.jobs.length > 0) {
                 return client.addNewInvoice(year, month, sum, invoiceNo).then(function(data) {
-                    return InvoiceJobList(clientData.jobs, data.id).then(function(smth){
-                        return register.generateInvoice(data.id);
+                    InvoiceJobList(clientData.jobs, data.id).then(function(smth){
+                        register.generateInvoice(data.id);
                     });
                 }, function(err){ console.log(err);});
             }

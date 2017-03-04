@@ -16,7 +16,7 @@ ctrl.index = function() {
     ctrl.initiatePage().then(function() {
         ctrl.loadCurrentInvoices();
     });
-    
+
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
@@ -78,6 +78,15 @@ ctrl.searchOptions = function() {
     ctrl.searchParams = formData;
     ctrl.currentPage = 0;
 
+    contentManager.add(ctrl.ctrlName, "search", ctrl.reloadSearch.bind(this));
+
+    return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+        ctrl.loadTable(data);
+    });
+
+};
+
+ctrl.reloadSearch = function() {
     return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
@@ -117,7 +126,14 @@ ctrl.createInvoice = function() {
     formData[1].value = ctrl.year;
     formData[2].value = parseInt(formData[2].value);
     facade.createInvoice(formData[0].value, formData[1].value, formData[2].value).then(function(data) {
-        ctrl.index();
+        if(formData[0].value !== 0) {
+            data = data.get({plain: true});
+            ctrl.invoiceDetails(data.id);
+        }
+        else {
+            sidebarManager.removeHtml();
+        }
+        contentManager.reload();
     });
 };
 
@@ -134,6 +150,7 @@ ctrl.invoiceDetails = function(id) {
             UIFunctions.jobDetails(id);
         });
     });
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.invoiceDetails.bind(this), id);
 };
 
 
@@ -143,8 +160,8 @@ ctrl.printInvoice = function(invoiceId) {
 
 ctrl.deleteInvoice = function(invoiceId) {
     facade.deleteInvoice(invoiceId).then(function(data){
-        $("#sidebar").html(" ");
-        ctrl.index();
+        sidebarManager.removeHtml();
+        contentManager.reload();
     });
 };
 

@@ -1,35 +1,40 @@
 
 
-function getManager() {
+function getManager(id) {
     var manager = {};
+    var htmlid = "#"+id;
 
     var lineUp = [];
 
-    manager.add = function(ctrl, name, func) {
+    manager.add = function(ctrl, name, func, params) {
         var lastitem = lineUp[lineUp.length-1];
         if(lineUp.length === 0 || lastitem.ctrl !== ctrl || lastitem.name !== name) {
-            lineUp.push({ctrl: ctrl, name: name, func: func});
+            lineUp.push({ctrl: ctrl, name: name, func: func, params: params});
         }
-        console.log(lineUp);
     };
 
-    manager.restartLineup = function(ctrl, name, func) {
+    manager.restartLineup = function(ctrl, name, func, params) {
         manager.empty();
-        manager.add(ctrl, name, func);
+        manager.add(ctrl, name, func, params);
     };
 
     manager.goBack = function() {
         lineUp.pop();
-        if(lineUp.length > 0) {
-            manager.reload();
-        }
-        else {
-            $("#sidebar").html("");
-        }
+        manager.reload();
     };
 
     manager.reload = function() {
-        lineUp[lineUp.length-1].func();
+        if(lineUp.length > 0) {
+            var item = lineUp[lineUp.length-1];
+            item.func(item.params);
+        }
+        else {
+            manager.removeHtml();
+        }
+    };
+
+    manager.removeHtml = function() {
+        $(htmlid).html("");
     };
 
     manager.empty = function() {

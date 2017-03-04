@@ -1,7 +1,7 @@
 {
   "name": "JobTracker",
   "productName": "JobTracker-alpha",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "An easy-to-use and stylish Job tracking application",
   "main": "main.js",
   "scripts": {

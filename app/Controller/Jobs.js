@@ -19,6 +19,7 @@ ctrl.index = function() {
     ctrl.initiatePage().then(function(){
         ctrl.loadAllJobs();
     });
+    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
 //Adds the heading, buttons and the modal
@@ -44,10 +45,11 @@ ctrl.getClientJobs = function(id){
             ctrl.loadTable(data);
         });
     });
+    contentManager.add(ctrl.ctrlName, "clientDetails", ctrl.getClientJobs.bind(this));
 };
 
 //Loads all Jobs
-ctrl.loadAllJobs = function(){
+ctrl.loadAllJobs = function() {
     ctrl.searchParams = {
         from: Date.today().last().year().set({month: 0, day: 1}),
         to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
@@ -76,8 +78,16 @@ ctrl.searchJobs = function() {
 
     formData.client = parseInt(formData.client);
 
+    contentManager.add(ctrl.ctrlName, "search", ctrl.reloadSearch.bind(this));
+
     ctrl.searchParams = formData;
-    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+        ctrl.loadTable(data);
+    });
+};
+
+ctrl.reloadSearch = function() {
+    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         ctrl.loadTable(data);
     });
 };
@@ -94,6 +104,7 @@ ctrl.updateSelectedList = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
     var temp = jsrender.templates(templatePath);
     var html = temp({count: ctrl.selectedList.length});
+    $("#sidebar-heading").html("Selection List");
     $("#sidebar").html(html);
 
 };
@@ -134,8 +145,11 @@ ctrl.jobDetails = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Job Details");
         $("#sidebar").html(html);
     });
+
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobDetails.bind(this), id);
 };
 
 //Creates the createJob page
@@ -159,6 +173,7 @@ ctrl.getCreateJob = function(id) {
         }
 
         var html = temp(data);
+        $("#sidebar-heading").html("Create Job");
         $("#sidebar").html(html);
 
         $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
@@ -175,6 +190,7 @@ ctrl.createJob = function() {
 
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
     facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
+        contentManager.reload();
         ctrl.jobDetails(job.id);
     });
 };
@@ -182,7 +198,7 @@ ctrl.createJob = function() {
 //Deletes the selected Job
 ctrl.removeJob = function(id, clientID) {
     facade.removeJob(id).then(function() {
-        UIFunctions.clientDetails(clientID);
+        sidebarManager.goBack();
     });
 };
 
@@ -196,6 +212,7 @@ ctrl.getEditJob = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Edit Job");
         $("#sidebar").html(html);
     });
 };
@@ -204,7 +221,10 @@ ctrl.getEditJob = function(id) {
 ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
     formData[1].value = parseFloat(formData[1].value);
-    facade.editJob(id, formData);
+    facade.editJob(id, formData).then(function() {
+        contentManager.reload();
+        ctrl.jobDetails(id);
+    });
 };
 
 //Creates the Rebook job page
@@ -213,6 +233,7 @@ ctrl.getRebookJob = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/rebook.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Rebook Job");
         $("#sidebar").html(html);
 
         $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
@@ -231,7 +252,10 @@ ctrl.rebookJob = function(id){
         name: "timeBooked",
         value: moment(date+" "+time, dateTimeFormat)._d
     });
-    facade.editJob(id, formData);
+    facade.editJob(id, formData).then(function() {
+        contentManager.reload();
+        ctrl.jobDetails(id);
+    });
 };
 
 //State Machine

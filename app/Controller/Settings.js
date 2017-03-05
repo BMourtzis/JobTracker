@@ -11,6 +11,8 @@ ctrl.index = function() {
     var temp = jsrender.templates(templatePath);
     var html = temp(settings);
     $("#content").html(html);
+
+    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
 ctrl.UpdateInvoiceTemplatePath = function() {

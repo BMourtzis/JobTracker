@@ -104,6 +104,7 @@ ctrl.updateSelectedList = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
     var temp = jsrender.templates(templatePath);
     var html = temp({count: ctrl.selectedList.length});
+    $("#sidebar-heading").html("Selection List");
     $("#sidebar").html(html);
 
 };
@@ -144,6 +145,7 @@ ctrl.jobDetails = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Job Details");
         $("#sidebar").html(html);
     });
 
@@ -171,6 +173,7 @@ ctrl.getCreateJob = function(id) {
         }
 
         var html = temp(data);
+        $("#sidebar-heading").html("Create Job");
         $("#sidebar").html(html);
 
         $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
@@ -209,6 +212,7 @@ ctrl.getEditJob = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Edit Job");
         $("#sidebar").html(html);
     });
 };
@@ -229,6 +233,7 @@ ctrl.getRebookJob = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/rebook.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Rebook Job");
         $("#sidebar").html(html);
 
         $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});

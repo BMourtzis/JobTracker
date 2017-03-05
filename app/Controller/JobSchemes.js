@@ -24,6 +24,7 @@ ctrl.jobSchemeDetails = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Service Details");
         $("#sidebar").html(html);
     });
     sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobSchemeDetails.bind(this), id);
@@ -62,6 +63,7 @@ ctrl.getCreateJobScheme = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Create Service");
         $("#sidebar").html(html);
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});
@@ -165,6 +167,7 @@ ctrl.getEditJobScheme = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Edit Service");
         $("#sidebar").html(html);
 
         var innerhtml = "";

@@ -142,6 +142,8 @@ uiFunctions.UpdateInvoiceOutputPath = function() { ctrl.Settings.UpdateInvoiceOu
 uiFunctions.UpdateBackupPath = function() { ctrl.Settings.UpdateBackupPath(); };
 uiFunctions.UpdateGSTPercentage = function() { ctrl.Settings.UpdateGSTPercentage(); };
 
+uiFunctions.goBack = function() { sidebarManager.goBack(); };
+
 uiFunctions.changeActive = function(itemNo) {
     var listItems = $("#navbar-list").children();
     listItems.each(function(no, data) {

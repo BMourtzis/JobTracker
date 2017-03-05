@@ -46,6 +46,7 @@ ctrl.clientDetails = function(id) {
             UIFunctions.jobSchemeDetails(id);
         });
     });
+    $("#sidebar-heading").html("Client Details");
     sidebarManager.add(ctrl.ctrlName, "details", ctrl.clientDetails.bind(this), id);
 };
 
@@ -53,6 +54,7 @@ ctrl.clientDetails = function(id) {
 ctrl.getCreateClient = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
     var temp = jsrender.templates(templatePath);
+    $("#sidebar-heading").html("Create Client");
     $("#sidebar").html(temp);
 };
 
@@ -77,6 +79,7 @@ ctrl.getEditClient = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+        $("#sidebar-heading").html("Edit Client");
         $("#sidebar").html(html);
     });
 };

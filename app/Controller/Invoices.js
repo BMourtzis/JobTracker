@@ -106,6 +106,7 @@ ctrl.getCreateInvoice = function() {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
         var temp = jsrender.templates(templatePath);
         var html = temp({clients: query, year: ctrl.year});
+        $("#sidebar-heading").html("Create Invoice");
         $("#sidebar").html(html);
     });
 };
@@ -143,6 +144,7 @@ ctrl.invoiceDetails = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(invoice);
+        $("#sidebar-heading").html("Invoice Details");
         $("#sidebar").html(html);
 
         $("#client-job-table.clickable-row").click(function() {

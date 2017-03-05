@@ -63,6 +63,8 @@ ctrl.getCreateJobScheme = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateJobScheme.bind(this));
         $("#sidebar-heading").html("Create Service");
         $("#sidebar").html(html);
 
@@ -76,6 +78,7 @@ ctrl.createJobScheme = function() {
     var repvalues = ctrl.getRepValues();
 
     facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function(data) {
+        sidebarManager.pop();
         data = data.get({plain: true});
         contentManager.reload();
         ctrl.jobSchemeDetails(data.id);
@@ -167,6 +170,8 @@ ctrl.getEditJobScheme = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.getEditJobScheme.bind(this), id);
         $("#sidebar-heading").html("Edit Service");
         $("#sidebar").html(html);
 
@@ -201,6 +206,7 @@ ctrl.editJobScheme = function(id) {
     });
 
     facade.editJobScheme(id, formData).then(function(data){
+        sidebarManager.pop();
         contentManager.reload();
         ctrl.jobSchemeDetails(id);
     });

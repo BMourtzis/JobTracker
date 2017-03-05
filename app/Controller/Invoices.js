@@ -106,6 +106,8 @@ ctrl.getCreateInvoice = function() {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
         var temp = jsrender.templates(templatePath);
         var html = temp({clients: query, year: ctrl.year});
+
+        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateInvoice.bind(this));
         $("#sidebar-heading").html("Create Invoice");
         $("#sidebar").html(html);
     });
@@ -127,6 +129,7 @@ ctrl.createInvoice = function() {
     formData[1].value = ctrl.year;
     formData[2].value = parseInt(formData[2].value);
     facade.createInvoice(formData[0].value, formData[1].value, formData[2].value).then(function(data) {
+        sidebar.pop();
         if(formData[0].value !== 0) {
             data = data.get({plain: true});
             ctrl.invoiceDetails(data.id);

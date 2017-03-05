@@ -27,7 +27,7 @@ ctrl.index = function() {
 };
 
 //TODO: Add pagination, maybe not
-
+//TODO: fix long names
 //Shows client the selected client on the sidebar
 ctrl.clientDetails = function(id) {
     facade.getClientFull(id).then(function(data) {
@@ -50,10 +50,13 @@ ctrl.clientDetails = function(id) {
     sidebarManager.add(ctrl.ctrlName, "details", ctrl.clientDetails.bind(this), id);
 };
 
+//TODO: add validation on fields
 //Displays the create client page
 ctrl.getCreateClient = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
     var temp = jsrender.templates(templatePath);
+
+    sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateClient.bind(this));
     $("#sidebar-heading").html("Create Client");
     $("#sidebar").html(temp);
 };
@@ -68,6 +71,7 @@ ctrl.createClient = function() {
 
     facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function(data) {
         data = data.get({plain: true});
+        sidebarManager.pop();
         contentManager.reload();
         ctrl.clientDetails(data.id);
     });
@@ -79,6 +83,8 @@ ctrl.getEditClient = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.getEditClient.bind(this), id);
         $("#sidebar-heading").html("Edit Client");
         $("#sidebar").html(html);
     });
@@ -90,6 +96,7 @@ ctrl.editClient = function(id) {
     formData[1].value = formData[1].value.toUpperCase();
 
     facade.editClient(id, formData).then(function(){
+        sidebarManager.pop();
         contentManager.reload();
         ctrl.clientDetails(id);
     });

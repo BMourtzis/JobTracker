@@ -173,6 +173,8 @@ ctrl.getCreateJob = function(id) {
         }
 
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateJob.bind(this));
         $("#sidebar-heading").html("Create Job");
         $("#sidebar").html(html);
 
@@ -190,6 +192,7 @@ ctrl.createJob = function() {
 
     formData.push(moment(date+" "+time, dateTimeFormat)._d);
     facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
+        sidebarManager.pop();
         contentManager.reload();
         ctrl.jobDetails(job.id);
     });
@@ -212,6 +215,8 @@ ctrl.getEditJob = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.getEditJob.bind(this), id);
         $("#sidebar-heading").html("Edit Job");
         $("#sidebar").html(html);
     });
@@ -222,6 +227,7 @@ ctrl.editJob = function(id) {
     var formData = $("#editJobForm").serializeArray();
     formData[1].value = parseFloat(formData[1].value);
     facade.editJob(id, formData).then(function() {
+        sidebar.pop();
         contentManager.reload();
         ctrl.jobDetails(id);
     });
@@ -233,6 +239,8 @@ ctrl.getRebookJob = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/rebook.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "rebook", ctrl.getRebookJob.bind(this), id);
         $("#sidebar-heading").html("Rebook Job");
         $("#sidebar").html(html);
 
@@ -253,6 +261,7 @@ ctrl.rebookJob = function(id){
         value: moment(date+" "+time, dateTimeFormat)._d
     });
     facade.editJob(id, formData).then(function() {
+        sidebarManager.pop();
         contentManager.reload();
         ctrl.jobDetails(id);
     });

@@ -1,11 +1,11 @@
-
-
 function getManager(id, button) {
     var manager = {};
     var htmlid = "#"+id;
     var goBack = button;
 
     var lineUp = [];
+
+    // TODO: add limitation on the number of stored steps. I'd say 30 is pretty good.
 
     manager.add = function(ctrl, name, func, params) {
         var lastitem = lineUp[lineUp.length-1];
@@ -22,6 +22,7 @@ function getManager(id, button) {
         manager.toggleGoBack();
     };
 
+    //TODO: fix goback from create, edit and rebook
     manager.goBack = function() {
         lineUp.pop();
         manager.reload();

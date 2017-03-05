@@ -6,6 +6,7 @@ ctrl.ctrlName = "Home";
 ctrl.templateDir = "../Templates/";
 ctrl.selectedDate = Date.today();
 
+//TODO: fix daily schedule heading
 //Renders the index page for Home
 ctrl.index = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");

@@ -50,7 +50,6 @@ ctrl.clientDetails = function(id) {
     sidebarManager.add(ctrl.ctrlName, "details", ctrl.clientDetails.bind(this), id);
 };
 
-//TODO: add validation on fields
 //Displays the create client page
 ctrl.getCreateClient = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");

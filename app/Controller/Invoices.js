@@ -140,6 +140,15 @@ ctrl.createInvoice = function() {
     formData[1].value = ctrl.year;
     formData[2].value = parseInt(formData[2].value);
     facade.createInvoice(formData[0].value, formData[1].value, formData[2].value).then(function(data) {
+        $.notify({
+            //options
+            message: "Invoices successfully generated"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
+
         sidebar.pop();
         if(formData[0].value !== 0) {
             data = data.get({plain: true});
@@ -171,7 +180,16 @@ ctrl.invoiceDetails = function(id) {
 
 
 ctrl.printInvoice = function(invoiceId) {
-    facade.generateInvoice(invoiceId);
+    facade.generateInvoice(invoiceId).then(function(){
+        $.notify({
+            //options
+            message: "Invoices successfully printed"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
+    });
 };
 
 ctrl.deleteInvoice = function(invoiceId) {

@@ -74,6 +74,19 @@ ctrl.createClient = function() {
         sidebarManager.pop();
         contentManager.reload();
         ctrl.clientDetails(data.id);
+    }, function(err){
+        if(err.errors[0].message === "shortname must be unique" ) {
+            $.notify({
+                //options
+                icon: 'glyphicon glyphicon-warning-sign',
+                message: "Short Name is taken. Please change it."
+            },{
+                //settings
+                type: "danger",
+                delay: 10000
+            });
+        }
+
     });
 };
 
@@ -99,6 +112,18 @@ ctrl.editClient = function(id) {
         sidebarManager.pop();
         contentManager.reload();
         ctrl.clientDetails(id);
+    }, function(err){
+        if(err.errors[0].message === "shortname must be unique" ) {
+            $.notify({
+                //options
+                icon: 'glyphicon glyphicon-warning-sign',
+                message: "Short Name is taken. Please change it."
+            },{
+                //settings
+                type: "danger",
+                delay: 10000
+            });
+        }
     });
 };
 

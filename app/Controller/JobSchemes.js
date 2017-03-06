@@ -46,7 +46,7 @@ ctrl.generateJobs = function(id) {
     facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
         $.notify({
             //options
-            message: "Invoices successfully generated"
+            message: "Jobs successfully generated"
         },{
             //settings
             type: "success",
@@ -62,7 +62,7 @@ ctrl.generateNextMonthsJobs = function(id) {
     facade.generateJobs(id, parseInt(Date.today().toString("yyyy")), parseInt(Date.today().toString("M"))).then(function(){
         $.notify({
             //options
-            message: "Invoices successfully generated"
+            message: "Jobs successfully generated"
         },{
             //settings
             type: "success",

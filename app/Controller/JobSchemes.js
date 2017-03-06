@@ -40,7 +40,6 @@ ctrl.subtractYear = function() {
     $("#yearCounter").val(ctrl.year);
 };
 
-// TODO: Add add notification that jobs where generated. maybe a bootstrap popover.
 //Generates Jobs for the month given, based on the jobScheme
 ctrl.generateJobs = function(id) {
     var formData = $("#JobGenerationForm").serializeArray();
@@ -57,7 +56,6 @@ ctrl.generateJobs = function(id) {
     });
 };
 
-// TODO: Add add notification that jobs where generated. maybe a bootstrap popover.
 //Generates Jobs based on the jobScheme for the next month
 ctrl.generateNextMonthsJobs = function(id) {
     var date = new Date.today();

@@ -31,7 +31,18 @@ ctrl.initiatePage = function(){
         $("#content").html(html);
 
         $('#fromDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
-        $('#toDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
+        $('#toDatepicker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+
+        $('#fromDatepicker').on("dp.change", function(e){
+            $('#toDatepicker').data("DateTimePicker").minDate(e.date);
+        });
+
+        $('#toDatepicker').on("dp.change", function(e){
+            $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
+        });
 
         ctrl.currentPage = 0;
     });
@@ -185,6 +196,7 @@ ctrl.getCreateJob = function(id) {
 
 //Creates a new job based on the fields and saves it in the db
 ctrl.createJob = function() {
+    console.log($("#createJobForm"));
     var formData = $("#createJobForm").serializeArray();
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();

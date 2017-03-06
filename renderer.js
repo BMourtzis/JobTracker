@@ -27,6 +27,8 @@ window.templateHelper = require("./app/scripts/TemplateHelper.js");
 window.contentManager = new require("./app/scripts/Manager.js")("content", false);
 window.sidebarManager = new require("./app/scripts/Manager.js")("sidebar", true);
 
+window.validRules = require("./app/scripts/ValidationRulesHelper.js");
+
 //Scripts
 require('./app/Registers/SettingsRegister.js')();
 require('./app/scripts/script.js')().then(function(data) {

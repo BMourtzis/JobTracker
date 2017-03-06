@@ -7,7 +7,7 @@
         <div class="form-group medium-field">
             <label for="timeBooked">Booking Date</label>
             <div class="input-group date" id="datepicker">
-                    <input type="text" class="form-control" value="{{:timeBooked.format('DD/MM/YYYY')}}" />
+                    <input type="text" class="form-control" value="{{:timeBooked.format('DD/MM/YYYY')}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))" >
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -16,7 +16,7 @@
         <div class="form-group medium-field">
             <label for="timeBooked">Booking Time</label>
             <div class="input-group date" id="timepicker">
-                    <input type="text" class="form-control" value="{{:timeBooked.format('HH:mm')}}" />
+                    <input type="text" class="form-control" value="{{:timeBooked.format('HH:mm')}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))" >
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>

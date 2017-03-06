@@ -3,7 +3,7 @@
     <div class="form-group small-field">
         <label for="timeBooked">Booking Time</label>
         <div class="input-group date timepicker">
-            <input id="time" type="text" class="form-control"/>
+            <input id="time" type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))" >
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-time"></span>
             </span>

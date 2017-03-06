@@ -2,14 +2,14 @@
 <div class="row">
     <div class="form-group medium-field">
         <label for="week">Week of the Month</label>
-        <select id="week" class="form-control" name="weekSelect">
+        <select id="week" class="form-control" name="weekSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
             <option value="0" {{if week === 0}} selected{{/if}}>1</option>
             <option value="1" {{if week === 1}} selected{{/if}}>2</option>
         </select>
     </div>
     <div class="form-group medium-field">
         <label for="day">Day</label>
-        <select id="day" class="form-control" name="daySelect">
+        <select id="day" class="form-control" name="daySelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
             <option value="0" {{if day === 0}} selected{{/if}}>Sunday</option>
             <option value="1" {{if day === 1}} selected{{/if}}>Monday</option>
             <option value="2" {{if day === 2}} selected{{/if}}>Tuesday</option>
@@ -22,7 +22,7 @@
     <div class="form-group small-field">
         <label for="timeBooked">Booking Time</label>
         <div class="input-group date timepicker">
-            <input id="time" type="text" class="form-control" value="{{:hour}}:{{:minute}}"/>
+            <input id="time" type="text" class="form-control" value="{{:hour}}:{{:minute}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-time"></span>
             </span>

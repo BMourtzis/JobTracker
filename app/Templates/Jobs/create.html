@@ -5,8 +5,8 @@
 <form id="createJobForm">
     <div class="row">
         <div class="form-group extra-large-field">
-            <label for="client">Client</label>
-            <select class="form-control" name="clientSelect">
+            <label for="client">Client*</label>
+            <select class="form-control" name="clientSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
                 {{if client == null}}
                     <option value="" disabled selected>Select a Client</option>
                     {{for clients}}
@@ -20,33 +20,33 @@
     </div>
     <div class="row">
         <div class="form-group large-field">
-            <label for="jobName">Job Name</label>
-            <input type="text" class="form-control" name="jobName" placeholder="Job Name">
+            <label for="jobName">Job Name*</label>
+            <input type="text" class="form-control" name="jobName" placeholder="Job Name" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
         </div>
         <div class="form-group small-field">
-            <label for="payment">Payment</label>
+            <label for="payment">Payment*</label>
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-usd"></span>
                 </span>
-                <input type="text" class="form-control" name="payment" placeholder="Eg. 50">
+                <input type="text" class="form-control" name="payment" placeholder="Eg. 50" onblur="validRules.isNumeric($(this))" onkeyup="validRules.isNumeric($(this))">
             </div>
         </div>
     </div>
     <div class="row">
         <div class="form-group medium-field">
-            <label for="timeBooked">Booking Date</label>
+            <label for="timeBooked">Booking Date*</label>
             <div class="input-group date" id="datepicker">
-                <input type="text" class="form-control"/>
+                <input type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onchange="validRules.isEmptyField($(this))">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
             </div>
         </div>
     <div class="form-group medium-field">
-        <label for="timeBooked">Booking Time</label>
+        <label for="timeBooked">Booking Time*</label>
         <div class="input-group date" id="timepicker">
-            <input type="text" class="form-control"/>
+            <input type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onchange="validRules.isEmptyField($(this))">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-time"></span>
             </span>
@@ -54,6 +54,6 @@
     </div>
 </div>
 <div class="row">
-    <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJob()">Submit</button>
+    <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJob()" disabled="true">Submit</button>
 </div>
 </form>

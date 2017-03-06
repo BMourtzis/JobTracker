@@ -9,11 +9,17 @@
     <div class="row">
         <div class="form-group large-field">
             <label for="jobName">Job Name</label>
-            <input type="text" class="form-control" name="jobName" value="{{:jobName}}">
+            <input type="text" class="form-control" name="jobName" value="{{:jobName}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
         </div>
         <div class="form-group small-field">
             <label for="payment">Payment</label>
-            <input type="text" class="form-control" name="payment" value="{{:payment}}">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-usd"></span>
+                </span>
+                <input type="text" class="form-control" name="payment" value="{{:payment}}" onblur="validRules.isNumeric($(this))" onkeyup="validRules.isNumeric($(this))">
+            </div>
+            <!-- <input type="text" class="form-control" name="payment" value="{{:payment}}" onblur="validRules.isNumeric($(this))" onkeyup="validRules.isNumeric($(this))"> -->
         </div>
     </div>
     <div class="row">

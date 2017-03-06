@@ -6,12 +6,12 @@
     <div class="row">
         <div class="form-group large-field">
             <label for="jobName">Job Name</label>
-            <input type="text" class="form-control" name="jobName" placeholder="Job Name" value="{{:jobName}}">
+            <input type="text" class="form-control" name="jobName" placeholder="Job Name" value="{{:jobName}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
         </div>
         <div class="form-group small-field">
             <label for="payment">Payment</label>
             <div class="input-group">
-                <input type="text" class="form-control" name="payment" placeholder="Eg. 50" value="{{:payment}}">
+                <input type="text" class="form-control" name="payment" placeholder="Eg. 50" value="{{:payment}}" onblur="validRules.isNumeric($(this))" onkeyup="validRules.isNumeric($(this))">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-usd"></span>
                 </span>
@@ -21,7 +21,7 @@
     <div class="row">
         <div class="form-group medium-field">
             <label for="repeatition">Repeatition</label>
-            <select id ="repetitionSelector" class="form-control" name="repetition" onchange="UIFunctions.updateRepFields()">
+            <select id ="repetitionSelector" class="form-control" name="repetition" onchange="UIFunctions.updateRepFields()" onblur="validRules.Selected($(this))" >
                 <option value="Monthly" {{if repetition === "Monthly"}} selected{{/if}}>Monthly</option>
                 <option value="Fortnightly" {{if repetition === "Fortnightly"}} selected{{/if}}>Fortnightly</option>
                 <option value="Weekly" {{if repetition === "Weekly"}} selected{{/if}}>Weekly</option>

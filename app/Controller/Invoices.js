@@ -28,7 +28,18 @@ ctrl.initiatePage = function() {
         $("#content").html(html);
 
         $('#fromDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
-        $('#toDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
+        $('#toDatepicker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+
+        $('#fromDatepicker').on("dp.change", function(e){
+            $('#toDatepicker').data("DateTimePicker").minDate(e.date);
+        });
+
+        $('#toDatepicker').on("dp.change", function(e){
+            $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
+        });
 
         ctrl.currentPage = 0;
     });

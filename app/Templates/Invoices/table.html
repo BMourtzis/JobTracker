@@ -14,7 +14,7 @@
         <tr id="invoice-table" class="clickable-row" data-id="{{:id}}">
             <td>{{:client.businessName}}</td>
             <td>{{:invoiceNo}}</td>
-            <td>{{:total}}$</td>
+            <td>${{:total}}</td>
             <td>{{:createdAt.format("DD/MM/YYYY")}}</td>
             <td>
                 {{if paid === false}}

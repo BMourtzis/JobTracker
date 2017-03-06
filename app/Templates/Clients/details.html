@@ -60,7 +60,7 @@
             <tr id="client-job-scheme-table" class="clickable-row" data-id="{{:id}}">
                 <th>{{:jobName}}</th>
                 <td>{{:repetition}}</td>
-                <td>{{:payment}}$</td>
+                <td>${{:payment}}</td>
                 <td>{{:enabled}}</td>
             </tr>
             {{/for}}
@@ -90,7 +90,7 @@
                 <td>{{:jobName}}</td>
                 <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
                 <td>{{:timeBooked.format("HH:mm")}}</td>
-                <td>{{:payment + gst}}$</td>
+                <td>${{:payment + gst}}</td>
             </tr>
             {{/for }}
         </tbody>

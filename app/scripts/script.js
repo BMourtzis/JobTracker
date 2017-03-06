@@ -86,9 +86,15 @@ uiFunctions.removeJobScheme = function(id) {
 };
 uiFunctions.generateJobs = function(id) {
     $("#generateJobsOptionsModal").modal('hide');
-    ctrl.JobSchemes.generateJobs(id);
+    new Promise(function(resolve, reject){
+        $(generateJobsOptionsModal).on('hidden.bs.modal', function (e) {
+            resolve();
+        });
+    }).then(function(){
+        ctrl.JobSchemes.generateJobs(id);
+    });
 };
-uiFunctions.generateNextMonthsJobs = function(id) { ctrl.JobScheme.generateNextMonthsJobs(id); };
+uiFunctions.generateNextMonthsJobs = function(id) { ctrl.JobSchemes.generateNextMonthsJobs(id); };
 uiFunctions.updateRepFields = function() { ctrl.JobSchemes.changeRepFields(); };
 uiFunctions.disableJobScheme = function(id) { ctrl.JobSchemes.disableJobScheme(id); };
 uiFunctions.enableJobScheme = function(id) { ctrl.JobSchemes.enableJobScheme(id); };

@@ -19,7 +19,7 @@
             <td>{{:jobName}}</td>
             <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>{{:payment + gst}}$</td>
+            <td>${{:payment + gst}}</td>
             <td>{{:state}}</td>
             <td>
                 <button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.jobDetails({{:id}})">More...</button>

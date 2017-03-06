@@ -16,6 +16,7 @@ window.moment = require('moment');
 
 //Front-end Modules
 window.$ = window.jQuery = require('jquery');
+require('bootstrap-notify');
 window.jsrender = require('jsrender');
 require('./app/scripts/JSRenderExtensions.js');
 window.bootstrap = require('bootstrap');

@@ -45,8 +45,15 @@ ctrl.subtractYear = function() {
 ctrl.generateJobs = function(id) {
     var formData = $("#JobGenerationForm").serializeArray();
     facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
+        $.notify({
+            //options
+            message: "Invoices successfully generated"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
         sidebarManager.reload();
-        // UIFunctions.jobs();
     });
 };
 
@@ -54,7 +61,16 @@ ctrl.generateJobs = function(id) {
 //Generates Jobs based on the jobScheme for the next month
 ctrl.generateNextMonthsJobs = function(id) {
     var date = new Date.today();
-    facade.generateJobs(id, parseInt(Date.today().toString("yyyy")), parseInt(Date.today().toString("M")));
+    facade.generateJobs(id, parseInt(Date.today().toString("yyyy")), parseInt(Date.today().toString("M"))).then(function(){
+        $.notify({
+            //options
+            message: "Invoices successfully generated"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
+    });
 };
 
 //Displays the create job scheme page
@@ -139,7 +155,7 @@ ctrl.addRepValues = function() {
         var temp = jsrender.templates(templatePath);
         ctrl.repval++;
         var data = { no: ctrl.repval };
-        var html = row(data);
+        var html = temp(data);
         $("#repValuesDiv").append(html);
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});

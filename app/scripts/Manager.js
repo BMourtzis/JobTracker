@@ -5,6 +5,9 @@ function getManager(id, button) {
 
     var lineUp = [];
 
+    // TODO:  add button id in the params instead of hardcoding
+    // TODO: make internal used methods functions
+
     manager.add = function(ctrl, name, func, params) {
         var lastitem = lineUp[lineUp.length-1];
 

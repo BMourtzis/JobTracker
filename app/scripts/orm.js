@@ -297,7 +297,7 @@ function initializeModels() {
             field: 'id'
         },
         invoiceNo: {
-            type: sequelize.STRING(7),
+            type: sequelize.STRING(8),
             allowNull: false,
             field: 'invoiceno'
         },

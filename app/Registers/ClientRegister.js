@@ -5,7 +5,9 @@ var register = {};
 //Client Functions
 ////Get all Clients
 register.getAllClients = function() {
-    return orm.client.findAll().then(function(query) {
+    return orm.client.findAll({
+        order: "businessName ASC"
+    }).then(function(query) {
         var data =  [];
         for (var i = 0; i < query.length; i++) {
             data.push(query[i].get({plain:true}));

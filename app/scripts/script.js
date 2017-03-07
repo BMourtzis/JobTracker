@@ -48,9 +48,14 @@ uiFunctions.gotoJobPage = function(page) { ctrl.Jobs.gotoPage(page); };
 uiFunctions.updateJobSelectedList = function() { ctrl.Jobs.updateSelectedList(); };
 uiFunctions.updateAllCheckboxes = function() { ctrl.Jobs.updateAllCheckboxes(); };
 
+uiFunctions.services = function() {
+    ctrl.Misc.comingsoon();
+    uiFunctions.changeActive(2);
+};
+
 uiFunctions.clients = function() {
     ctrl.Clients.index();
-    uiFunctions.changeActive(2);
+    uiFunctions.changeActive(3);
 };
 uiFunctions.getCreateClient = function() { ctrl.Clients.getCreateClient(); };
 uiFunctions.createClient = function() { ctrl.Clients.createClient(); };
@@ -102,7 +107,7 @@ uiFunctions.getEditJobScheme = function(id) { ctrl.JobSchemes.getEditJobScheme(i
 uiFunctions.editJobScheme = function(id) { ctrl.JobSchemes.editJobScheme(id); };
 
 uiFunctions.invoices = function() {
-    uiFunctions.changeActive(3);
+    uiFunctions.changeActive(4);
     ctrl.Invoices.index();
 };
 uiFunctions.invoicePaid = function(id) { ctrl.Invoices.invoicePaid(id); };
@@ -129,17 +134,17 @@ uiFunctions.searchOptions = function() {
 uiFunctions.gotoInvoicePage = function(page) { ctrl.Invoices.gotoPage(page); };
 
 uiFunctions.timetable = function() {
-    uiFunctions.changeActive(4);
-    ctrl.Misc.comingsoon();
-};
-
-uiFunctions.finances = function() {
     uiFunctions.changeActive(5);
     ctrl.Misc.comingsoon();
 };
 
-uiFunctions.settings = function() {
+uiFunctions.finances = function() {
     uiFunctions.changeActive(6);
+    ctrl.Misc.comingsoon();
+};
+
+uiFunctions.settings = function() {
+    uiFunctions.changeActive(7);
     ctrl.Settings.index();
 };
 

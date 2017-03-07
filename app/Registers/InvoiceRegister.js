@@ -11,11 +11,11 @@ register.getInvoice = function(id){
 };
 
 register.getCurrentInvoices = function() {
-    return findInvoices(generateQuery({paid: false}),"", 0);
+    return findInvoices(generateQuery({paid: false}),"invoiceNo ASC", 0);
 };
 
 register.invoiceSearchOptions = function(searchParams, orderParams, page) {
-    return findInvoices(generateQuery(searchParams), orderParams, page);
+    return findInvoices(generateQuery(searchParams), "", page);
 };
 
 register.invoiceGeneration = function(id, year, month) {
@@ -254,10 +254,14 @@ function generateQuery(searchParams) {
 }
 
 function findInvoices(searchParams, orderParams, page){
+    if(orderParams === "") {
+        orderParams = "year DESC, month DESC";
+    }
+
     return orm.invoice.findAll({
         where: searchParams,
         include:[orm.client],
-        order: "year DESC, month DESC",
+        order: orderParams,
         offset: page*100,
         limit: 100
     }).then(function(query) {

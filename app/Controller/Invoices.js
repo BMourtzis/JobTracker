@@ -149,10 +149,9 @@ ctrl.createInvoice = function() {
             delay: 3000
         });
 
-        sidebar.pop();
+        sidebarManager.pop();
         if(formData[0].value !== 0) {
-            data = data.get({plain: true});
-            ctrl.invoiceDetails(data.id);
+            ctrl.invoiceDetails(data);
         }
         else {
             sidebarManager.removeHtml();

@@ -115,6 +115,7 @@ ctrl.updateSelectedList = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
     var temp = jsrender.templates(templatePath);
     var html = temp({count: ctrl.selectedList.length});
+    sidebarManager.removeHtml();
     $("#sidebar-heading").html("Selection List");
     $("#sidebar").html(html);
 
@@ -295,10 +296,12 @@ ctrl.done = function(id){
 //List State Machine
 ctrl.jobListPlaced = function() {
     facade.jobListPlaced(ctrl.selectedList);
+    contentManager.reload();
 };
 
 ctrl.jobListDone = function() {
     facade.jobListDone(ctrl.selectedList);
+    contentManager.reload();
 };
 
 module.exports = function getController() {

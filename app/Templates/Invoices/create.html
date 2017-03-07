@@ -16,21 +16,22 @@
     </div>
     <div class="row">
         <div class="form-group medium-field">
-            <label for="client">Year</label>
+            <label for="year">Year</label>
             <div class="input-group">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" onclick="UIFunctions.subtractYear()"><span class="glyphicon glyphicon-minus"></span></button>
                 </span>
-                <input id="yearCounter" type="text" class="form-control" name="year" value="{{:year}}" disabled="disabled">
+                <input id="yearCounter" type="text" class="form-control" name="year" value="{{:year}}" readonly>
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" onclick="UIFunctions.addYear()"><span class="glyphicon glyphicon-plus"></span></button>
                 </span>
             </div>
         </div>
         <div class="form-group medium-field">
-            <label for="client">Month</label>
+            <label for="month">Month</label>
             <select class="form-control" name="month">
-                <option value="1" selected>January</option>
+                <option value="" selected disabled>Select Month</option>
+                <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
                 <option value="4">April</option>

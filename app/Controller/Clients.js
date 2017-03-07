@@ -17,10 +17,10 @@ ctrl.index = function() {
         var html = temp(data);
         $("#content").html(html);
 
-        $("#client-table.clickable-row").click(function() {
-            var id = $(this).data("id");
-            ctrl.clientDetails(id);
-        });
+        // $("#client-table.clickable-row").click(function() {
+        //     var id = $(this).data("id");
+        //     ctrl.clientDetails(id);
+        // });
     });
 
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));

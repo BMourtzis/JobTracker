@@ -5,7 +5,11 @@
 <div class="row button-row">
     {{if state === "Placed"}}
     <button id="done-button" type="button" class="btn btn-success" onclick="UIFunctions.jobDone({{:id}})">
-        Done
+        <span class="glyphicon glyphicon-ok"></span>&nbsp;Done
+    </button>
+    {{else state === "Done"}}
+    <button id="placed-button" type="button" class="btn btn-warning" onclick="UIFunctions.jobDone({{:id}})">
+        <span class="glyphicon glyphicon-remove"></span>&nbsp;Placed
     </button>
     {{/if}}
     <button id="rebook-button" type="button" class="btn btn-info" onclick="UIFunctions.getRebookJob({{:id}})">

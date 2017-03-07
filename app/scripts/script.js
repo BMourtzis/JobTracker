@@ -110,6 +110,7 @@ uiFunctions.invoices = function() {
     uiFunctions.changeActive(4);
     ctrl.Invoices.index();
 };
+uiFunctions.invoiceDetails = function(id) { ctrl.Invoices.invoiceDetails(id); };
 uiFunctions.invoicePaid = function(id) { ctrl.Invoices.invoicePaid(id); };
 uiFunctions.invoiceInvoiced = function(id) { ctrl.Invoices.invoiceInvoiced(id); };
 uiFunctions.getCreateInvoice = function() { ctrl.Invoices.getCreateInvoice(); };

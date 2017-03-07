@@ -60,10 +60,10 @@ ctrl.loadTable = function(data) {
     var html = temp(data);
     $("#indexInvoiceTable").html(html);
 
-    $("#invoice-table.clickable-row").click(function() {
-        var id = $(this).data("id");
-        ctrl.invoiceDetails(id);
-    });
+    // $("#invoice-table.clickable-row").click(function() {
+    //     var id = $(this).data("id");
+    //     ctrl.invoiceDetails(id);
+    // });
 };
 
 ctrl.searchOptions = function() {

@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <div class="row">
-    <div class="form-group medium-field">
-        <label for="week">Week of the Month</label>
-        <select id="week" class="form-control" name="weekSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
+    <div class="col-md-6 col-lg-5">
+        <div class="form-group">
+            <label for="week">Week of the Month</label>
+            <select id="week" class="form-control" name="weekSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
             <option value="" selected disabled>Select Week</option>
             <option value="0">1</option>
             <option value="1">2</option>
             <option value="2">3</option>
             <option value="3">4</option>
         </select>
+        </div>
     </div>
-    <div class="form-group medium-field">
-        <label for="client">Day</label>
-        <select id="day" class="form-control" name="daySelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
+    <div class="col-md-4 col-lg-5">
+        <div class="form-group">
+            <label for="client">Day</label>
+            <select id="day" class="form-control" name="daySelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
             <option value="" selected disabled>Select Day</option>
             <option value="0">Sunday</option>
             <option value="1">Monday</option>
@@ -22,17 +25,22 @@
             <option value="5">Friday</option>
             <option value="6">Saturday</option>
         </select>
-    </div>
-    <div class="form-group small-field">
-        <label for="timeBooked">Booking Time</label>
-        <div class="input-group date timepicker">
-            <input id="time" type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))" >
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-time"></span>
-            </span>
         </div>
     </div>
-    <div class="form-group small-field clickable-span remove-span" onclick="UIFunctions.removeRepValues(this)">
-        <span class="glyphicon glyphicon-remove"></span>
+    <div class="col-md-4 col-lg-4">
+        <div class="form-group">
+            <label for="timeBooked">Booking Time</label>
+            <div class="input-group date timepicker">
+                <input id="time" type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+                <span class="input-group-addon">
+                <span class="glyphicon glyphicon-time"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1 col-lg-1">
+        <div class="clickable-span remove-span">
+            <span class="glyphicon glyphicon-remove" onclick="UIFunctions.removeRepValues($(this).parent().parent())"></span>
+        </div>
     </div>
 </div>

@@ -47,6 +47,7 @@ ctrl.initiatePage = function() {
 
 ctrl.loadCurrentInvoices = function() {
     facade.getCurrentInvoices().then(function(invoices){
+        console.log(invoices);
         ctrl.searchParams.paid = false;
         ctrl.loadTable(invoices);
     });
@@ -142,7 +143,7 @@ ctrl.createInvoice = function() {
     facade.createInvoice(formData[0].value, formData[1].value, formData[2].value).then(function(data) {
         $.notify({
             //options
-            message: "Invoices successfully generated"
+            message: "Invoice(s) successfully generated"
         },{
             //settings
             type: "success",
@@ -182,7 +183,7 @@ ctrl.printInvoice = function(invoiceId) {
     facade.generateInvoice(invoiceId).then(function(){
         $.notify({
             //options
-            message: "Invoices successfully printed"
+            message: "Invoice successfully printed"
         },{
             //settings
             type: "success",

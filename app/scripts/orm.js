@@ -316,7 +316,7 @@ function initializeModels() {
             allowNull: true,
             field: 'paidAt',
             get: function() {
-                return moment(this.getDataValue('timeBooked'));
+                return moment(this.getDataValue('paidAt'));
             }
         },
         total: {
@@ -338,7 +338,7 @@ function initializeModels() {
             allowNull: false,
             field: 'createdAt',
             get: function() {
-                return moment(this.getDataValue('timeBooked'));
+                return moment(this.getDataValue('createdAt'));
             }
         }
     }, {

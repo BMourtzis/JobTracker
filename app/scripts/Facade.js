@@ -6,6 +6,8 @@ var settingsRegister;
 
 var facade = { };
 
+//TODO: add backup functionality
+
 //Client Functions
 ////Get all Clients
 facade.getAllClients = function() {

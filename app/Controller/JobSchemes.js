@@ -40,21 +40,36 @@ ctrl.subtractYear = function() {
     $("#yearCounter").val(ctrl.year);
 };
 
-// TODO: Add add notification that jobs where generated. maybe a bootstrap popover.
 //Generates Jobs for the month given, based on the jobScheme
 ctrl.generateJobs = function(id) {
     var formData = $("#JobGenerationForm").serializeArray();
     facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
-        sidebarManager.reload();
-        // UIFunctions.jobs();
+        $.notify({
+            //options
+            message: "Jobs successfully generated"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
+        UIFunctions.jobs();
     });
 };
 
-// TODO: Add add notification that jobs where generated. maybe a bootstrap popover.
 //Generates Jobs based on the jobScheme for the next month
 ctrl.generateNextMonthsJobs = function(id) {
     var date = new Date.today();
-    facade.generateJobs(id, parseInt(Date.today().toString("yyyy")), parseInt(Date.today().toString("M")));
+    facade.generateJobs(id, parseInt(Date.today().toString("yyyy")), parseInt(Date.today().toString("M"))).then(function(){
+        $.notify({
+            //options
+            message: "Jobs successfully generated"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
+        UIFunctions.jobs();
+    });
 };
 
 //Displays the create job scheme page
@@ -63,6 +78,8 @@ ctrl.getCreateJobScheme = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateJobScheme.bind(this));
         $("#sidebar-heading").html("Create Service");
         $("#sidebar").html(html);
 
@@ -76,6 +93,7 @@ ctrl.createJobScheme = function() {
     var repvalues = ctrl.getRepValues();
 
     facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function(data) {
+        sidebarManager.pop();
         data = data.get({plain: true});
         contentManager.reload();
         ctrl.jobSchemeDetails(data.id);
@@ -136,7 +154,7 @@ ctrl.addRepValues = function() {
         var temp = jsrender.templates(templatePath);
         ctrl.repval++;
         var data = { no: ctrl.repval };
-        var html = row(data);
+        var html = temp(data);
         $("#repValuesDiv").append(html);
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});
@@ -167,6 +185,8 @@ ctrl.getEditJobScheme = function(id) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
+
+        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.getEditJobScheme.bind(this), id);
         $("#sidebar-heading").html("Edit Service");
         $("#sidebar").html(html);
 
@@ -201,6 +221,7 @@ ctrl.editJobScheme = function(id) {
     });
 
     facade.editJobScheme(id, formData).then(function(data){
+        sidebarManager.pop();
         contentManager.reload();
         ctrl.jobSchemeDetails(id);
     });

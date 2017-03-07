@@ -13,7 +13,7 @@
             <span class="glyphicon glyphicon-menu-right"></span>
         </button>
     </div>
-    <h2>Daily Schedule</h2>
+    <h2 id="daily-heading">Daily Schedule</h2>
 </div>
 <table class="table table-striped">
     <thead>
@@ -31,7 +31,7 @@
             <td>{{:client.businessName}}</td>
             <td>{{:jobName}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>{{:payment + gst}}$</td>
+            <td>${{:payment + gst}}</td>
             <td>
                 {{if state === "Placed"}}
                 <input type="checkbox" onclick="UIFunctions.homeJobDone({{:id}})">
@@ -45,5 +45,5 @@
     </tbody>
 </table>
 <div id="day-income" class="row float-right">
-    <h4>Day's Income: {{:sum}}$</h4>
+    <h4>Day's Income: ${{:sum}}</h4>
 </div>

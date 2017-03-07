@@ -7,42 +7,56 @@
 </div>
 <form id="editClientForm">
     <div class="row">
-        <div class="form-group large-field">
-            <label for="businessName">Business Name</label>
-            <input type="text" class="form-control" name="businessName" value="{{:businessName}}">
+        <div class="col-md-8 col-lg-8">
+            <div class="form-group">
+                <label for="businessName">Business Name</label>
+                <input type="text" class="form-control" name="businessName" value="{{:businessName}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            </div>
         </div>
-        <div class="form-group small-field">
-            <label for="shortName">Short Name</label>
-            <input type="text" class="form-control" name="shortName" value="{{:shortName}}">
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group medium-field">
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" name="firstName" value="{{:firstName}}">
-        </div>
-        <div class="form-group medium-field">
-            <label for="lastName">Last Name</label>
-            <input type="text" class="form-control" name="lastName" value="{{:lastName}}">
+        <div class="col-md-4 col-lg-4">
+            <div class="form-group">
+                <label for="shortName">Short Name</label>
+                <input type="text" class="form-control" name="shortName" value="{{:shortName}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="form-group extra-large-field">
-            <label for="address">Address</label>
-            <input type="text" class="form-control" name="address" value="{{:address}}">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" name="firstName" value="{{:firstName}}">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" name="lastName" value="{{:lastName}}">
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="form-group medium-field">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" value="{{:email}}">
-        </div>
-        <div class="form-group medium-field">
-            <label for="phone">Phone</label>
-            <input type="phone" class="form-control" name="phone" value="{{:phone}}">
+        <div class="col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" name="address" value="{{:address}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            </div>
         </div>
     </div>
     <div class="row">
-        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.editClient({{:id}})">Save</button>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" value="{{:email}}" onblur="validRules.isEmail($(this))" onkeyup="validRules.isEmail($(this))">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="phone" class="form-control" name="phone" value="{{:phone}}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.editClient({{:id}})" disabled="true">Save</button>
     </div>
 </form>

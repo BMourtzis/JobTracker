@@ -1,5 +1,3 @@
-
-
 function getManager(id, button) {
     var manager = {};
     var htmlid = "#"+id;
@@ -7,12 +5,17 @@ function getManager(id, button) {
 
     var lineUp = [];
 
+    // TODO: add button id in the params instead of hardcoding
+    // TODO: make internal used methods functions
+
     manager.add = function(ctrl, name, func, params) {
         var lastitem = lineUp[lineUp.length-1];
 
         if(lineUp.length === 0 || lastitem.ctrl !== ctrl || lastitem.name !== name || lastitem.params !==  params) {
             lineUp.push({ctrl: ctrl, name: name, func: func, params: params});
         }
+
+        manager.limitLineUp();
         manager.toggleGoBack();
     };
 
@@ -31,7 +34,7 @@ function getManager(id, button) {
     manager.reload = function() {
         if(lineUp.length > 0) {
             var item = lineUp[lineUp.length-1];
-            item.func(item.params);
+            return item.func(item.params);
         }
         else {
             manager.removeHtml();
@@ -39,7 +42,7 @@ function getManager(id, button) {
     };
 
     manager.removeHtml = function() {
-        $(htmlid).html("");
+        $(htmlid).html("<h2>Click on an item for details</h2>");
         $("#sidebar-heading").html("");
     };
 
@@ -54,6 +57,13 @@ function getManager(id, button) {
 
     manager.getCount = function() {
         return lineUp.length;
+    };
+
+    manager.limitLineUp = function() {
+        if(lineUp.length > 30) {
+            lineUp.splice(0, 1);
+            manager.limitLineUp();
+        }
     };
 
     manager.toggleGoBack = function() {

@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <div class="row">
-    <div class="form-group medium-field">
-        <label for="client">Day</label>
-        <select id="day" class="form-control" name="daySelect">
-            <option value="" selected disabled>Select Day</option>
-            <option value="0">Sunday</option>
-            <option value="1">Monday</option>
-            <option value="2">Tuesday</option>
-            <option value="3">Wednesday</option>
-            <option value="4">Thursday</option>
-            <option value="5">Friday</option>
-            <option value="6">Saturday</option>
-        </select>
-    </div>
-    <div class="form-group small-field">
-        <label for="timeBooked">Booking Time</label>
-        <div class="input-group date timepicker">
-            <input id="time" type="text" class="form-control"/>
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-time"></span>
-            </span>
+    <div class="col-md-5 col-lg-5">
+        <div class="form-group">
+            <label for="client">Day</label>
+            <select id="day" class="form-control" name="daySelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
+                <option value="" selected disabled>Select Day</option>
+                <option value="0">Sunday</option>
+                <option value="1">Monday</option>
+                <option value="2">Tuesday</option>
+                <option value="3">Wednesday</option>
+                <option value="4">Thursday</option>
+                <option value="5">Friday</option>
+                <option value="6">Saturday</option>
+            </select>
         </div>
     </div>
-    <div class="form-group small-field clickable-span remove-span" onclick="UIFunctions.removeRepValues(this)">
-        <span class="glyphicon glyphicon-remove"></span>
+    <div class="col-md-5 col-lg-5">
+        <div class="form-group">
+            <label for="timeBooked">Time</label>
+            <div class="input-group date timepicker">
+                <input id="time" type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-lg-2">
+        <div class="clickable-span remove-span span-button">
+            <span class="glyphicon glyphicon-remove" onclick="UIFunctions.removeRepValues($(this).parent())"></span>
+        </div>
     </div>
 </div>

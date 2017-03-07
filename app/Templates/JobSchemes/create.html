@@ -4,43 +4,54 @@
 </div>
 <form id="createJobSchemeForm">
     <div class="row">
-        <div class="form-group extra-large-field">
-            <label for="client">Client</label>
-            <select class="form-control" name="clientSelect">
-                <option value="{{:id}}" selected>{{:businessName}}</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group large-field">
-            <label for="jobName">Job Name</label>
-            <input type="text" class="form-control" name="jobName" placeholder="Job Name">
-        </div>
-        <div class="form-group small-field">
-            <label for="payment">Payment</label>
-            <div class="input-group">
-                <input type="text" class="form-control" name="payment" placeholder="Eg. 50">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-usd"></span>
-                </span>
+        <div class="col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="client">Client*</label>
+                <select class="form-control" name="clientSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
+                    <option value="{{:id}}" selected>{{:businessName}}</option>
+                </select>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="form-group medium-field">
-            <!-- Could be Generated based on Enum values -->
-            <label for="repeatition">Repeatition</label>
-            <select id ="repetitionSelector" class="form-control" name="repeatitionSelect" onchange="UIFunctions.updateRepFields()">
-                <option value="" selected disabled>Select Repeatition</option>
-                <option value="Monthly">Monthly</option>
-                <option value="Fortnightly">Fortnightly</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Daily">Daily</option>
-            </select>
+        <div class="col-md-8 col-lg-8">
+            <div class="form-group">
+                <label for="jobName">Job Name*</label>
+                <input type="text" class="form-control" name="jobName" placeholder="Job Name" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-4">
+            <div class="form-group">
+                <label for="payment">Payment*</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-usd"></span>
+                    </span>
+                    <input type="text" class="form-control" name="payment" placeholder="Eg. 50" onblur="validRules.isNumeric($(this))" onkeyup="validRules.isNumeric($(this))">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <!-- NOTE: Could be Generated based on Enum values -->
+                <label for="repeatition">Repetition*</label>
+                <select id ="repetitionSelector" class="form-control" name="repeatitionSelect" onchange="UIFunctions.updateRepFields()" onblur="validRules.Selected($(this))">
+                    <option value="" selected disabled>Select Repetition</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Fortnightly">Fortnightly</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Daily">Daily</option>
+                </select>
+            </div>
         </div>
         <!-- Button to add repetition fields -->
-        <div id="addRepValues" class="form-group small-field">
-            <span class="glyphicon glyphicon-plus" onclick="UIFunctions.addRepValues()"></span>
+        <div class="col-md-2 col-lg-2">
+            <div id="addRepValues" class="form-group span-button">
+                <span class="glyphicon glyphicon-plus" onclick="UIFunctions.addRepValues()"></span>
+            </div>
         </div>
     </div>
     <br>
@@ -48,6 +59,6 @@
         <!-- Where the repetition values are added -->
     </div>
     <div class="row">
-        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJobScheme()">Submit</button>
+        <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJobScheme()" disabled="true">Submit</button>
     </div>
 </form>

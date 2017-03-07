@@ -203,23 +203,25 @@ function initializeModels() {
                         month: month,
                         day: 1
                     }).first().sunday();
-
+                    var returnObj;
                     month += 2;
                     switch (this.repetition) {
                         case "Daily":
-                            this.dailyGenerator(date, month);
+                            returnObj = this.dailyGenerator(date, month);
                             break;
                         case "Weekly":
-                            this.weeklyGenerator(date, month);
+                            returnObj = this.weeklyGenerator(date, month);
                             break;
                         case "Fortnightly":
-                            this.fortnightlyGenerator(date, month);
+                            returnObj = this.fortnightlyGenerator(date, month);
                             break;
                         case "Monthly":
-                            this.monthlyGenerator(date, month);
+                            returnObj = this.monthlyGenerator(date, month);
                             break;
                         default:
                     }
+                    console.log(returnObj);
+                    return Promise.all(returnObj);
                 }
             },
             dailyGenerator: function dailyGenerator(date, nextMonth) {
@@ -230,12 +232,12 @@ function initializeModels() {
                 });
 
                 for (; date.toString("M") < (nextMonth); date.next().day()) {
-                    this.createJob(date);
+                    return this.createJob(date);
                 }
             },
             weeklyGenerator: function weeklyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
-
+                var promises = [];
                 for (; date.toString("M") < (nextMonth); date.next().sunday()) {
                     for (var i = 0; i < repvalues.length; i++) {
                         var jobDate = new Date(date);
@@ -244,9 +246,10 @@ function initializeModels() {
                             minute: repvalues[i].minute
                         });
 
-                        this.createJob(jobDate);
+                        promises.push(this.createJob(jobDate));
                     }
                 }
+                return promises;
             },
             fortnightlyGenerator: function fortnightlyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
@@ -259,7 +262,7 @@ function initializeModels() {
                             minute: repvalues[i].minute
                         });
 
-                        this.createJob(jobDate);
+                        return this.createJob(jobDate);
                     }
                 }
             },
@@ -273,14 +276,14 @@ function initializeModels() {
                         minute: repvalues[i].minute
                     });
 
-                    this.createJob(jobDate);
+                    return this.createJob(jobDate);
                 }
             },
             createJob: function createJob(jobDate) {
                 var payment = this.payment;
                 var jobName = this.jobName;
-                orm.client.findById(this.clientId).then(function(client) {
-                    client.addNewJob(jobName, jobDate, payment);
+                return orm.client.findById(this.clientId).then(function(client) {
+                    return client.addNewJob(jobName, jobDate, payment);
                 });
             }
         }
@@ -294,7 +297,7 @@ function initializeModels() {
             field: 'id'
         },
         invoiceNo: {
-            type: sequelize.STRING(7),
+            type: sequelize.STRING(8),
             allowNull: false,
             field: 'invoiceno'
         },
@@ -313,7 +316,7 @@ function initializeModels() {
             allowNull: true,
             field: 'paidAt',
             get: function() {
-                return moment(this.getDataValue('timeBooked'));
+                return moment(this.getDataValue('paidAt'));
             }
         },
         total: {
@@ -335,7 +338,7 @@ function initializeModels() {
             allowNull: false,
             field: 'createdAt',
             get: function() {
-                return moment(this.getDataValue('timeBooked'));
+                return moment(this.getDataValue('createdAt'));
             }
         }
     }, {

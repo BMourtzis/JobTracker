@@ -17,11 +17,14 @@
         </thead>
         <tbody>
             {{for clients}}
-            <tr id="client-table" class="clickable-row" data-id="{{:id}}">
+            <tr id="client-table">
                 <td>{{:businessName}}</td>
                 <td>{{:firstName}}</td>
                 <td>{{:lastName}}</td>
                 <td>{{:shortName}}</td>
+                <td>
+                    <button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.clientDetails({{:id}})">More...</button>
+                </td>
             </tr>
             {{/for}}
         </tbody>

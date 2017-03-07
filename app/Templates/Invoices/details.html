@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <div class="row">
     <h2 class="details-heading float-left">{{:invoiceNo}}</h2>
-    <div class="custom-button">
-        {{if paid === false}}
-        <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.invoicePaid({{:id}})">
-            Paid
-        </button>
-        {{else}}
-        <button id="cancel-button" type="button" class="btn btn-danger" onclick="UIFunctions.invoiceInvoiced({{:id}})">
-            Cancel Paid
-        </button>
-        {{/if}}
-        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.printInvoice({{:id}})">
-            <span class="glyphicon glyphicon-print"></span>
-            Print Invoice
-        </button>
-    </div>
+</div>
+<div class="row button-row">
+    {{if paid === false}}
+    <button id="paid-button" type="button" class="btn btn-success" onclick="UIFunctions.invoicePaid({{:id}})">
+        Paid
+    </button>
+    {{else}}
+    <button id="cancel-button" type="button" class="btn btn-danger" onclick="UIFunctions.invoiceInvoiced({{:id}})">
+        Cancel Paid
+    </button>
+    {{/if}}
+    <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.printInvoice({{:id}})">
+        <span class="glyphicon glyphicon-print"></span>&nbsp;Print Invoice
+    </button>
+    <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
+        <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
+    </button>
 </div>
 <div class="row">
     <p>
@@ -28,7 +30,7 @@
     </p>
     <p>
         <strong>Total:</strong>
-        {{:total}}$
+        ${{:total}}
     </p>
     <p>
         <strong>Paid:</strong>
@@ -58,20 +60,12 @@
                 <td>{{:jobName}}</td>
                 <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
                 <td>{{:timeBooked.format("HH:mm")}}</td>
-                <td>{{:payment + gst}}$</td>
+                <td>${{:payment + gst}}</td>
                 <td>{{:state}}</td>
             </tr>
             {{/for }}
         </tbody>
     </table>
-</div>
-<div class="row">
-    <div class="custom-button">
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
-            <span class="glyphicon glyphicon-trash"></span>
-            Delete
-        </button>
-    </div>
 </div>
 
 <!-- Delete confirmation Modal -->

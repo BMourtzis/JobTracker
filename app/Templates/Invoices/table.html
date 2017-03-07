@@ -11,10 +11,10 @@
     </thead>
     <tbody>
         {{for invoices}}
-        <tr id="invoice-table" class="clickable-row" data-id="{{:id}}">
+        <tr id="invoice-table">
             <td>{{:client.businessName}}</td>
             <td>{{:invoiceNo}}</td>
-            <td>{{:total}}$</td>
+            <td>${{:total}}</td>
             <td>{{:createdAt.format("DD/MM/YYYY")}}</td>
             <td>
                 {{if paid === false}}
@@ -22,6 +22,9 @@
                 {{else}}
                     {{:paidAt.format("DD/MM/YYYY")}}
                 {{/if}}
+            </td>
+            <td>
+                <button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.invoiceDetails({{:id}})">More...</button>
             </td>
         </tr>
         {{/for}}

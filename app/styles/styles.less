@@ -14,6 +14,7 @@
     padding-right: 2%;
 }
 
+
 #navbar {
     position: absolute;
     float: left;
@@ -30,13 +31,18 @@
 
 #sidebar-nav {
     background-color: rgba(44, 48, 62, 1);
-    border: none;
     margin-bottom: 0%;
+    border: none;
+}
+
+#goBack-button {
+    display: none;
 }
 
 #sidebar {
     padding-left: 2%;
     padding-right: 2%;
+    color: rgba(235, 235, 235, 0.9);
 }
 
 #sidebar-container {
@@ -72,8 +78,32 @@
     margin-bottom: 0.5%;
 }
 
+#daily-heading {
+    margin-left: 1.5%;
+}
+
 #day-income {
     margin-right: 0.5%;
+}
+
+#timepicker table{
+    background-color: rgba(210, 210, 200, 1);
+    color: rgba(0, 0, 0, 0.9);
+}
+
+#datepicker table{
+    background-color: rgba(210, 210, 200, 1);
+    color: rgba(0, 0, 0, 0.9);
+}
+
+#fromDatepicker table{
+    background-color: rgba(210, 210, 200, 1);
+    color: rgba(0, 0, 0, 0.9);
+}
+
+#toDatepicker table{
+    background-color: rgba(210, 210, 200, 1);
+    color: rgba(0, 0, 0, 0.9);
 }
 
 //Classes
@@ -84,26 +114,8 @@
     transition: width 0.5s ease, margin 0.3s ease;
 }
 
-.extra-large-field {
-    margin-right: 3%;
-}
-
-.large-field {
-    float:left;
-    width: 74%;
-    margin-right: 3%;
-}
-
-.medium-field {
-    float:left;
-    width: 47%;
-    margin-right: 3%;
-}
-
-.small-field {
-    float:left;
-    width: 20%;
-    // margin-right: 5.7%;
+.span-button {
+    padding-top: 60%;
 }
 
 .submit-button {
@@ -118,6 +130,10 @@
     float:right;
     margin-top: 2.5%;
     margin-left: 2%;
+}
+
+.button-row {
+    margin-bottom: 5%;
 }
 
 .content-custom-button {

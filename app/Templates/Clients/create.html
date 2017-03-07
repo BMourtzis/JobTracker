@@ -4,42 +4,56 @@
 </div>
 <form id="createClientForm">
     <div class="row">
-        <div class="form-group large-field">
-            <label for="businessName">Business Name</label>
-            <input type="text" class="form-control" name="businessName" placeholder="Business Name">
+        <div class="col-md-8 col-lg-8">
+            <div class="form-group">
+                <label for="businessName">Business Name*</label>
+                <input type="text" class="form-control" name="businessName" placeholder="Business Name" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            </div>
         </div>
-        <div class="form-group small-field">
-            <label for="shortName">Short Name</label>
-            <input type="text" class="form-control" name="shortName" placeholder="Eg. ABC">
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group medium-field">
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" name="firstName" placeholder="First Name">
-        </div>
-        <div class="form-group medium-field">
-            <label for="lastName">Last Name</label>
-            <input type="text" class="form-control" name="lastName" placeholder="Last Name">
+        <div class="col-md-4 col-lg-4">
+            <div class="form-group">
+                <label for="shortName">Short Name*</label>
+                <input type="text" class="form-control" name="shortName" placeholder="Eg. ABC" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="form-group extra-large-field">
-            <label for="address">Address</label>
-            <input type="text" class="form-control" name="address" placeholder="123 some St, Suburb, NSW, 2000">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" name="firstName" placeholder="First Name">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" name="lastName" placeholder="Last Name">
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="form-group medium-field">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" placeholder="someone@somewhere.com">
-        </div>
-        <div class="form-group medium-field">
-            <label for="phone">Phone</label>
-            <input type="phone" class="form-control" name="phone" placeholder="1234 567 890">
+        <div class="col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="address">Address*</label>
+                <input type="text" class="form-control" name="address" placeholder="123 some St, Suburb, NSW, 2000" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            </div>
         </div>
     </div>
     <div class="row">
-        <button type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createClient()">Submit</button>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="email">Email*</label>
+                <input type="email" class="form-control" name="email" placeholder="someone@somewhere.com" onblur="validRules.isEmail($(this))" onkeyup="validRules.isEmail($(this))">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="phone" class="form-control" name="phone" placeholder="1234 567 890">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createClient()" disabled="true">Submit</button>
     </div>
 </form>

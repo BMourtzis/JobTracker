@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <div class="row">
     <h2 class="details-heading float-left">{{:businessName}}</h2>
-    <div class="custom-button">
-        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditClient({{:id}})">
-            <span class="glyphicon glyphicon-pencil"></span>
-            Edit
-        </button>
-        <button id="delete-button" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
-            <span class="glyphicon glyphicon-trash"></span>
-            Delete
-        </button>
-    </div>
+</div>
+<div class="row button-row">
+    <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditClient({{:id}})">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
+    </button>
+    <button id="delete-button" type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
+        <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
+    </button>
 </div>
 <div class="row">
     <p>
@@ -60,7 +58,7 @@
             <tr id="client-job-scheme-table" class="clickable-row" data-id="{{:id}}">
                 <th>{{:jobName}}</th>
                 <td>{{:repetition}}</td>
-                <td>{{:payment}}$</td>
+                <td>${{:payment}}</td>
                 <td>{{:enabled}}</td>
             </tr>
             {{/for}}
@@ -90,7 +88,7 @@
                 <td>{{:jobName}}</td>
                 <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
                 <td>{{:timeBooked.format("HH:mm")}}</td>
-                <td>{{:payment + gst}}$</td>
+                <td>${{:payment + gst}}</td>
             </tr>
             {{/for }}
         </tbody>

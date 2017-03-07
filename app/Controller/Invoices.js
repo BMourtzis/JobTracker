@@ -28,7 +28,18 @@ ctrl.initiatePage = function() {
         $("#content").html(html);
 
         $('#fromDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
-        $('#toDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
+        $('#toDatepicker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+
+        $('#fromDatepicker').on("dp.change", function(e){
+            $('#toDatepicker').data("DateTimePicker").minDate(e.date);
+        });
+
+        $('#toDatepicker').on("dp.change", function(e){
+            $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
+        });
 
         ctrl.currentPage = 0;
     });
@@ -36,6 +47,7 @@ ctrl.initiatePage = function() {
 
 ctrl.loadCurrentInvoices = function() {
     facade.getCurrentInvoices().then(function(invoices){
+        console.log(invoices);
         ctrl.searchParams.paid = false;
         ctrl.loadTable(invoices);
     });
@@ -48,10 +60,10 @@ ctrl.loadTable = function(data) {
     var html = temp(data);
     $("#indexInvoiceTable").html(html);
 
-    $("#invoice-table.clickable-row").click(function() {
-        var id = $(this).data("id");
-        ctrl.invoiceDetails(id);
-    });
+    // $("#invoice-table.clickable-row").click(function() {
+    //     var id = $(this).data("id");
+    //     ctrl.invoiceDetails(id);
+    // });
 };
 
 ctrl.searchOptions = function() {
@@ -106,6 +118,8 @@ ctrl.getCreateInvoice = function() {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
         var temp = jsrender.templates(templatePath);
         var html = temp({clients: query, year: ctrl.year});
+
+        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateInvoice.bind(this));
         $("#sidebar-heading").html("Create Invoice");
         $("#sidebar").html(html);
     });
@@ -127,9 +141,18 @@ ctrl.createInvoice = function() {
     formData[1].value = ctrl.year;
     formData[2].value = parseInt(formData[2].value);
     facade.createInvoice(formData[0].value, formData[1].value, formData[2].value).then(function(data) {
+        $.notify({
+            //options
+            message: "Invoice(s) successfully generated"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
+
+        sidebarManager.pop();
         if(formData[0].value !== 0) {
-            data = data.get({plain: true});
-            ctrl.invoiceDetails(data.id);
+            ctrl.invoiceDetails(data);
         }
         else {
             sidebarManager.removeHtml();
@@ -157,7 +180,16 @@ ctrl.invoiceDetails = function(id) {
 
 
 ctrl.printInvoice = function(invoiceId) {
-    facade.generateInvoice(invoiceId);
+    facade.generateInvoice(invoiceId).then(function(){
+        $.notify({
+            //options
+            message: "Invoice successfully printed"
+        },{
+            //settings
+            type: "success",
+            delay: 3000
+        });
+    });
 };
 
 ctrl.deleteInvoice = function(invoiceId) {

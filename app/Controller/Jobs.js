@@ -16,10 +16,10 @@ ctrl.selectedList = [];
 
 //Creates the index page for Jobs and loads all the jobs
 ctrl.index = function() {
-    ctrl.initiatePage().then(function(){
-        ctrl.loadAllJobs();
-    });
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
+    return ctrl.initiatePage().then(function(){
+        return ctrl.loadAllJobs();
+    });
 };
 
 //Adds the heading, buttons and the modal
@@ -115,10 +115,9 @@ ctrl.updateSelectedList = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
     var temp = jsrender.templates(templatePath);
     var html = temp({count: ctrl.selectedList.length});
-    sidebarManager.removeHtml();
+    sidebarManager.add(ctrl.ctrlName, "updateSelectedList", ctrl.updateSelectedList.bind(this));
     $("#sidebar-heading").html("Selection List");
     $("#sidebar").html(html);
-
 };
 
 //Updates all the checkboxes depending on the top one, and then updates the list
@@ -197,7 +196,6 @@ ctrl.getCreateJob = function(id) {
 
 //Creates a new job based on the fields and saves it in the db
 ctrl.createJob = function() {
-    console.log($("#createJobForm"));
     var formData = $("#createJobForm").serializeArray();
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();
@@ -219,7 +217,11 @@ ctrl.removeJob = function(id, clientID) {
 };
 
 ctrl.bulkDelete = function() {
-    facade.bulkDeleteJobs(ctrl.selectedList);
+    facade.bulkDeleteJobs(ctrl.selectedList).then(function(){
+        contentManager.reload().then(function(){
+            ctrl.updateSelectedList();
+        });
+    });
 };
 
 //Creates the edit details page
@@ -296,11 +298,13 @@ ctrl.done = function(id){
 //List State Machine
 ctrl.jobListPlaced = function() {
     facade.jobListPlaced(ctrl.selectedList);
+    sidebarManager.pop();
     contentManager.reload();
 };
 
 ctrl.jobListDone = function() {
     facade.jobListDone(ctrl.selectedList);
+    sidebarManager.pop();
     contentManager.reload();
 };
 

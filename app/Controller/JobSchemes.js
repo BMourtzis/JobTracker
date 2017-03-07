@@ -52,7 +52,7 @@ ctrl.generateJobs = function(id) {
             type: "success",
             delay: 3000
         });
-        sidebarManager.reload();
+        UIFunctions.jobs();
     });
 };
 
@@ -68,6 +68,7 @@ ctrl.generateNextMonthsJobs = function(id) {
             type: "success",
             delay: 3000
         });
+        UIFunctions.jobs();
     });
 };
 

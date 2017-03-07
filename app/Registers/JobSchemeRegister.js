@@ -120,7 +120,7 @@ register.enableJobScheme = function(id) {
 //GenerateJobs
 register.generateJobs = function(id, year, month) {
     return orm.jobScheme.findById(id).then(function(jobScheme) {
-        jobScheme.generateJobs(year, month);
+        return jobScheme.generateJobs(year, month);
     });
 };
 

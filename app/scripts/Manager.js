@@ -5,7 +5,7 @@ function getManager(id, button) {
 
     var lineUp = [];
 
-    // TODO:  add button id in the params instead of hardcoding
+    // TODO: add button id in the params instead of hardcoding
     // TODO: make internal used methods functions
 
     manager.add = function(ctrl, name, func, params) {
@@ -34,7 +34,7 @@ function getManager(id, button) {
     manager.reload = function() {
         if(lineUp.length > 0) {
             var item = lineUp[lineUp.length-1];
-            item.func(item.params);
+            return item.func(item.params);
         }
         else {
             manager.removeHtml();

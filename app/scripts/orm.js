@@ -203,20 +203,20 @@ function initializeModels() {
                         month: month,
                         day: 1
                     }).first().sunday();
-                    var returnObj;
+                    var returnObj = [];
                     month += 2;
                     switch (this.repetition) {
                         case "Daily":
-                            returnObj = this.dailyGenerator(date, month);
+                            returnObj.push(this.dailyGenerator(date, month));
                             break;
                         case "Weekly":
-                            returnObj = this.weeklyGenerator(date, month);
+                            returnObj.push(this.weeklyGenerator(date, month));
                             break;
                         case "Fortnightly":
-                            returnObj = this.fortnightlyGenerator(date, month);
+                            returnObj.push(this.fortnightlyGenerator(date, month));
                             break;
                         case "Monthly":
-                            returnObj = this.monthlyGenerator(date, month);
+                            returnObj.push(this.monthlyGenerator(date, month))  ;
                             break;
                         default:
                     }

@@ -47,7 +47,6 @@ ctrl.initiatePage = function() {
 
 ctrl.loadCurrentInvoices = function() {
     facade.getCurrentInvoices().then(function(invoices){
-        console.log(invoices);
         ctrl.searchParams.paid = false;
         ctrl.loadTable(invoices);
     });

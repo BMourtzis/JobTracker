@@ -8,7 +8,14 @@
             <div class="form-group">
                 <label for="client">Client*</label>
                 <select class="form-control" name="clientSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
-                    <option value="{{:id}}" selected>{{:businessName}}</option>
+                    {{if client == null}}
+                        <option value="" selected disabled>Select Client</option>
+                        {{for clients}}
+                            <option value="{{:id}}">{{:businessName}}</option>
+                        {{/for}}
+                    {{else}}
+                        <option value="{{:client.id}}" selected>{{:client.businessName}}</option>
+                    {{/if}}
                 </select>
             </div>
         </div>

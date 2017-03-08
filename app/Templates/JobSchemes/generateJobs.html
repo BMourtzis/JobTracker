@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<div class="row">
+    <h1 class="float-left">Generate Jobs</h1>
+</div>
+<form id="GenerateClientJobsForm">
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="client">Client</label>
+                <select class="form-control" name="client">
+                    <option value="" selected>All</option>
+                    {{for clients}}
+                    <option value="{{:id}}">{{:businessName}}</option>
+                    {{/for}}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="year">Year</label>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button id="subtractYearButton" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
+                    </span>
+                    <input id="yearCounter" type="text" class="form-control" name="year" value="{{:year}}" readonly>
+                    <span class="input-group-btn">
+                        <button id="addYearButton" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label for="month">Month</label>
+                <select class="form-control" name="month">
+                    <option value="" selected disabled>Select Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button id="generateClientJobsButton" type="button" class="btn btn-lg btn-success submit-button">Generate</button>
+    </div>
+</form>

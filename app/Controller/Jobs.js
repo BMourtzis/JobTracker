@@ -148,18 +148,30 @@ ctrl.loadTable = function(data){
 
 //Gets the client details and loads them on the sidebar
 ctrl.jobDetails = function(id) {
-    facade.getJobFull(id).then(function(data) {
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobDetails.bind(this), id);
+    return facade.getJobFull(id).then(function(data) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
         $("#sidebar-heading").html("Job Details");
         $("#sidebar").html(html);
+
+        $("#").click(function(){});
+        $("#done-button").click(function(){ctrl.done(data.id);});
+        $("#placed-button").click(function(){ctrl.placed(data.id);});
+        $("#rebook-button").click(function(){ctrl.getRebookJob(data.id);});
+        $("#edit-button").click(function(){ctrl.getEditJob(data.id);});
+        $("#delete-button").click(function(){
+            new Promise(function(resolve, reject){
+                $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+                    resolve();
+                });
+            }).then(function(){
+                ctrl.removeJob(data.id);
+            });
+        });
     });
-
-    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobDetails.bind(this), id);
 };
-
-//TODO: add an if statement for id before asking for data
 
 //Creates the createJob page
 ctrl.getCreateJob = function(id) {
@@ -204,8 +216,9 @@ ctrl.createJob = function() {
 };
 
 //Deletes the selected Job
-ctrl.removeJob = function(id, clientID) {
+ctrl.removeJob = function(id) {
     facade.removeJob(id).then(function() {
+        contentManager.reload();
         sidebarManager.goBack();
     });
 };

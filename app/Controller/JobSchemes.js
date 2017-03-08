@@ -14,7 +14,6 @@ ctrl.year = 0 ;
 ctrl.currentPage = 0;
 ctrl.searchParams = {};
 
-//TODO: add a new page for Job Schemes
 ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
     return initiateIndexPage().then(function(){
@@ -29,7 +28,9 @@ function initiateIndexPage() {
         var html = temp({clients: query});
         $("#content").html(html);
 
-        $("#searchJobSchemesButton").click(ctrl.searchJobSchemes);
+        $("#searchJobSchemesButton").click(function(){ctrl.searchJobSchemes();});
+        $("#generate-button").click(function(){ctrl.getGenerateJobs();});
+        $("#create-button").click(function(){ctrl.getCreateJobScheme();});
 
         $('#fromTimepicker').datetimepicker({format: 'HH:mm'});
         $('#toTimepicker').datetimepicker({
@@ -94,8 +95,9 @@ ctrl.gotoPage = function(page) {
 
 //Get and Displays the jobScheme details on the sidebar
 ctrl.jobSchemeDetails = function(id) {
-    facade.getJobSchemeFull(id).then(function(data) {
-        ctrl.year = parseInt(new Date.today().toString("yyyy"));
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobSchemeDetails.bind(this), id);
+    ctrl.year = parseInt(new Date.today().toString("yyyy"));
+    return facade.getJobSchemeFull(id).then(function(data) {
         data.year = ctrl.year;
 
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
@@ -103,8 +105,29 @@ ctrl.jobSchemeDetails = function(id) {
         var html = temp(data);
         $("#sidebar-heading").html("Service Details");
         $("#sidebar").html(html);
+
+        //Adds clicks events on buttons
+        $("#edit-button").click(function(){ctrl.getEditJobScheme(data.id);});
+        $("#generateJobsButton").click(function() {generateJobs(data.id);});
+        $("#removeJobSchemeButton").click(function(){
+            //Wait until modal is dissmissed
+            new Promise(function(resolve, reject){
+                $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+                    resolve();
+                });
+            }).then(function(){
+                //Then remove
+                ctrl.removeJobScheme(data.id);
+            });
+        });
+
+        $("#disable-button").click(function(){disableJobScheme(data.id);});
+        $("#enable-button").click(function(){enableJobScheme(data.id);});
+
+        $("#subtractYearButton").click(function(){subtractYear();});
+        $("#addYearButton").click(function(){addYear();});
+
     });
-    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobSchemeDetails.bind(this), id);
 };
 
 function addYear() {
@@ -128,9 +151,9 @@ ctrl.getGenerateJobs = function() {
         $("#sidebar-heading").html("Generate Jobs");
         $("#sidebar").html(html);
 
-        $("#subtractYearButton").click(subtractYear);
-        $("#addYearButton").click(addYear);
-        $("#generateClientJobsButton").click(generateJobsForClients);
+        $("#subtractYearButton").click(function(){subtractYear();});
+        $("#addYearButton").click(function(){addYear();});
+        $("#generateClientJobsButton").click(function(){generateJobsForClients();});
     });
 };
 
@@ -156,9 +179,9 @@ function generateJobsForClients() {
 }
 
 //Generates Jobs for the month given, based on the jobScheme
-ctrl.generateJobs = function(id) {
+function generateJobs(id) {
     var formData = $("#JobGenerationForm").serializeArray();
-    facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
+    return facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
         $.notify({
             //options
             message: "Jobs successfully generated"
@@ -169,7 +192,7 @@ ctrl.generateJobs = function(id) {
         });
         UIFunctions.jobs();
     });
-};
+}
 
 //Displays the create job scheme page
 ctrl.getCreateJobScheme = function(id) {
@@ -178,7 +201,6 @@ ctrl.getCreateJobScheme = function(id) {
         return facade.getAllClients().then(function(data) {
             return fillCreatePage({clients: data});
         });
-
     }
     else {
         return facade.getClient(id).then(function(data){
@@ -197,12 +219,19 @@ function fillCreatePage(data) {
     $("#sidebar").html(html);
 
     $('.timepicker').datetimepicker({format: 'HH:mm'});
+
+    //Add click events
+    $("#form-submit-button").click(function(){createJobScheme();});
+    $("#addRepValues").children("span").click(function(){addRepValues();});
+
+    //Add other events
+    $("#repetitionSelector").change(function(){changeRepFields();});
 }
 
 //create a new job scheme based on the field values
-ctrl.createJobScheme = function() {
+function createJobScheme() {
     var formData = $("#createJobSchemeForm").serializeArray();
-    var repvalues = ctrl.getRepValues();
+    var repvalues = getRepValues();
 
     facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function(data) {
         sidebarManager.pop();
@@ -210,10 +239,10 @@ ctrl.createJobScheme = function() {
         contentManager.reload();
         ctrl.jobSchemeDetails(data.id);
     });
-};
+}
 
 //Returns the rep values from the fields
-ctrl.getRepValues = function(){
+function getRepValues(){
     var repvalues = [];
     var selected = $("#repetitionSelector").val();
 
@@ -236,11 +265,11 @@ ctrl.getRepValues = function(){
         repvalues.push(rep);
     });
     return repvalues;
-};
+}
 
 
 //Adds new repetition field based on the selected repetition value
-ctrl.addRepValues = function() {
+function addRepValues() {
     var selected = $("#repetitionSelector").val();
 
     if(ctrl.repval < 7 && selected !== null)
@@ -271,17 +300,17 @@ ctrl.addRepValues = function() {
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});
     }
-};
+}
 
 //Checks if the repetition value has changed.
 //If yes, it will remove all the repValues
-ctrl.changeRepFields = function() {
+function changeRepFields() {
     if (ctrl.selectedRep !== $("#repetitionSelector").val()) {
         $("#repValuesDiv").html("");
         ctrl.repval = 0;
     }
     ctrl.selectedRep = $("#repetitionSelector").val();
-};
+}
 
 //Remove the specified repValue
 ctrl.removeRepValues = function(data) {
@@ -301,6 +330,9 @@ ctrl.getEditJobScheme = function(id) {
         sidebarManager.add(ctrl.ctrlName, "edit", ctrl.getEditJobScheme.bind(this), id);
         $("#sidebar-heading").html("Edit Service");
         $("#sidebar").html(html);
+
+        $("#editJobSchemeSubmitButton").click(function(){editJobScheme(data.id);});
+        $("#addRepValues").children("span").click(function(){addRepValues();});
 
         var innerhtml = "";
         data.repetitionValues.forEach(function(value){
@@ -324,7 +356,7 @@ ctrl.getEditJobScheme = function(id) {
 };
 
 //Edit a job scheme based on the field values
-ctrl.editJobScheme = function(id) {
+function editJobScheme(id) {
     var formData = $("#editJobSchemeForm").serializeArray();
     formData.splice(3,4);
     formData.push({
@@ -332,32 +364,31 @@ ctrl.editJobScheme = function(id) {
         value: ctrl.getRepValues()
     });
 
-    facade.editJobScheme(id, formData).then(function(data){
+    return facade.editJobScheme(id, formData).then(function(data){
         sidebarManager.pop();
         contentManager.reload();
         ctrl.jobSchemeDetails(id);
     });
-
-};
+}
 
 //Disables a jobScheme
-ctrl.disableJobScheme = function(id){
+function disableJobScheme(id){
     facade.disableJobScheme(id).then(function(data){
         contentManager.reload();
         ctrl.jobSchemeDetails(id);
     });
-};
+}
 
 //Enables a jobScheme
-ctrl.enableJobScheme = function(id){
+function enableJobScheme(id){
     facade.enableJobScheme(id).then(function(data){
         contentManager.reload();
         ctrl.jobSchemeDetails(id);
     });
-};
+}
 
 ctrl.removeJobScheme = function(id) {
-    facade.removeJobScheme(id).then(function() {
+    return facade.removeJobScheme(id).then(function() {
         contentManager.reload();
         sidebarManager.goBack();
     });

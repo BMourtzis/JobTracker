@@ -4,21 +4,21 @@
 </div>
 <div class="row button-row">
     {{if state === "Placed"}}
-    <button id="done-button" type="button" class="btn btn-success" onclick="UIFunctions.jobDone({{:id}})">
-        <span class="glyphicon glyphicon-ok"></span>&nbsp;Done
+    <button id="done-button" type="button" class="btn btn-success">
+        <span class="glyphicon"></span>&nbsp;Done
     </button>
     {{else state === "Done"}}
-    <button id="placed-button" type="button" class="btn btn-warning" onclick="UIFunctions.jobDone({{:id}})">
-        <span class="glyphicon glyphicon-remove"></span>&nbsp;Placed
+    <button id="placed-button" type="button" class="btn btn-warning">
+        <span class="glyphicon"></span>&nbsp;Placed
     </button>
     {{/if}}
-    <button id="rebook-button" type="button" class="btn btn-info" onclick="UIFunctions.getRebookJob({{:id}})">
+    <button id="rebook-button" type="button" class="btn btn-info">
         <span class="glyphicon glyphicon-time"></span>&nbsp;Rebook
     </button>
-    <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditJob({{:id}})">
+    <button id="edit-button" type="button" class="btn btn-warning">
         <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
     </button>
-    <button id="delete-button" type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
+    <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
         <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
     </button>
 </div>
@@ -49,7 +49,7 @@
                 <h4 class="modal-title modalLabel">Are you sure you want to delete {{:jobName}}</h4>
             </div>
             <div class="modal-body">
-                <button type="button" class="btn btn-danger" onclick="UIFunctions.removeJob({{:id}}, {{:client.id}})">Delete Job</button>
+                <button id="delete-button" type="button" class="btn btn-danger" data-dismiss="modal">Delete Job</button>
                 <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
             </div>
         </div>

@@ -203,24 +203,23 @@ function initializeModels() {
                         month: month,
                         day: 1
                     }).first().sunday();
-                    var returnObj = [];
+                    var returnObj;
                     month += 2;
                     switch (this.repetition) {
                         case "Daily":
-                            returnObj.push(this.dailyGenerator(date, month));
+                            returnObj = this.dailyGenerator(date, month);
                             break;
                         case "Weekly":
-                            returnObj.push(this.weeklyGenerator(date, month));
+                            returnObj = this.weeklyGenerator(date, month);
                             break;
                         case "Fortnightly":
-                            returnObj.push(this.fortnightlyGenerator(date, month));
+                            returnObj = this.fortnightlyGenerator(date, month);
                             break;
                         case "Monthly":
-                            returnObj.push(this.monthlyGenerator(date, month))  ;
+                            returnObj = this.monthlyGenerator(date, month);
                             break;
                         default:
                     }
-                    console.log(returnObj);
                     return Promise.all(returnObj);
                 }
             },
@@ -230,10 +229,11 @@ function initializeModels() {
                     hour: repvalues[i].hour,
                     minute: repvalues[i].minute
                 });
-
+                var promises = [];
                 for (; date.toString("M") < (nextMonth); date.next().day()) {
-                    return this.createJob(date);
+                    promises.push(this.createJob(date));
                 }
+                return promises;
             },
             weeklyGenerator: function weeklyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
@@ -253,6 +253,7 @@ function initializeModels() {
             },
             fortnightlyGenerator: function fortnightlyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
+                var promises = [];
 
                 for (; date.toString("M") < (nextMonth); date.next().sunday().next().sunday()) {
                     for (var i = 0; i < repvalues.length; i++) {
@@ -262,22 +263,24 @@ function initializeModels() {
                             minute: repvalues[i].minute
                         });
 
-                        return this.createJob(jobDate);
+                        promises.push(this.createJob(jobDate));
                     }
                 }
+                return promises;
             },
             monthlyGenerator: function monthlyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
-
-                for (var i = 0; i < repvalues.length; i++) {
+                var promises = [];
+                for(var i = 0; i < repvalues.length; i++) {
                     var jobDate = new Date(date);
                     jobDate.add(repvalues[i].day).day().at({
                         hour: repvalues[i].hour,
                         minute: repvalues[i].minute
                     });
 
-                    return this.createJob(jobDate);
+                    promises.push(this.createJob(jobDate));
                 }
+                return promises;
             },
             createJob: function createJob(jobDate) {
                 var payment = this.payment;

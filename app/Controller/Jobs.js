@@ -17,13 +17,13 @@ ctrl.selectedList = [];
 //Creates the index page for Jobs and loads all the jobs
 ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
-    return ctrl.initiatePage().then(function(){
+    return ctrl.initiateIndexPage().then(function(){
         return ctrl.loadAllJobs();
     });
 };
 
 //Adds the heading, buttons and the modal
-ctrl.initiatePage = function(){
+ctrl.initiateIndexPage = function(){
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
         var temp = jsrender.templates(templatePath);
@@ -87,8 +87,6 @@ ctrl.searchJobs = function() {
         formData.to = Date.parse($('#toDatepicker :input').val());
     }
 
-    formData.client = parseInt(formData.client);
-
     contentManager.add(ctrl.ctrlName, "search", ctrl.reloadSearch.bind(this));
 
     ctrl.searchParams = formData;
@@ -135,9 +133,7 @@ ctrl.updateAllCheckboxes = function() {
 //Loads the next page of the table
 ctrl.gotoPage = function(page) {
     ctrl.currentPage = page;
-    facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        ctrl.loadTable(data);
-    });
+    return ctrl.reloadSearch();
 };
 
 //Generates the table with the data given
@@ -163,36 +159,34 @@ ctrl.jobDetails = function(id) {
     sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobDetails.bind(this), id);
 };
 
+//TODO: add an if statement for id before asking for data
+
 //Creates the createJob page
 ctrl.getCreateJob = function(id) {
-    facade.getAllClients().then(function(query) {
-        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
-        var temp = jsrender.templates(templatePath);
-        var data = {
-            clients: query
-        };
-
-        if(id !== null)
-        {
-            for (var i = 0; i < data.clients.length; i++) {
-                if(data.clients[i].id == id)
-                {
-                    data.client = data.clients[i];
-                    break;
-                }
-            }
-        }
-
-        var html = temp(data);
-
-        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateJob.bind(this));
-        $("#sidebar-heading").html("Create Job");
-        $("#sidebar").html(html);
-
-        $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
-        $('#timepicker').datetimepicker({format: 'HH:mm'});
-    });
+    if(id === undefined) {
+        return facade.getAllClients().then(function(query) {
+            return fillCreatePage({clients: query});
+        });
+    }
+    else {
+        return facade.getClient(id).then(function(query) {
+            return fillCreatePage({client: query});
+        });
+    }
 };
+
+function fillCreatePage(data) {
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+    var temp = jsrender.templates(templatePath);
+    var html = temp(data);
+
+    sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateJob.bind(this));
+    $("#sidebar-heading").html("Create Job");
+    $("#sidebar").html(html);
+
+    $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
+    $('#timepicker').datetimepicker({format: 'HH:mm'});
+}
 
 //Creates a new job based on the fields and saves it in the db
 ctrl.createJob = function() {

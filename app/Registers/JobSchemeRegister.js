@@ -16,6 +16,81 @@ register.getJobScheme = function(id) {
     });
 };
 
+register.getActiveJobSchemes = function() {
+    var searchParams = { "enabled": true };
+    return findJobSchemes(searchParams, "", 0);
+};
+
+register.searchJobSchemes = function(searchParams, page) {
+    return findJobSchemes(generateQuery(searchParams), "", page);
+};
+
+//Query Generator Helper
+function generateQuery(searchParams) {
+    var query = {};
+
+    searchParams.client = parseInt(searchParams.client);
+
+    if(searchParams.enabled === "true") {
+        searchParams.enabled = true;
+    }
+    else if(searchParams.enabled === "false") {
+        searchParams.enabled = false;
+    }
+    else {
+        searchParams.enabled = "";
+    }
+
+    if(searchParams.repetition !== "" && searchParams.repetition !== undefined) {
+        query.repetition = searchParams.repetition;
+    }
+
+    if(searchParams.enabled !== "" && searchParams.enabled !== undefined) {
+        query.enabled = searchParams.enabled;
+    }
+
+    if(!Number.isNaN(searchParams.client) && searchParams.client !== undefined && searchParams.client !== "") {
+        query.clientId = searchParams.client;
+    }
+
+    return query;
+}
+
+function findJobSchemes(searchParams, orderParams, page) {
+    if(!Number.isInteger(page)) {
+        page = 0;
+    }
+
+    return orm.jobScheme.findAll({
+        include: [orm.client],
+        where: searchParams,
+        order: orderParams,
+        offset: page*100,
+        limit: 100
+    }).then(function(query) {
+        return getCount(searchParams).then(function(count) {
+            var schemes = [];
+            for(var i = 0; i<query.length; i++) {
+                schemes.push(query[i].get({plain:true}));
+            }
+
+            var data = {
+                count: count,
+                schemes: schemes
+            };
+            return data;
+        });
+    });
+}
+
+function getCount(searchParams){
+    return orm.jobScheme.count({
+        where: searchParams
+    }).then(function (count) {
+        return Math.floor(count/100);
+    });
+}
+
 function jobSchemeEditHelper(data) {
     if (data.day) {
         data.week = Math.floor(data.day/7);
@@ -123,6 +198,58 @@ register.generateJobs = function(id, year, month) {
         return jobScheme.generateJobs(year, month);
     });
 };
+
+register.generateClientJobs = function(clientId, year, month) {
+    year = parseInt(year);
+    month = parseInt(month)-1;
+    if(clientId === "") {
+        return GenerateAllActiveJobs(year, month);
+    }
+    else {
+        clientId = parseInt(clientId);
+        return GenerateClientActiveJobs(clientId, year, month);
+    }
+};
+
+function GenerateAllActiveJobs(year, month) {
+    return orm.jobScheme.findAll({
+        where: {
+            enabled: true
+        }
+    }).then(function(data){
+        return generateMultipleJobs(data, year, month);
+    });
+}
+
+function GenerateClientActiveJobs(clientId, year, month) {
+    return orm.jobScheme.findAll({
+        where: {
+            enabled: true,
+            clientId: clientId
+        }
+    }).then(function(data){
+        return generateMultipleJobs(data, year, month);
+    });
+}
+
+function generateMultipleJobs(data, year, month) {
+    return Promise.resolve(0).then(function loop(i){
+        if(i < data.length){
+            return generateMultipleJobsHelper(data[i], year, month).then(function(){
+                i++;
+                return loop(i);
+            });
+        }
+    });
+}
+
+function generateMultipleJobsHelper(scheme, year, month) {
+    return new Promise(function(resolve){
+        return scheme.generateJobs(year, month).then(function() {
+            resolve();
+        });
+    });
+}
 
 //Delete jobScheme
 register.removeJobScheme = function(id) {

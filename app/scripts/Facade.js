@@ -156,16 +156,18 @@ facade.getJobScheme = function(id) {
 };
 
 //////Gets the specified jobScheme and includes the client
-facade.getJobSchemeFull = function(id){
+facade.getJobSchemeFull = function(id) {
     return schemeRegister.getJobSchemeFull(id);
 };
 
+facade.getActiveJobSchemes = function() {
+    return schemeRegister.getActiveJobSchemes();
+};
+
 //////Advanced Search
-// facade.findJobSchemes = function(searchParams) {
-//   return orm.JobScheme.findAll({
-//     where: searchParams
-//   });
-// }
+facade.searchJobSchemes = function(searchParams, page) {
+    return schemeRegister.searchJobSchemes(searchParams, page);
+};
 
 ////Create Functions
 facade.createJobScheme = function(jobname, payment, repetition, repetitionvalues, clientid) {
@@ -192,6 +194,10 @@ facade.enableJobScheme = function(id) {
 ////GenerateJobs
 facade.generateJobs = function(id, year, month) {
     return schemeRegister.generateJobs(id, year, month);
+};
+
+facade.generateClientJobs = function(clientId, year, month) {
+    return schemeRegister.generateClientJobs(clientId, year, month);
 };
 
 //Invoice

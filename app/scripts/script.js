@@ -18,7 +18,6 @@ uiFunctions.jobs = function() {
     ctrl.Jobs.index();
     uiFunctions.changeActive(1);
 };
-uiFunctions.getCreateJob = function() { ctrl.Jobs.getCreateJob(); };
 uiFunctions.getCreateJob = function(id) { ctrl.Jobs.getCreateJob(id); };
 uiFunctions.createJob = function() { ctrl.Jobs.createJob(); };
 uiFunctions.removeJob = function(id, clientID) {
@@ -49,36 +48,15 @@ uiFunctions.updateJobSelectedList = function() { ctrl.Jobs.updateSelectedList();
 uiFunctions.updateAllCheckboxes = function() { ctrl.Jobs.updateAllCheckboxes(); };
 
 uiFunctions.services = function() {
-    ctrl.Misc.comingsoon();
+    ctrl.JobSchemes.index();
     uiFunctions.changeActive(2);
 };
-
-uiFunctions.clients = function() {
-    ctrl.Clients.index();
-    uiFunctions.changeActive(3);
-};
-uiFunctions.getCreateClient = function() { ctrl.Clients.getCreateClient(); };
-uiFunctions.createClient = function() { ctrl.Clients.createClient(); };
-uiFunctions.clientDetails = function(id) { ctrl.Clients.clientDetails(id); };
-uiFunctions.getEditClient = function(id) { ctrl.Clients.getEditClient(id); };
-uiFunctions.editClient = function(id) { ctrl.Clients.editClient(id); };
-uiFunctions.getClientJobs = function(id) {ctrl.Jobs.getClientJobs(id); };
-uiFunctions.removeClient = function(id) {
-    $("#deleteConfirmationModal").modal('hide');
-    new Promise(function(resolve, reject){
-        $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
-            resolve();
-        });
-    }).then(function(){
-        ctrl.Clients.removeClient(id);
-    });
-};
-
 uiFunctions.getCreateJobScheme = function(id) { ctrl.JobSchemes.getCreateJobScheme(id); };
 uiFunctions.createJobScheme = function() { ctrl.JobSchemes.createJobScheme(); };
 uiFunctions.addRepValues = function() { ctrl.JobSchemes.addRepValues(); };
 uiFunctions.removeRepValues = function(data) { ctrl.JobSchemes.removeRepValues(data); };
 uiFunctions.jobSchemeDetails = function(id) { ctrl.JobSchemes.jobSchemeDetails(id); };
+uiFunctions.getGenerateJobs = function() { ctrl.JobSchemes.getGenerateJobs(); };
 uiFunctions.removeJobScheme = function(id) {
     $("#deleteConfirmationModal").modal('hide');
     new Promise(function(resolve, reject){
@@ -105,6 +83,27 @@ uiFunctions.disableJobScheme = function(id) { ctrl.JobSchemes.disableJobScheme(i
 uiFunctions.enableJobScheme = function(id) { ctrl.JobSchemes.enableJobScheme(id); };
 uiFunctions.getEditJobScheme = function(id) { ctrl.JobSchemes.getEditJobScheme(id); };
 uiFunctions.editJobScheme = function(id) { ctrl.JobSchemes.editJobScheme(id); };
+
+uiFunctions.clients = function() {
+    ctrl.Clients.index();
+    uiFunctions.changeActive(3);
+};
+uiFunctions.getCreateClient = function() { ctrl.Clients.getCreateClient(); };
+uiFunctions.createClient = function() { ctrl.Clients.createClient(); };
+uiFunctions.clientDetails = function(id) { ctrl.Clients.clientDetails(id); };
+uiFunctions.getEditClient = function(id) { ctrl.Clients.getEditClient(id); };
+uiFunctions.editClient = function(id) { ctrl.Clients.editClient(id); };
+uiFunctions.getClientJobs = function(id) {ctrl.Jobs.getClientJobs(id); };
+uiFunctions.removeClient = function(id) {
+    $("#deleteConfirmationModal").modal('hide');
+    new Promise(function(resolve, reject){
+        $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+            resolve();
+        });
+    }).then(function(){
+        ctrl.Clients.removeClient(id);
+    });
+};
 
 uiFunctions.invoices = function() {
     uiFunctions.changeActive(4);

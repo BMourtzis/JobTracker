@@ -26,7 +26,7 @@
         <div class="col-md-6 col-lg-6">
             <div class="form-group">
                 <label for="repeatition">Repeatition</label>
-                <select id ="repetitionSelector" class="form-control" name="repetition" onchange="UIFunctions.updateRepFields()" onblur="validRules.Selected($(this))" >
+                <select id ="repetitionSelector" class="form-control" name="repetition" onblur="validRules.Selected($(this))" >
                     <option value="Monthly" {{if repetition === "Monthly"}} selected{{/if}}>Monthly</option>
                     <option value="Fortnightly" {{if repetition === "Fortnightly"}} selected{{/if}}>Fortnightly</option>
                     <option value="Weekly" {{if repetition === "Weekly"}} selected{{/if}}>Weekly</option>
@@ -46,6 +46,6 @@
         <!-- Where the repetition values are added -->
     </div>
     <div class="row">
-        <button id="editJobSchemeSubmitButton" type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.editJobScheme({{:id}})">Submit</button>
+        <button id="editJobSchemeSubmitButton" type="button" class="btn btn-lg btn-success submit-button">Submit</button>
     </div>
 </form>

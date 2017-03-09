@@ -3,10 +3,10 @@
     <h2 class="details-heading float-left">{{:businessName}}</h2>
 </div>
 <div class="row button-row">
-    <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditClient({{:id}})">
+    <button id="edit-button" type="button" class="btn btn-warning">
         <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
     </button>
-    <button id="delete-button" type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
+    <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
         <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
     </button>
 </div>
@@ -38,7 +38,7 @@
 </div>
 <div class="row">
     <h2 class="details-heading float-left">Services</h2>
-    <button id="create-jobscheme-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJobScheme({{:id}})">
+    <button id="create-jobscheme-button" type="button" class="btn btn-primary custom-button">
         <span class="glyphicon glyphicon-plus"></span>
         Create
     </button>
@@ -67,7 +67,7 @@
 </div>
 <div class="row">
     <h2 class="details-heading float-left">Jobs</h2>
-    <button id="create-job-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateJob({{:id}})">
+    <button id="create-job-button" type="button" class="btn btn-primary custom-button">
         <span class="glyphicon glyphicon-plus"></span>
         Create
     </button>
@@ -96,7 +96,7 @@
 </div>
 {{if jobs.length > 0 }}
 <div class="row">
-    <button id="see-all-jobs-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getClientJobs({{:id}})">
+    <button id="see-all-jobs-button" type="button" class="btn btn-primary custom-button">
         See All Jobs
     </button>
 </div>
@@ -111,8 +111,8 @@
             <h4 class="modal-title modalLabel">Are you sure you want to delete {{:businessName}}</h4>
         </div>
         <div class="modal-body">
-            <button type="button" class="btn btn-danger" onclick="UIFunctions.removeClient({{:id}})">Delete Client</button>
-            <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
+            <button id="delete-button" type="button" class="btn btn-danger" data-dismiss="modal">Delete Client</button>
+            <button type="button" class="btn btn-default float-right">Close</button>
         </div>
     </div>
   </div>

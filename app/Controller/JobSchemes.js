@@ -64,6 +64,9 @@ function loadTable(data) {
     var tableTemp = jsrender.templates(templatePath);
     var table = tableTemp(data);
     $("#JobSchemesTable").html(table);
+
+    $("#paginationNavBar li").click(function(){gotoPage($(this).data("id"));});
+    $("#jobSchemes-table button").click(function(){ctrl.jobSchemeDetails($(this).data("id"));});
 }
 
 ctrl.searchJobSchemes = function() {
@@ -88,10 +91,10 @@ ctrl.reloadSearch = function() {
     });
 };
 
-ctrl.gotoPage = function(page) {
+function gotoPage(page) {
     ctrl.currentPage = page;
     return ctrl.reloadSearch();
-};
+}
 
 //Get and Displays the jobScheme details on the sidebar
 ctrl.jobSchemeDetails = function(id) {
@@ -112,7 +115,7 @@ ctrl.jobSchemeDetails = function(id) {
         $("#removeJobSchemeButton").click(function(){
             //Wait until modal is dissmissed
             new Promise(function(resolve, reject){
-                $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+                $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
                     resolve();
                 });
             }).then(function(){
@@ -332,7 +335,8 @@ ctrl.getEditJobScheme = function(id) {
         $("#sidebar").html(html);
 
         $("#editJobSchemeSubmitButton").click(function(){editJobScheme(data.id);});
-        $("#addRepValues").children("span").click(function(){addRepValues();});
+        $("#addRepValues span").click(function(){addRepValues();});
+        $("#repetitionSelector").change(function(){changeRepFields();});
 
         var innerhtml = "";
         data.repetitionValues.forEach(function(value){

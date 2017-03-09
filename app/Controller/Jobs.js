@@ -17,13 +17,13 @@ ctrl.selectedList = [];
 //Creates the index page for Jobs and loads all the jobs
 ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
-    return ctrl.initiateIndexPage().then(function(){
-        return ctrl.loadAllJobs();
+    return initiateIndexPage().then(function(){
+        return loadAllJobs();
     });
 };
 
 //Adds the heading, buttons and the modal
-ctrl.initiateIndexPage = function(){
+function initiateIndexPage(){
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
         var temp = jsrender.templates(templatePath);
@@ -44,34 +44,38 @@ ctrl.initiateIndexPage = function(){
             $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
         });
 
+        $("#jobAllCheckbox").click(function(){updateAllCheckboxes();});
+        $("#create-button").click(function(){ctrl.getCreateJob();});
+        $("#search-button").click(function(){searchJobs();});
+
         ctrl.currentPage = 0;
     });
-};
+}
 
 //Queries all the jobs based on the client id
 ctrl.getClientJobs = function(id){
     ctrl.initiatePage().then(function(){
         ctrl.searchParams = {clientID: id};
         facade.getClientJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-            ctrl.loadTable(data);
+            loadTable(data);
         });
     });
     contentManager.add(ctrl.ctrlName, "clientDetails", ctrl.getClientJobs.bind(this));
 };
 
 //Loads all Jobs
-ctrl.loadAllJobs = function() {
+function loadAllJobs() {
     ctrl.searchParams = {
         from: Date.today().last().year().set({month: 0, day: 1}),
         to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
     };
     facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(query) {
-        ctrl.loadTable(query);
+        loadTable(query);
     });
-};
+}
 
 //Searches for the Jobs with the given parameters
-ctrl.searchJobs = function() {
+function searchJobs() {
     ctrl.currentPage = 0;
 
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
@@ -91,23 +95,23 @@ ctrl.searchJobs = function() {
 
     ctrl.searchParams = formData;
     return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        ctrl.loadTable(data);
+        loadTable(data);
     });
-};
+}
 
 ctrl.reloadSearch = function() {
     return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        ctrl.loadTable(data);
+        loadTable(data);
     });
 };
 
 //Updates the list of selected jobs
-ctrl.updateSelectedList = function() {
+function updateSelectedList() {
     var tdList = $("#indexJobTable :checked");
     ctrl.selectedList = [];
 
     tdList.each(function(){
-        ctrl.selectedList.push(parseInt($(this).val()));
+        ctrl.selectedList.push(parseInt($(this).data("id")));
     });
 
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
@@ -116,10 +120,12 @@ ctrl.updateSelectedList = function() {
     sidebarManager.add(ctrl.ctrlName, "updateSelectedList", ctrl.updateSelectedList.bind(this));
     $("#sidebar-heading").html("Selection List");
     $("#sidebar").html(html);
-};
+
+    $("#delete-button").click(function(){bulkDelete();});
+}
 
 //Updates all the checkboxes depending on the top one, and then updates the list
-ctrl.updateAllCheckboxes = function() {
+function updateAllCheckboxes() {
     var checked = $("#jobAllCheckbox").is(":checked");
     var tdList = $("#indexJobTable :checkbox");
 
@@ -127,24 +133,30 @@ ctrl.updateAllCheckboxes = function() {
         $(this).prop("checked", checked);
     });
 
-    ctrl.updateSelectedList();
-};
+    updateSelectedList();
+}
 
 //Loads the next page of the table
-ctrl.gotoPage = function(page) {
-    ctrl.currentPage = page;
-    return ctrl.reloadSearch();
-};
+function gotoPage(page) {
+    if(page !== undefined) {
+        ctrl.currentPage = page;
+        return ctrl.reloadSearch();
+    }
+}
 
 //Generates the table with the data given
-ctrl.loadTable = function(data){
+function loadTable(data){
     data.currentPage = ctrl.currentPage;
 
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var tableTemp = jsrender.templates(templatePath);
     var table = tableTemp(data);
     $("#indexJobTable").html(table);
-};
+
+    $(".job-checkbox").click(function(){updateSelectedList();});
+    $(".details-button").click(function(){ctrl.jobDetails($(this).data("id"));});
+    $("#paginationNavBar li").click(function(){gotoPage($(this).data("page"));});
+}
 
 //Gets the client details and loads them on the sidebar
 ctrl.jobDetails = function(id) {
@@ -157,17 +169,17 @@ ctrl.jobDetails = function(id) {
         $("#sidebar").html(html);
 
         $("#").click(function(){});
-        $("#done-button").click(function(){ctrl.done(data.id);});
-        $("#placed-button").click(function(){ctrl.placed(data.id);});
-        $("#rebook-button").click(function(){ctrl.getRebookJob(data.id);});
-        $("#edit-button").click(function(){ctrl.getEditJob(data.id);});
+        $("#done-button").click(function(){done(id);});
+        $("#placed-button").click(function(){placed(id);});
+        $("#rebook-button").click(function(){ctrl.getRebookJob(id);});
+        $("#edit-button").click(function(){ctrl.getEditJob(id);});
         $("#delete-button").click(function(){
             new Promise(function(resolve, reject){
-                $(deleteConfirmationModal).on('hidden.bs.modal', function (e) {
+                $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
                     resolve();
                 });
             }).then(function(){
-                ctrl.removeJob(data.id);
+                removeJob(data.id);
             });
         });
     });
@@ -198,10 +210,12 @@ function fillCreatePage(data) {
 
     $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
     $('#timepicker').datetimepicker({format: 'HH:mm'});
+
+    $("#form-submit-button").click(function(){createJob();});
 }
 
 //Creates a new job based on the fields and saves it in the db
-ctrl.createJob = function() {
+function createJob() {
     var formData = $("#createJobForm").serializeArray();
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();
@@ -213,23 +227,23 @@ ctrl.createJob = function() {
         contentManager.reload();
         ctrl.jobDetails(job.id);
     });
-};
+}
 
 //Deletes the selected Job
-ctrl.removeJob = function(id) {
-    facade.removeJob(id).then(function() {
+function removeJob(id) {
+    return facade.removeJob(id).then(function() {
         contentManager.reload();
         sidebarManager.goBack();
     });
-};
+}
 
-ctrl.bulkDelete = function() {
-    facade.bulkDeleteJobs(ctrl.selectedList).then(function(){
+function bulkDelete() {
+    return facade.bulkDeleteJobs(ctrl.selectedList).then(function(){
         contentManager.reload().then(function(){
             ctrl.updateSelectedList();
         });
     });
-};
+}
 
 //Creates the edit details page
 ctrl.getEditJob = function(id) {
@@ -241,11 +255,13 @@ ctrl.getEditJob = function(id) {
         sidebarManager.add(ctrl.ctrlName, "edit", ctrl.getEditJob.bind(this), id);
         $("#sidebar-heading").html("Edit Job");
         $("#sidebar").html(html);
+
+        $("#save-edit-button").click(function(){editJob(id);});
     });
 };
 
 //Updates the details of the job based on the edits made
-ctrl.editJob = function(id) {
+function editJob(id) {
     var formData = $("#editJobForm").serializeArray();
     formData[1].value = parseFloat(formData[1].value);
     facade.editJob(id, formData).then(function() {
@@ -253,7 +269,7 @@ ctrl.editJob = function(id) {
         contentManager.reload();
         ctrl.jobDetails(id);
     });
-};
+}
 
 //Creates the Rebook job page
 ctrl.getRebookJob = function(id) {
@@ -268,11 +284,13 @@ ctrl.getRebookJob = function(id) {
 
         $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
         $('#timepicker').datetimepicker({format: 'HH:mm'});
+
+        $("#save-rebook-button").click(function(){rebookJob(id);});
     });
 };
 
 //Rebooks a job
-ctrl.rebookJob = function(id){
+function rebookJob(id){
     var formData = [];
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();
@@ -287,33 +305,20 @@ ctrl.rebookJob = function(id){
         contentManager.reload();
         ctrl.jobDetails(id);
     });
-};
+}
 
 //State Machine
-ctrl.placed = function(id){
+function placed(id){
     facade.placed(id).then(function(data){
         ctrl.jobDetails(id);
     });
-};
+}
 
-ctrl.done = function(id){
+function done(id){
     facade.done(id).then(function(data){
         ctrl.jobDetails(id);
     });
-};
-
-//List State Machine
-ctrl.jobListPlaced = function() {
-    facade.jobListPlaced(ctrl.selectedList);
-    sidebarManager.pop();
-    contentManager.reload();
-};
-
-ctrl.jobListDone = function() {
-    facade.jobListDone(ctrl.selectedList);
-    sidebarManager.pop();
-    contentManager.reload();
-};
+}
 
 module.exports = function getController() {
     return require('../scripts/Facade.js')().then(function(data){

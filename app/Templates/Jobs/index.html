@@ -3,12 +3,12 @@
     <h1 class="float-left">Jobs</h1>
 </div>
 <div class="row">
-    <input id="jobAllCheckbox" type="checkbox" onclick="UIFunctions.updateAllCheckboxes()">
+    <input id="jobAllCheckbox" type="checkbox">
     <div class="content-custom-button">
-        <button id="advance-search-button" type="button" class="btn btn-default" data-toggle="modal" data-target="#advSearchModal">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#advSearchModal">
             <span class="glyphicon glyphicon-search"></span> Advance Search
         </button>
-        <button id="create-button" type="button" class="btn btn-primary" onclick="UIFunctions.getCreateJob()">
+        <button id="create-button" type="button" class="btn btn-primary">
             <span class="glyphicon glyphicon-plus"></span> Create
         </button>
     </div>
@@ -65,7 +65,7 @@
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <label for="state">Status</label>
-                                <select class="form-control" name="status">
+                                <select class="form-control" name="state">
                                     <option value="" selected></option>
                                     <option value="Placed">Placed</option>
                                     <option value="Done">Done</option>
@@ -78,7 +78,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="UIFunctions.searchJobs()">Search</button>
+                <button id="search-button" type="button" class="btn btn-primary" data-dismiss="modal">Search</button>
             </div>
         </div>
     </div>

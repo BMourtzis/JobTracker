@@ -1,60 +1,70 @@
-var ctrl = require("../Controller/Controllers.js");
 
-var uiFunctions = { };
+function initiate() {
+    $("#home-nav-item").click(function(){home();});
+    $("#jobs-nav-item").click(function(){jobs();});
+    $("#schemes-nav-item").click(function(){services();});
+    $("#clients-nav-item").click(function(){clients();});
+    $("#invoices-nav-item").click(function(){invoices();});
+    $("#timetable-nav-item").click(function(){timetable();});
+    $("#finances-nav-item").click(function(){finances();});
+    $("#settings-nav-item").click(function(){settings();});
+    $("#goBack-button").click(function(){goBack();});
+}
 
-uiFunctions.home = function() {
-    ctrl.Home.index();
-    uiFunctions.changeActive(0);
-};
+function home() {
+    removeActive();
+    $("#home-nav-item").parent().addClass("active");
+    ctrls.Home.index();
+}
 
-uiFunctions.jobs = function() {
-    ctrl.Jobs.index();
-    uiFunctions.changeActive(1);
-};
+function jobs() {
+    removeActive();
+    $("#jobs-nav-item").parent().addClass("active");
+    ctrls.Jobs.index();
+}
 
-uiFunctions.services = function() {
-    ctrl.JobSchemes.index();
-    uiFunctions.changeActive(2);
-};
+function services() {
+    removeActive();
+    $("#schemes-nav-item").parent().addClass("active");
+    ctrls.JobSchemes.index();
+}
 
-uiFunctions.clients = function() {
-    ctrl.Clients.index();
-    uiFunctions.changeActive(3);
-};
+function clients() {
+    removeActive();
+    $("#clients-nav-item").parent().addClass("active");
+    ctrls.Clients.index();
+}
 
-uiFunctions.invoices = function() {
-    uiFunctions.changeActive(4);
-    ctrl.Invoices.index();
-};
+function invoices() {
+    removeActive();
+    $("#invoices-nav-item").parent().addClass("active");
+    ctrls.Invoices.index();
+}
 
-uiFunctions.timetable = function() {
-    uiFunctions.changeActive(5);
-    ctrl.Misc.comingsoon();
-};
+function timetable() {
+    removeActive();
+    $("#timetable-nav-item").parent().addClass("active");
+    ctrls.Misc.comingsoon();
+}
 
-uiFunctions.finances = function() {
-    uiFunctions.changeActive(6);
-    ctrl.Misc.comingsoon();
-};
+function finances() {
+    removeActive();
+    $("#finances-nav-item").parent().addClass("active");
+    ctrls.Misc.comingsoon();
+}
 
-uiFunctions.settings = function() {
-    uiFunctions.changeActive(7);
-    ctrl.Settings.index();
-};
+function settings() {
+    removeActive();
+    $("#settings-nav-item").parent().addClass("active");
+    ctrls.Settings.index();
+}
 
-uiFunctions.goBack = function() { sidebarManager.goBack(); };
+function goBack() {
+    sidebarManager.goBack();
+}
 
-uiFunctions.changeActive = function(itemNo) {
-    var listItems = $("#navbar-list").children();
-    listItems.each(function(no, data) {
-        $(data).removeClass("active");
-    });
-    $(listItems[itemNo]).addClass("active");
-};
+function removeActive() {
+    $("#navbar-list li").removeClass("active");
+}
 
-module.exports = function getScripts() {
-    return require("../Controller/Controllers.js")().then(function(data) {
-        ctrl = data;
-        return uiFunctions;
-    });
-};
+module.exports = initiate();

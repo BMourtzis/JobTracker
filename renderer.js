@@ -29,13 +29,11 @@ window.contentManager = new require("./app/scripts/Manager.js")("content", false
 window.sidebarManager = new require("./app/scripts/Manager.js")("sidebar", true);
 
 window.validRules = require("./app/scripts/ValidationRulesHelper.js");
+require('./app/scripts/script.js');
 
 //Scripts
 require('./app/Registers/SettingsRegister.js')();
 require("./app/Controller/Controllers.js")().then(function(data){
     window.ctrls = data;
-});
-require('./app/scripts/script.js')().then(function(data) {
-    window.UIFunctions = data;
-    UIFunctions.home();
+    ctrls.Home.index();
 });

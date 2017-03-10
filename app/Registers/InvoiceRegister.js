@@ -198,6 +198,7 @@ function createInvoicePromiseHelper(i, data, year, month) {
     });
 }
 
+//TODO: fix bug where 1/12/16 - 31/03/17 doesn't work properly
 function generateQuery(searchParams) {
     var query = {};
 

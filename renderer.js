@@ -6,6 +6,7 @@ window.app = require('electron').remote.app;
 
 //Back-end Modules
 window.datejs = require('datejs');
+Date.i18n.setLanguage(["en-AU"]);
 window.fs = require('fs');
 window.path = require('path');
 
@@ -31,6 +32,9 @@ window.validRules = require("./app/scripts/ValidationRulesHelper.js");
 
 //Scripts
 require('./app/Registers/SettingsRegister.js')();
+require("./app/Controller/Controllers.js")().then(function(data){
+    window.ctrls = data;
+});
 require('./app/scripts/script.js')().then(function(data) {
     window.UIFunctions = data;
     UIFunctions.home();

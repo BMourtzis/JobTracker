@@ -44,7 +44,7 @@ function loadDayJobs() {
         $("#next-day-button").click(function(){nextDay();});
         $(".placed").click(function(){done($(this).data("id"));});
         $(".done").click(function(){placed($(this).data("id"));});
-        $("#home-job-table button").click(function(){UIFunctions.jobDetails($(this).data("id"));});
+        $("#home-job-table button").click(function(){ctrls.Jobs.details($(this).data("id"));});
     });
 }
 
@@ -53,7 +53,7 @@ function nextDay(){
     ctrl.selectedDate.add(1).day();
     loadDayJobs();
 
-    contentManager.add(ctrl.ctrlName, nextDay.bind(this));
+    contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
 }
 
 //Goes to the previous day
@@ -61,7 +61,7 @@ function previousDay(){
     ctrl.selectedDate.add(-1).day();
     loadDayJobs();
 
-    contentManager.add(ctrl.ctrlName, previousDay.bind(this));
+    contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
 }
 
 //Changes the status of a job to placed

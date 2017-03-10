@@ -41,7 +41,7 @@ function initiatePage() {
             $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
         });
 
-        $("#create-button").click(function(){ctrl.getCreate();});
+        $("#create-button").click(function(){ctrl.create();});
         $("#search-button").click(function(){search();});
 
         ctrl.currentPage = 0;
@@ -62,7 +62,7 @@ function loadTable(data) {
     var html = temp(data);
     $("#indexInvoiceTable").html(html);
 
-    $("#invoice-table").click(function(){ctrl.details($(this).data("id"));});
+    $("#invoice-table button").click(function(){ctrl.details($(this).data("id"));});
     $("#paginationNavBar li").click(function(){gotoPage($(this).data("page"));});
 }
 
@@ -113,7 +113,7 @@ function gotoPage(page) {
     }
 }
 
-ctrl.getCreate = function() {
+ctrl.create = function() {
     facade.getAllClients().then(function(query) {
         ctrl.year = parseInt(new Date.today().toString("yyyy"));
 
@@ -121,7 +121,7 @@ ctrl.getCreate = function() {
         var temp = jsrender.templates(templatePath);
         var html = temp({clients: query, year: ctrl.year});
 
-        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreate.bind(this));
+        sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this));
         $("#sidebar-heading").html("Create Invoice");
         $("#sidebar").html(html);
 
@@ -176,9 +176,9 @@ ctrl.details = function(id) {
         $("#sidebar-heading").html("Invoice Details");
         $("#sidebar").html(html);
 
-        $("#client-job-table.clickable-row").click(function() {
+        $("#client-job-table .clickable-row").click(function() {
             var id = $(this).data("id");
-            UIFunctions.jobDetails(id);
+            ctrls.Jobs.details(id);
         });
 
         $("#paid-button").click(function(){paid(id);});
@@ -194,7 +194,7 @@ ctrl.details = function(id) {
             });
         });
     });
-    sidebarManager.add(ctrl.ctrlName, "details", ctrl.invoiceDetails.bind(this), id);
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.details.bind(this), id);
 };
 
 
@@ -212,21 +212,23 @@ function print(invoiceId) {
 }
 
 function remove(invoiceId) {
-    facade.deleteInvoice(invoiceId).then(function(data){
+    return facade.deleteInvoice(invoiceId).then(function(data){
         sidebarManager.removeHtml();
         contentManager.reload();
     });
 }
 
 function paid(invoiceId) {
-    facade.invoicePaid(invoiceId).then(function(invoice){
-        ctrl.invoiceDetails(invoiceId);
+    return facade.invoicePaid(invoiceId).then(function(invoice){
+        ctrl.details(invoiceId);
+        contentManager.reload();
     });
 }
 
 function invoiced(invoiceId) {
-    facade.invoiceInvoiced(invoiceId).then(function(invoice){
-        ctrl.invoiceDetails(invoiceId);
+    return facade.invoiceInvoiced(invoiceId).then(function(invoice){
+        ctrl.details(invoiceId);
+        contentManager.reload();
     });
 }
 

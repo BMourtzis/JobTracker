@@ -225,13 +225,18 @@ function initializeModels() {
             },
             dailyGenerator: function dailyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
-                date.at({
-                    hour: repvalues[i].hour,
-                    minute: repvalues[i].minute
-                });
                 var promises = [];
                 for (; date.toString("M") < (nextMonth); date.next().day()) {
-                    promises.push(this.createJob(date));
+                    for (var i= 0; i< repvalues.length; i++) {
+                        date.at({
+                            hour: repvalues[i].hour,
+                            minute: repvalues[i].minute
+                        });
+                        
+                        var jobDate = new Date(date);
+                        promises.push(this.createJob(jobDate));
+                    }
+
                 }
                 return promises;
             },

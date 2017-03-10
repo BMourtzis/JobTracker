@@ -28,9 +28,9 @@ function initiateIndexPage() {
         var html = temp({clients: query});
         $("#content").html(html);
 
-        $("#searchJobSchemesButton").click(function(){ctrl.searchJobSchemes();});
-        $("#generate-button").click(function(){ctrl.getGenerateJobs();});
-        $("#create-button").click(function(){ctrl.getCreateJobScheme();});
+        $("#searchJobSchemesButton").click(function(){search();});
+        $("#generate-button").click(function(){ctrl.generate();});
+        $("#create-button").click(function(){ctrl.create();});
 
         $('#fromTimepicker').datetimepicker({format: 'HH:mm'});
         $('#toTimepicker').datetimepicker({
@@ -66,12 +66,12 @@ function loadTable(data) {
     $("#JobSchemesTable").html(table);
 
     $("#paginationNavBar li").click(function(){gotoPage($(this).data("id"));});
-    $("#jobSchemes-table button").click(function(){ctrl.jobSchemeDetails($(this).data("id"));});
+    $("#jobSchemes-table button").click(function(){ctrl.details($(this).data("id"));});
 }
 
-ctrl.searchJobSchemes = function() {
+function search() {
     $("#advSearchModal").modal('hide');
-    contentManager.add(ctrl.ctrlName, "search", ctrl.reloadSearch.bind(this));
+    contentManager.add(ctrl.ctrlName, "search", reload.bind(this));
 
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
         obj[item.name] = item.value;
@@ -83,22 +83,22 @@ ctrl.searchJobSchemes = function() {
     return facade.searchJobSchemes(formData, ctrl.currentPage).then(function(data) {
         return loadTable(data);
     });
-};
+}
 
-ctrl.reloadSearch = function() {
+function reload() {
     return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data){
         loadTable(data);
     });
-};
+}
 
 function gotoPage(page) {
     ctrl.currentPage = page;
-    return ctrl.reloadSearch();
+    return reload();
 }
 
 //Get and Displays the jobScheme details on the sidebar
-ctrl.jobSchemeDetails = function(id) {
-    sidebarManager.add(ctrl.ctrlName, "details", ctrl.jobSchemeDetails.bind(this), id);
+ctrl.details = function(id) {
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.details.bind(this), id);
     ctrl.year = parseInt(new Date.today().toString("yyyy"));
     return facade.getJobSchemeFull(id).then(function(data) {
         data.year = ctrl.year;
@@ -110,8 +110,8 @@ ctrl.jobSchemeDetails = function(id) {
         $("#sidebar").html(html);
 
         //Adds clicks events on buttons
-        $("#edit-button").click(function(){ctrl.getEditJobScheme(id);});
-        $("#generateJobsButton").click(function() {generateJobs(id);});
+        $("#edit-button").click(function(){ctrl.edit(id);});
+        $("#generateJobsButton").click(function() {generate(id);});
         $("#removeJobSchemeButton").click(function(){
             //Wait until modal is dissmissed
             new Promise(function(resolve, reject){
@@ -120,7 +120,7 @@ ctrl.jobSchemeDetails = function(id) {
                 });
             }).then(function(){
                 //Then remove
-                ctrl.removeJobScheme(id);
+                remove(id);
             });
         });
 
@@ -143,8 +143,8 @@ function subtractYear() {
     $("#yearCounter").val(ctrl.year);
 }
 
-ctrl.getGenerateJobs = function() {
-    sidebarManager.add(ctrl.ctrlName, "generate", ctrl.getGenerateJobs.bind(this));
+ctrl.generate = function() {
+    sidebarManager.add(ctrl.ctrlName, "generate", ctrl.generate.bind(this));
     ctrl.year = parseInt(new Date.today().toString("yyyy"));
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/generateJobs.html");
@@ -156,11 +156,11 @@ ctrl.getGenerateJobs = function() {
 
         $("#subtractYearButton").click(function(){subtractYear();});
         $("#addYearButton").click(function(){addYear();});
-        $("#generateClientJobsButton").click(function(){generateJobsForClients();});
+        $("#generateClientJobsButton").click(function(){generateForClients();});
     });
 };
 
-function generateJobsForClients() {
+function generateForClients() {
     var formData = $("#GenerateClientJobsForm").serializeArray().reduce(function(obj, item) {
         obj[item.name] = item.value;
         return obj;
@@ -182,7 +182,7 @@ function generateJobsForClients() {
 }
 
 //Generates Jobs for the month given, based on the jobScheme
-function generateJobs(id) {
+function generate(id) {
     var formData = $("#JobGenerationForm").serializeArray();
     return facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
         $.notify({
@@ -198,8 +198,8 @@ function generateJobs(id) {
 }
 
 //Displays the create job scheme page
-ctrl.getCreateJobScheme = function(id) {
-    sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateJobScheme.bind(this), id);
+ctrl.create = function(id) {
+    sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this), id);
     if(id === undefined) {
         return facade.getAllClients().then(function(data) {
             return fillCreatePage({clients: data});
@@ -224,7 +224,7 @@ function fillCreatePage(data) {
     $('.timepicker').datetimepicker({format: 'HH:mm'});
 
     //Add click events
-    $("#form-submit-button").click(function(){createJobScheme();});
+    $("#form-submit-button").click(function(){create();});
     $("#addRepValues").children("span").click(function(){addRepValues();});
 
     //Add other events
@@ -232,7 +232,7 @@ function fillCreatePage(data) {
 }
 
 //create a new job scheme based on the field values
-function createJobScheme() {
+function create() {
     var formData = $("#createJobSchemeForm").serializeArray();
     var repvalues = getRepValues();
 
@@ -240,7 +240,7 @@ function createJobScheme() {
         sidebarManager.pop();
         data = data.get({plain: true});
         contentManager.reload();
-        ctrl.jobSchemeDetails(data.id);
+        ctrl.details(data.id);
     });
 }
 
@@ -325,17 +325,17 @@ function removeRepValues(span) {
 }
 
 //Displays the edit job scheme page
-ctrl.getEditJobScheme = function(id) {
+ctrl.edit = function(id) {
     facade.getJobScheme(id).then(function(data) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
 
-        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.getEditJobScheme.bind(this), id);
+        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.edit.bind(this), id);
         $("#sidebar-heading").html("Edit Service");
         $("#sidebar").html(html);
 
-        $("#editJobSchemeSubmitButton").click(function(){editJobScheme(data.id);});
+        $("#editJobSchemeSubmitButton").click(function(){edit(data.id);});
         $("#addRepValues span").click(function(){addRepValues();});
         $("#repetitionSelector").change(function(){changeRepFields();});
 
@@ -362,43 +362,43 @@ ctrl.getEditJobScheme = function(id) {
 };
 
 //Edit a job scheme based on the field values
-function editJobScheme(id) {
+function edit(id) {
     var formData = $("#editJobSchemeForm").serializeArray();
     formData.splice(3,4);
     formData.push({
         name: "repetitionValues",
-        value: ctrl.getRepValues()
+        value: getRepValues()
     });
 
     return facade.editJobScheme(id, formData).then(function(data){
         sidebarManager.pop();
         contentManager.reload();
-        ctrl.jobSchemeDetails(id);
+        ctrl.details(id);
     });
 }
 
 //Disables a jobScheme
 function disableJobScheme(id){
-    facade.disableJobScheme(id).then(function(data){
+    return facade.disableJobScheme(id).then(function(data){
         contentManager.reload();
-        ctrl.jobSchemeDetails(id);
+        ctrl.details(id);
     });
 }
 
 //Enables a jobScheme
 function enableJobScheme(id){
-    facade.enableJobScheme(id).then(function(data){
+    return facade.enableJobScheme(id).then(function(data){
         contentManager.reload();
-        ctrl.jobSchemeDetails(id);
+        ctrl.details(id);
     });
 }
 
-ctrl.removeJobScheme = function(id) {
+function remove(id) {
     return facade.removeJobScheme(id).then(function() {
         contentManager.reload();
         sidebarManager.goBack();
     });
-};
+}
 
 module.exports = function getController() {
     return require('../scripts/Facade.js')().then(function(data){

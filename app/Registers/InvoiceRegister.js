@@ -68,7 +68,7 @@ register.invoicePaid = function(invoiceId) {
         });
 
     }).then(function(data){
-        PaidJobList(data.jobs).then(function(){
+        return PaidJobList(data.jobs).then(function(){
             return data;
         });
     });
@@ -84,7 +84,7 @@ register.invoiceInvoiced = function(invoiceId) {
         });
 
     }).then(function(data){
-        InvoiceJobList(data.jobs, invoiceId).then(function(){
+        return InvoiceJobList(data.jobs, invoiceId).then(function(){
             return data;
         });
     });
@@ -249,6 +249,8 @@ function generateQuery(searchParams) {
     if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== ""){
         query.clientID = searchParams.clientID;
     }
+
+    console.log(query);
 
     return query;
 }

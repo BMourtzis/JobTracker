@@ -110,8 +110,8 @@ ctrl.jobSchemeDetails = function(id) {
         $("#sidebar").html(html);
 
         //Adds clicks events on buttons
-        $("#edit-button").click(function(){ctrl.getEditJobScheme(data.id);});
-        $("#generateJobsButton").click(function() {generateJobs(data.id);});
+        $("#edit-button").click(function(){ctrl.getEditJobScheme(id);});
+        $("#generateJobsButton").click(function() {generateJobs(id);});
         $("#removeJobSchemeButton").click(function(){
             //Wait until modal is dissmissed
             new Promise(function(resolve, reject){
@@ -120,7 +120,7 @@ ctrl.jobSchemeDetails = function(id) {
                 });
             }).then(function(){
                 //Then remove
-                ctrl.removeJobScheme(data.id);
+                ctrl.removeJobScheme(id);
             });
         });
 
@@ -300,6 +300,7 @@ function addRepValues() {
         var data = { no: ctrl.repval };
         var html = temp(data);
         $("#repValuesDiv").append(html);
+        $(".clickable-span span").click(function(){removeRepValues($(this));});
 
         $('.timepicker').datetimepicker({format: 'HH:mm'});
     }
@@ -316,12 +317,12 @@ function changeRepFields() {
 }
 
 //Remove the specified repValue
-ctrl.removeRepValues = function(data) {
-    $(data).parent().remove();
+function removeRepValues(span) {
+    $(span).parent().parent().parent().remove();
     if(ctrl.repval > 0) {
         ctrl.repval--;
     }
-};
+}
 
 //Displays the edit job scheme page
 ctrl.getEditJobScheme = function(id) {
@@ -356,6 +357,7 @@ ctrl.getEditJobScheme = function(id) {
             }
         });
         $("#repValuesDiv").html(innerhtml);
+        $(".clickable-span span").click(function(){removeRepValues($(this));});
     });
 };
 

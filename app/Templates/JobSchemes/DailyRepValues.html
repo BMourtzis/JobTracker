@@ -3,8 +3,8 @@
     <div class="col-md-5 col-lg-5">
         <div class="form-group  ">
             <label for="timeBooked">Booking Time</label>
-            <div class="input-group date timepicker">
-                <input id="time" type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
+            <div id="timepicker" class="input-group date timepicker">
+                <input id="time" type="text" class="form-control datetimepicker" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-time"></span>
                 </span>

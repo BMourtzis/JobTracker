@@ -358,6 +358,7 @@ ctrl.edit = function(id) {
         });
         $("#repValuesDiv").html(innerhtml);
         $(".clickable-span span").click(function(){removeRepValues($(this));});
+        $('.timepicker').datetimepicker({format: 'HH:mm'});
     });
 };
 

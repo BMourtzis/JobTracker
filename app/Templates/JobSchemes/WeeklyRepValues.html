@@ -3,7 +3,7 @@
     <div class="col-md-5 col-lg-5">
         <div class="form-group">
             <label for="client">Day</label>
-            <select id="day" class="form-control" name="daySelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
+            <select id="day" class="form-control datetimepicker" name="daySelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
                 <option value="" selected disabled>Select Day</option>
                 <option value="0">Sunday</option>
                 <option value="1">Monday</option>
@@ -18,7 +18,7 @@
     <div class="col-md-5 col-lg-5">
         <div class="form-group">
             <label for="timeBooked">Time</label>
-            <div class="input-group date timepicker">
+            <div id="timepicker" class="input-group date timepicker">
                 <input id="time" type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-time"></span>

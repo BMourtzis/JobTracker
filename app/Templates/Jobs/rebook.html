@@ -7,7 +7,7 @@
         <div class="col-md-6 col-lg-6">
             <div class="form-group">
                 <label for="timeBooked">Booking Date</label>
-                <div class="input-group date" id="datepicker">
+                <div class="input-group date datetimepicker" id="datepicker">
                     <input type="text" class="form-control" value="{{:timeBooked.format('DD/MM/YYYY')}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))" >
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
@@ -18,7 +18,7 @@
         <div class="col-md-6 col-lg-6">
             <div class="form-group">
                 <label for="timeBooked">Booking Time</label>
-                <div class="input-group date" id="timepicker">
+                <div class="input-group date datetimepicker" id="timepicker">
                         <input type="text" class="form-control" value="{{:timeBooked.format('HH:mm')}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>

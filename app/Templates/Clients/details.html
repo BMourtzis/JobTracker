@@ -11,96 +11,88 @@
     </button>
 </div>
 <div class="row">
-    <p>
-        <strong>First Name:</strong>
-        {{:firstName}}
-    </p>
-    <p>
-        <strong>Last Name:</strong>
-        {{:lastName}}
-    </p>
-    <p>
-        <strong>Short Name:</strong>
-        {{:shortName}}
-    </p>
-    <p>
-        <strong>Address:</strong>
-        {{:address}}
-    </p>
-    <p>
-        <strong>Email:</strong>
-        {{:email}}
-    </p>
-    <p>
-        <strong>Phone:</strong>
-        {{:phone}}
-    </p>
+    <dl>
+        <dt>First Name:&nbsp;</dt>
+        <dd>{{:firstName}}&nbsp;</dd>
+        <dt>Last Name:&nbsp;</dt>
+        <dd>{{:lastName}}&nbsp;</dd>
+        <dt>Short Name:&nbsp;</dt>
+        <dd>{{:shortName}}&nbsp;</dd>
+        <dt>Address:&nbsp;</dt>
+        <dd>{{:address}}&nbsp;</dd>
+        <dt>Email:&nbsp;</dt>
+        <dd>{{:email}}&nbsp;</dd>
+        <dt>Phone:&nbsp;</dt>
+        <dd>{{:phone}}&nbsp;</dd>
+    </dl>
 </div>
+
+<div class="divider"></div>
 <div class="row">
-    <h2 class="details-heading float-left">Services</h2>
+    <h3 class="details-heading float-left">Services</h3>
+    <button id="see-all-schemes-button" type="button" class="btn btn-success custom-button">
+        See All Services
+    </button>
     <button id="create-jobscheme-button" type="button" class="btn btn-primary custom-button">
         <span class="glyphicon glyphicon-plus"></span>
         Create
     </button>
 </div>
 <div class="row">
-    <table class="table">
-        <thead class="details-heading">
-            <tr>
-                <th>Job Name</th>
-                <th>Repetition</th>
-                <th>Payment</th>
-                <th>Active</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{for jobSchemes}}
-            <tr id="client-job-scheme-table" class="clickable-row" data-id="{{:id}}">
-                <th>{{:jobName}}</th>
-                <td>{{:repetition}}</td>
-                <td>${{:payment}}</td>
-                <td>{{:enabled}}</td>
-            </tr>
-            {{/for}}
-        </tbody>
-    </table>
+    <dl>
+        <dt>Number of Services:&nbsp;</dt>
+        <dd id="client-no-services"></dd>
+        <dt>Active Service(s):&nbsp;</dt>
+        <dd id="client-active-services"></dd>
+        <dt>Total Income (per Month):&nbsp;</dt>
+        <dd id="client-total-services"></dd>
+    </dl>
 </div>
+
+<div class="divider"></div>
 <div class="row">
-    <h2 class="details-heading float-left">Jobs</h2>
+    <h3 class="details-heading float-left">Jobs</h3>
+    <button id="see-all-jobs-button" type="button" class="btn btn-success custom-button">
+        See All Jobs
+    </button>
     <button id="create-job-button" type="button" class="btn btn-primary custom-button">
         <span class="glyphicon glyphicon-plus"></span>
         Create
     </button>
 </div>
 <div class="row">
-    <table class="table">
-        <thead class="details-heading">
-            <tr>
-                <th>Job Name</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{for jobs}}
-            <tr id="client-job-table" class="clickable-row" data-id="{{:id}}">
-                <td>{{:jobName}}</td>
-                <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
-                <td>{{:timeBooked.format("HH:mm")}}</td>
-                <td>${{:payment + gst}}</td>
-            </tr>
-            {{/for }}
-        </tbody>
-    </table>
+    <dl>
+        <dt>Number of Jobs:&nbsp;</dt>
+        <dd id="client-no-jobs"></dd>
+        <dt>Pending Job(s):&nbsp;</dt>
+        <dd id="client-pending-jobs"></dd>
+    </dl>
 </div>
-{{if jobs.length > 0 }}
+
+<div class="divider"></div>
 <div class="row">
-    <button id="see-all-jobs-button" type="button" class="btn btn-primary custom-button">
-        See All Jobs
+    <h3 class="details-heading float-left">Invoices</h3>
+    <button id="see-all-invoices-button" type="button" class="btn btn-success custom-button">
+        See All Services
+    </button>
+    <button id="create-invoice-button" type="button" class="btn btn-primary custom-button">
+        <span class="glyphicon glyphicon-plus"></span>
+        Create
     </button>
 </div>
-{{/if}}
+<div class="row">
+    <dl>
+        <dt>Number of Invoice(s):&nbsp;</dt>
+        <dd id="client-no-invoices"></dd>
+        <dt>Pending Invoice(s):&nbsp;</dt>
+        <dd id="client-pending-invoices"></dd>
+        <dt>Total Paid:&nbsp;</dt>
+        <dd id="client-total-paid-invoices"></dd>
+        <dt>Total Pending:&nbsp;</dt>
+        <dd id="client-total-pending-invoices"></dd>
+    </dl>
+</div>
+<div class="divider"></div>
 
 <!-- Delete confirmation Modal -->
 <div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">

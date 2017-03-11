@@ -98,6 +98,15 @@ function search() {
 
 }
 
+ctrl.getClientInvoices = function(clientId){
+    contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
+    ctrl.searchParams = {clientID: clientId};
+    initiatePage();
+    return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+        loadTable(data);
+    });
+};
+
 function reload() {
     return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
         loadTable(data);
@@ -112,24 +121,55 @@ function gotoPage(page) {
         });
     }
 }
+//
+// ctrl.create = function() {
+//     facade.getAllClients().then(function(query) {
+//         ctrl.year = parseInt(new Date.today().toString("yyyy"));
+//
+//         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+//         var temp = jsrender.templates(templatePath);
+//         var html = temp({clients: query, year: ctrl.year});
+//
+//         sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this));
+//         $("#sidebar-heading").html("Create Invoice");
+//         $("#sidebar").html(html);
+//
+//         $("#subtractYearCounter").click(function(){subtractYear();});
+//         $("#addYearCounter").click(function() {addYear();});
+//         $("#generate-invoice").click(function(){create();});
+//     });
+// };
 
-ctrl.create = function() {
-    facade.getAllClients().then(function(query) {
-        ctrl.year = parseInt(new Date.today().toString("yyyy"));
+//Creates the createInvoice page
+ctrl.create = function(id) {
+    ctrl.year = parseInt(new Date.today().toString("yyyy"));
 
-        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
-        var temp = jsrender.templates(templatePath);
-        var html = temp({clients: query, year: ctrl.year});
-
-        sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this));
-        $("#sidebar-heading").html("Create Invoice");
-        $("#sidebar").html(html);
-
-        $("#subtractYearCounter").click(function(){subtractYear();});
-        $("#addYearCounter").click(function() {addYear();});
-        $("#generate-invoice").click(function(){create();});
-    });
+    if(id === undefined) {
+        return facade.getAllClients().then(function(query) {
+            return fillCreatePage({clients: query, year: ctrl.year});
+        });
+    }
+    else {
+        return facade.getClient(id).then(function(query) {
+            return fillCreatePage({client: query, year: ctrl.year});
+        });
+    }
 };
+
+//Create the create page based on the data given
+function fillCreatePage(data) {
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+    var temp = jsrender.templates(templatePath);
+    var html = temp(data);
+
+    sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this));
+    $("#sidebar-heading").html("Create Invoice");
+    $("#sidebar").html(html);
+
+    $("#subtractYearCounter").click(function(){subtractYear();});
+    $("#addYearCounter").click(function() {addYear();});
+    $("#generate-invoice").click(function(){create();});
+}
 
 function addYear() {
     ctrl.year++;

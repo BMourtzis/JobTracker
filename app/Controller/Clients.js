@@ -38,27 +38,88 @@ ctrl.details = function(id) {
         $("#edit-button").click(function(){ctrl.edit(id);});
         $("#create-jobscheme-button").click(function(){ctrls.JobSchemes.create(id);});
         $("#create-job-button").click(function(){ctrls.Jobs.create(id);});
+        $("#create-invoice-button").click(function(){ctrls.Invoices.create(id);});
         $("#see-all-jobs-button").click(function(){ctrls.Jobs.getClientJobs(id);});
-        $("#delete-button").click(function(){new Promise(function(resolve, reject){
-            $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
-                resolve();
+        $("#see-all-schemes-button").click(function(){ctrls.JobSchemes.getClientSchemes(id);});
+        $("#see-all-invoices-button").click(function(){ctrls.Invoices.getClientInvoices(id);});
+        $("#delete-button").click(function(){
+            new Promise(function(resolve, reject){
+                $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
+                    resolve();
+                });
+            }).then(function(){
+                remove(id);
             });
-        }).then(function(){
-            remove(id);
         });
-    });
-
-        $("#client-job-table.clickable-row").click(function() {
-            var id = $(this).data("id");
-            ctrls.Jobs.details(id);
-        });
-
-        $("#client-job-scheme-table.clickable-row").click(function() {
-            var id = $(this).data("id");
-            ctrls.JobSchemes.details(id);
-        });
+        getClientStats(id);
     });
 };
+
+function getClientStats(clientId) {
+    getJobCount(clientId);
+    getJobPendingCount(clientId);
+    getSchemeCount(clientId);
+    getSchemeActiveCount(clientId);
+    getSchemeActiveTotal(clientId);
+    getInvoiceCount(clientId);
+    getInvoicePendingCount(clientId);
+    getInvoicePaidTotal(clientId);
+    getInvoicePendingTotal(clientId);
+}
+
+function getJobCount(clientId) {
+    return facade.getJobCount(clientId).then(function(count){
+        $("#client-no-jobs").html(count);
+    });
+}
+
+function getJobPendingCount(clientId) {
+    return facade.getPendingJobCount(clientId).then(function(count){
+        $("#client-pending-jobs").html(count);
+    });
+}
+
+function getSchemeCount(clientId) {
+    return facade.getJobSchemeCount(clientId).then(function(count){
+        $("#client-no-services").html(count);
+    });
+}
+
+function getSchemeActiveCount(clientId) {
+    return facade.getActiveJobSchemeCount(clientId).then(function(count){
+        $("#client-active-services").html(count);
+    });
+}
+
+function getSchemeActiveTotal(clientId) {
+    return facade.getActiveJobSchemeSum(clientId).then(function(sum){
+        $("#client-total-services").html("$"+sum);
+    });
+}
+
+function getInvoiceCount(clientId) {
+    return facade.getInvoiceCount(clientId).then(function(count) {
+        $("#client-no-invoices").html(count);
+    });
+}
+
+function getInvoicePendingCount(clientId) {
+    return facade.getPendingInvoiceCount(clientId).then(function(count) {
+        $("#client-pending-invoices").html(count);
+    });
+}
+
+function getInvoicePaidTotal(clientId) {
+    return facade.getPaidSum(clientId).then(function(sum) {
+        $("#client-total-paid-invoices").html("$"+sum);
+    });
+}
+
+function getInvoicePendingTotal(clientId) {
+    return facade.getPendingSum(clientId).then(function(sum) {
+        $("#client-total-pending-invoices").html("$"+sum);
+    });
+}
 
 //Displays the create client page
 ctrl.create = function() {

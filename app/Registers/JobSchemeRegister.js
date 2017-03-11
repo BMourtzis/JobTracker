@@ -68,7 +68,7 @@ function findJobSchemes(searchParams, orderParams, page) {
         offset: page*100,
         limit: 100
     }).then(function(query) {
-        return getCount(searchParams).then(function(count) {
+        return getPageCount(searchParams).then(function(count) {
             var schemes = [];
             for(var i = 0; i<query.length; i++) {
                 schemes.push(query[i].get({plain:true}));
@@ -83,13 +83,35 @@ function findJobSchemes(searchParams, orderParams, page) {
     });
 }
 
-function getCount(searchParams){
-    return orm.jobScheme.count({
-        where: searchParams
-    }).then(function (count) {
+function getPageCount(searchParams) {
+    return getCount(searchParams).then(function(count){
         return Math.floor(count/100);
     });
 }
+
+function getCount(searchParams){
+    return orm.jobScheme.count({
+        where: searchParams
+    });
+}
+
+function getTotalSum(searchParams){
+    return orm.jobScheme.sum('payment',{
+        where: searchParams
+    });
+}
+
+register.getJobSchemeCount = function(clientId) {
+    return getCount(generateQuery({client: clientId}));
+};
+
+register.getActiveJobSchemeCount = function(clientId) {
+    return getCount(generateQuery({client: clientId, enabled: true}));
+};
+
+register.getActiveJobSchemeSum = function(clientId) {
+    return getTotalSum(generateQuery({client: clientId, enabled: true}));
+};
 
 function jobSchemeEditHelper(data) {
     if (data.day) {

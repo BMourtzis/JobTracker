@@ -83,9 +83,14 @@ facade.searchJobs = function(searchParams, orderParams, page) {
     return jobRegister.searchJobs(searchParams, orderParams, page);
 };
 
-//////Returns the number of pages
-facade.getJobPageCount = function(searchParams){
-    return getJobPageCount(searchParams);
+//////Returns the number of jobs for the specified client
+facade.getJobCount = function(clientId) {
+    return jobRegister.getJobCount(clientId);
+};
+
+///////Return the number of jobs that are not done
+facade.getPendingJobCount = function(clientId) {
+    return jobRegister.getPendingJobCount(clientId);
 };
 
 ////Create Functions
@@ -164,6 +169,18 @@ facade.getActiveJobSchemes = function() {
     return schemeRegister.getActiveJobSchemes();
 };
 
+facade.getJobSchemeCount = function(clientId) {
+    return schemeRegister.getJobSchemeCount(clientId);
+};
+
+facade.getActiveJobSchemeCount = function(clientId) {
+    return schemeRegister.getActiveJobSchemeCount(clientId);
+};
+
+facade.getActiveJobSchemeSum = function(clientId) {
+    return schemeRegister.getActiveJobSchemeSum(clientId);
+};
+
 //////Advanced Search
 facade.searchJobSchemes = function(searchParams, page) {
     return schemeRegister.searchJobSchemes(searchParams, page);
@@ -231,6 +248,22 @@ facade.invoiceSearchOptions = function(searchParams, orderParams, page){
 
 facade.deleteInvoice = function(invoiceId) {
     return invoiceRegister.deleteInvoice(invoiceId);
+};
+
+facade.getInvoiceCount = function(clientId) {
+    return invoiceRegister.getInvoiceCount(clientId);
+};
+
+facade.getPendingInvoiceCount = function(clientId) {
+    return invoiceRegister.getPendingInvoiceCount(clientId);
+};
+
+facade.getPaidSum = function(clientId) {
+    return invoiceRegister.getPaidSum(clientId);
+};
+
+facade.getPendingSum = function(clientId) {
+    return invoiceRegister.getPendingSum(clientId);
 };
 
 //Settings

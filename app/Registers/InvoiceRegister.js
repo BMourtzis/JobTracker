@@ -268,7 +268,7 @@ function findInvoices(searchParams, orderParams, page){
         offset: page*100,
         limit: 100
     }).then(function(query) {
-        return getInvoiceCount(searchParams).then(function(count){
+        return getPageCount(searchParams).then(function(count){
             var data = {};
             data.count = count;
             data.invoices = [];
@@ -280,13 +280,45 @@ function findInvoices(searchParams, orderParams, page){
     });
 }
 
-function getInvoiceCount(searchParams) {
-    return orm.invoice.count({
-        where: searchParams
-    }).then(function (count) {
+function getPageCount(searchParams) {
+    return getCount(searchParams).then(function (count) {
         return Math.floor(count/100);
     });
 }
+
+function getCount(searchParams) {
+    return orm.invoice.count({
+        where: searchParams
+    });
+}
+
+function getTotalSum(searchParams){
+    return orm.jobScheme.sum('payment',{
+        where: searchParams
+    });
+}
+
+function getTotalSum(searchParams) {
+    return orm.invoice.sum('total',{
+        where: searchParams
+    });
+}
+
+register.getInvoiceCount = function(clientId) {
+    return getCount(generateQuery({clientID: clientId}));
+};
+
+register.getPendingInvoiceCount = function(clientId) {
+    return getCount(generateQuery({clientID: clientId, paid: false}));
+};
+
+register.getPaidSum = function(clientId) {
+    return getTotalSum(generateQuery({clientID: clientId}));
+};
+
+register.getPendingSum = function(clientId) {
+    return getTotalSum(generateQuery({clientID: clientId, paid: false}));
+};
 
 function getJobs(year, month, clientId, state) {
     var from = new Date.today().set({year: year, month: month-1, day: 1});

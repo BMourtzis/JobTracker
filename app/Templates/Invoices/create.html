@@ -8,10 +8,14 @@
             <div class="form-group">
                 <label for="client">Client</label>
                 <select class="form-control" name="client">
-                    <option value="0" selected>All</option>
-                    {{for clients}}
-                    <option value="{{:id}}">{{:businessName}}</option>
-                    {{/for}}
+                    {{if client == null}}
+                        <option value="0" selected>All</option>
+                        {{for clients}}
+                        <option value="{{:id}}">{{:businessName}}</option>
+                        {{/for}}
+                    {{else}}
+                    <option value="{{:client.id}}" selected>{{:client.businessName}}</option>
+                    {{/if}}
                 </select>
             </div>
         </div>

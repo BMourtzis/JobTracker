@@ -16,12 +16,12 @@ ctrl.searchParams = {};
 
 ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
-    return initiateIndexPage().then(function(){
+    return initiatePage().then(function(){
         return loadActiveJobs();
     });
 };
 
-function initiateIndexPage() {
+function initiatePage() {
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
         var temp = jsrender.templates(templatePath);
@@ -80,10 +80,19 @@ function search() {
 
     ctrl.currentPage = 0;
     ctrl.searchParams = formData;
-    return facade.searchJobSchemes(formData, ctrl.currentPage).then(function(data) {
+    return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data) {
         return loadTable(data);
     });
 }
+
+ctrl.getClientSchemes = function(clientId) {
+    contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
+    ctrl.searchParams = {client: clientId};
+    initiatePage();
+    return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data) {
+        return loadTable(data);
+    });
+};
 
 function reload() {
     return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data){

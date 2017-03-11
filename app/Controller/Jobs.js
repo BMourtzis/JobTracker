@@ -53,10 +53,10 @@ function initiatePage(){
 }
 
 //Queries all the jobs based on the client id
-ctrl.getClientJobs = function(id) {
+ctrl.getClientJobs = function(clientId) {
     contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
     return initiatePage().then(function(){
-        ctrl.searchParams = {clientID: id};
+        ctrl.searchParams = {clientID: clientId};
         facade.getClientJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
             loadTable(data);
         });

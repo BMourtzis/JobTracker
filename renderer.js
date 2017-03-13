@@ -32,7 +32,7 @@ window.validRules = require("./app/scripts/ValidationRulesHelper.js");
 require('./app/scripts/script.js');
 
 //Scripts
-require('./app/Registers/SettingsRegister.js')();
+window.settings = require("./app/scripts/Settings.js");
 require("./app/Controller/Controllers.js")().then(function(data){
     window.ctrls = data;
     ctrls.Home.index();

@@ -3,6 +3,7 @@ var jobRegister;
 var schemeRegister;
 var invoiceRegister;
 var settingsRegister;
+var backupRegister;
 
 var facade = { };
 
@@ -34,16 +35,25 @@ facade.getClientFull = function(id) {
 
 ////Create Functions
 facade.createClient = function(firstname, lastname, businessname, shortname, address, email, phone) {
-    return clientRegister.createClient(firstname, lastname, businessname, shortname, address, email, phone);
+    return clientRegister.createClient(firstname, lastname, businessname, shortname, address, email, phone).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 ////Edit Function
 facade.editClient = function(id, data){
-    return clientRegister.editClient(id, data);
+    return clientRegister.editClient(id, data).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.removeClient = function(id){
-    return clientRegister.removeClient(id);
+    return clientRegister.removeClient(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //Job Functions
@@ -95,62 +105,95 @@ facade.getPendingJobCount = function(clientId) {
 
 ////Create Functions
 facade.createJob = function(jobname, timebooked, payment, clientid) {
-    return jobRegister.createJob(jobname, timebooked, payment, clientid);
+    return jobRegister.createJob(jobname, timebooked, payment, clientid).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 ////Edit Function
 facade.editJob = function(id, data){
-    return jobRegister.editJob(id, data);
+    return jobRegister.editJob(id, data).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 ////State Machine for single objects
 
 //////Changes the state to placed
 facade.placed = function(id){
-    return jobRegister.placed(id);
+    return jobRegister.placed(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //////Changes the state to done
 facade.done = function(id){
-    return jobRegister.done(id);
+    return jobRegister.done(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //NOTE: Maybe I won't need these
 //////Changes the state to invoice
 facade.invoice = function(id) {
-    return jobRegister.invoice(id);
+    return jobRegister.invoice(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //////Changes the state to paid
 facade.paid = function(id){
-    return jobRegister.paid(id);
+    return jobRegister.paid(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //List State Machine
 //////Changes the state to done
 facade.jobListDone = function(idList) {
-    return jobRegister.jobListDone(idList);
+    return jobRegister.jobListDone(idList).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //////Changes the state to inboiced
 facade.jobListInvoiced = function(idList) {
-    return jobRegister.jobListInvoiced(idList);
+    return jobRegister.jobListInvoiced(idList).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //////Changes the state to paid
 facade.jobListPaid = function(idList) {
-    return jobRegister.jobListPaid(idList);
+    return jobRegister.jobListPaid(idList).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 ////Remove Functions
 //////Removes a single job object
 facade.removeJob = function(id){
-    return jobRegister.removeJob(id);
+    return jobRegister.removeJob(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //////Removed a list of job objects
 facade.bulkDeleteJobs = function(idList) {
-    return jobRegister.bulkDeleteJobs(idList);
+    return jobRegister.bulkDeleteJobs(idList).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //JobScheme Functions
@@ -188,33 +231,54 @@ facade.searchJobSchemes = function(searchParams, page) {
 
 ////Create Functions
 facade.createJobScheme = function(jobname, payment, repetition, repetitionvalues, clientid) {
-    return schemeRegister.createJobScheme(jobname, payment, repetition, repetitionvalues, clientid);
+    return schemeRegister.createJobScheme(jobname, payment, repetition, repetitionvalues, clientid).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 ////Edit Function
 facade.editJobScheme = function(id, data){
-    return schemeRegister.editJobScheme(id, data);
+    return schemeRegister.editJobScheme(id, data).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.removeJobScheme = function(id) {
-    return schemeRegister.removeJobScheme(id);
+    return schemeRegister.removeJobScheme(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.disableJobScheme = function(id) {
-    return schemeRegister.disableJobScheme(id);
+    return schemeRegister.disableJobScheme(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.enableJobScheme = function(id) {
-    return schemeRegister.enableJobScheme(id);
+    return schemeRegister.enableJobScheme(id).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 ////GenerateJobs
 facade.generateJobs = function(id, year, month) {
-    return schemeRegister.generateJobs(id, year, month);
+    return schemeRegister.generateJobs(id, year, month).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.generateClientJobs = function(clientId, year, month) {
-    return schemeRegister.generateClientJobs(clientId, year, month);
+    return schemeRegister.generateClientJobs(clientId, year, month).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 //Invoice
@@ -227,19 +291,31 @@ facade.getInvoice = function(invoiceId) {
 };
 
 facade.invoicePaid = function(invoiceId) {
-    return invoiceRegister.invoicePaid(invoiceId);
+    return invoiceRegister.invoicePaid(invoiceId).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.invoiceInvoiced = function(invoiceId) {
-    return invoiceRegister.invoiceInvoiced(invoiceId);
+    return invoiceRegister.invoiceInvoiced(invoiceId).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.createInvoice =  function(id, year, month){
-    return invoiceRegister.invoiceGeneration(id, year, month);
+    return invoiceRegister.invoiceGeneration(id, year, month).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.generateInvoice = function(invoiceId) {
-    return invoiceRegister.generateInvoice(invoiceId);
+    return invoiceRegister.generateInvoice(invoiceId).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.invoiceSearchOptions = function(searchParams, orderParams, page){
@@ -247,7 +323,10 @@ facade.invoiceSearchOptions = function(searchParams, orderParams, page){
 };
 
 facade.deleteInvoice = function(invoiceId) {
-    return invoiceRegister.deleteInvoice(invoiceId);
+    return invoiceRegister.deleteInvoice(invoiceId).then(function(data){
+        backupRegister.updateBackup();
+        return data;
+    });
 };
 
 facade.getInvoiceCount = function(clientId) {
@@ -301,7 +380,8 @@ module.exports = function getFacade() {
         invoiceRegister = data;
     });
 
-    settingsRegister = require('../Registers/SettingsRegister.js')();
+    settingsRegister = require('../Registers/SettingsRegister.js');
+    backupRegister = require('../Registers/BackupRegister');
 
     return Promise.all([clients, jobs, schemes, invoices]).then(function(data){
         return facade;

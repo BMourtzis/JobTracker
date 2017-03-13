@@ -19,7 +19,7 @@ function checkForWeeklyBackup() {
 
 //Updates the db at the first launch every day
 function checkForDailyBackup() {
-    var date = Date.parse(settings.dailyUpdate);
+    var date = new Date.parse(settings.dailyUpdate);
     var day = date.toString("dd") !== new Date.today().toString("dd");
     var month = date.toString("MM") !== new Date.today().toString("MM");
     var year = date.toString("YYYY") !== new Date.today().toString("YYYY");

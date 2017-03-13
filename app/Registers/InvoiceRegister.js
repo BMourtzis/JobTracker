@@ -251,8 +251,6 @@ function generateQuery(searchParams) {
         query.clientID = searchParams.clientID;
     }
 
-    console.log(query);
-
     return query;
 }
 

@@ -121,24 +121,6 @@ function gotoPage(page) {
         });
     }
 }
-//
-// ctrl.create = function() {
-//     facade.getAllClients().then(function(query) {
-//         ctrl.year = parseInt(new Date.today().toString("yyyy"));
-//
-//         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
-//         var temp = jsrender.templates(templatePath);
-//         var html = temp({clients: query, year: ctrl.year});
-//
-//         sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this));
-//         $("#sidebar-heading").html("Create Invoice");
-//         $("#sidebar").html(html);
-//
-//         $("#subtractYearCounter").click(function(){subtractYear();});
-//         $("#addYearCounter").click(function() {addYear();});
-//         $("#generate-invoice").click(function(){create();});
-//     });
-// };
 
 //Creates the createInvoice page
 ctrl.create = function(id) {

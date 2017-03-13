@@ -15,7 +15,7 @@ function getManager(id, button) {
             lineUp.push({ctrl: ctrl, name: name, func: func, params: params});
         }
 
-        manager.limitLineUp();
+        limitLineUp();
         manager.toggleGoBack();
     };
 
@@ -59,12 +59,12 @@ function getManager(id, button) {
         return lineUp.length;
     };
 
-    manager.limitLineUp = function() {
+    function limitLineUp() {
         if(lineUp.length > 30) {
             lineUp.splice(0, 1);
             manager.limitLineUp();
         }
-    };
+    }
 
     manager.toggleGoBack = function() {
         if(goBack) {

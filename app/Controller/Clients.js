@@ -24,7 +24,6 @@ ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
-//TODO: fix long names
 //Shows client the selected client on the sidebar
 ctrl.details = function(id) {
     $("#sidebar-heading").html("Client Details");
@@ -93,7 +92,9 @@ function getSchemeActiveCount(clientId) {
 
 function getSchemeActiveTotal(clientId) {
     return facade.getActiveJobSchemeSum(clientId).then(function(sum){
-        $("#client-total-services").html("$"+sum);
+        if(Number.isNaN(sum)) {sum = 0;}
+        sum = numberFormatter(sum).format();
+        $("#client-total-services").html(sum);
     });
 }
 
@@ -111,13 +112,17 @@ function getInvoicePendingCount(clientId) {
 
 function getInvoicePaidTotal(clientId) {
     return facade.getPaidSum(clientId).then(function(sum) {
-        $("#client-total-paid-invoices").html("$"+sum);
+        if(Number.isNaN(sum)) {sum = 0;}
+        sum = numberFormatter(sum).format();
+        $("#client-total-paid-invoices").html(sum);
     });
 }
 
 function getInvoicePendingTotal(clientId) {
     return facade.getPendingSum(clientId).then(function(sum) {
-        $("#client-total-pending-invoices").html("$"+sum);
+        if(Number.isNaN(sum)) {sum = 0;}
+        sum = numberFormatter(sum).format();
+        $("#client-total-pending-invoices").html(sum);
     });
 }
 

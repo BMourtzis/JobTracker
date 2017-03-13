@@ -35,7 +35,6 @@
                         <span class="glyphicon glyphicon-usd"></span>
                     </span>
                     <input type="text" class="form-control" name="payment" placeholder="Eg. 50" onblur="validRules.isNumeric($(this))" onkeyup="validRules.isNumeric($(this))">
-
                 </div>
             </div>
         </div>
@@ -45,7 +44,7 @@
             <div class="form-group">
                 <!-- NOTE: Could be Generated based on Enum values -->
                 <label for="repeatition">Repetition*</label>
-                <select id ="repetitionSelector" class="form-control" name="repeatitionSelect" onchange="UIFunctions.updateRepFields()" onblur="validRules.Selected($(this))">
+                <select id ="repetitionSelector" class="form-control" name="repeatitionSelect" onblur="validRules.Selected($(this))">
                     <option value="" selected disabled>Select Repetition</option>
                     <option value="Monthly">Monthly</option>
                     <option value="Fortnightly">Fortnightly</option>
@@ -55,9 +54,11 @@
             </div>
         </div>
         <!-- Button to add repetition fields -->
+        <!-- TODO: fix button height with different resolutions -->
         <div class="col-md-2 col-lg-2">
+            <!-- <button id="addRepValues" type="button" class="btn btn-link"><span class="glyphicon glyphicon-plus"></span></button> -->
             <div id="addRepValues" class="form-group span-button">
-                <span class="glyphicon glyphicon-plus" onclick="UIFunctions.addRepValues()"></span>
+                <span class="glyphicon glyphicon-plus"></span>
             </div>
         </div>
     </div>
@@ -66,6 +67,6 @@
         <!-- Where the repetition values are added -->
     </div>
     <div class="row">
-        <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button" onclick="UIFunctions.createJobScheme()" disabled="true">Submit</button>
+        <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button" disabled="true">Submit</button>
     </div>
 </form>

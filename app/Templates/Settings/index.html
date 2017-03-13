@@ -7,8 +7,8 @@
         <label for="InvoiceTemplatePath">Invoice Template :</label>
     </div>
     <div class="col-md-10 col-lg-10">
-        <div id="InvoiceTemplatePath" class="input-group" onclick="UIFunctions.UpdateInvoiceTemplatePath()">
-            <input type="text" class="form-control" value="{{:InvoiceTemplatePath}}" readonly="readonly">
+        <div id="InvoiceTemplatePath" class="input-group">
+            <input type="text" class="form-control" value="{{:InvoiceTemplatePath}}" readonly="true">
             <span class="input-group-addon"><span class="glyphicon glyphicon-file"></span></span>
         </div>
     </div>
@@ -18,8 +18,8 @@
         <label for="InvoiceOutputPath">Invoice Output :</label>
     </div>
     <div class="col-md-10 col-lg-10">
-        <div id="InvoiceOutputPath" class="input-group" onclick="UIFunctions.UpdateInvoiceOutputPath()">
-            <input type="text" class="form-control" value="{{:InvoiceOutputPath}}" readonly="readonly">
+        <div id="InvoiceOutputPath" class="input-group">
+            <input type="text" class="form-control" value="{{:InvoiceOutputPath}}" readonly="true">
             <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
         </div>
     </div>
@@ -29,7 +29,7 @@
         <label for="BackupPath">Backup Path :</label>
     </div>
     <div class="col-md-10 col-lg-10">
-        <div id="BackupPath" class="input-group" onclick="UIFunctions.UpdateBackupPath()">
+        <div id="BackupPath" class="input-group">
             <input type="text" class="form-control" value="{{:BackupPath}}" readonly="true">
             <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
         </div>
@@ -41,7 +41,7 @@
         <label for="GSTPercentage">GST :</label>
     </div>
     <div class="col-md-2 col-lg-2">
-        <div id="GSTPercentage" class="input-group" onkeypress="UIFunctions.UpdateGSTPercentage()" onkeyup="UIFunctions.UpdateGSTPercentage()">
+        <div id="GSTPercentage" class="input-group">
             <input type="text" class="form-control" value="{{:GSTPercentage}}">
             <span class="input-group-addon">%</span>
         </div>

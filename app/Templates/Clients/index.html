@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <div class="row">
     <h1 class="float-left">Clients</h1>
-    <button id="create-button" type="button" class="btn btn-primary custom-button" onclick="UIFunctions.getCreateClient()">
+    <button id="create-button" type="button" class="btn btn-primary custom-button">
         <span class="glyphicon glyphicon-plus"></span> Create
     </button>
 </div>
 <div class="row">
-    <table class="table table-striped">
+    <table id="client-table" class="table table-striped">
         <thead>
             <tr>
                 <th>Name</th>
@@ -17,13 +17,13 @@
         </thead>
         <tbody>
             {{for clients}}
-            <tr id="client-table">
+            <tr>
                 <td>{{:businessName}}</td>
                 <td>{{:firstName}}</td>
                 <td>{{:lastName}}</td>
                 <td>{{:shortName}}</td>
                 <td>
-                    <button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.clientDetails({{:id}})">More...</button>
+                    <button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">More...</button>
                 </td>
             </tr>
             {{/for}}

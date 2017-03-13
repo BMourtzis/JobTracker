@@ -13,14 +13,14 @@ ctrl.searchParams = {};
 ctrl.year = 0 ;
 
 ctrl.index = function() {
-    ctrl.initiatePage().then(function() {
-        ctrl.loadCurrentInvoices();
+    initiatePage().then(function() {
+        loadCurrentInvoices();
     });
 
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
-ctrl.initiatePage = function() {
+function initiatePage() {
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
         var temp = jsrender.templates(templatePath);
@@ -41,31 +41,32 @@ ctrl.initiatePage = function() {
             $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
         });
 
+        $("#create-button").click(function(){ctrl.create();});
+        $("#search-button").click(function(){search();});
+
         ctrl.currentPage = 0;
     });
-};
+}
 
-ctrl.loadCurrentInvoices = function() {
-    facade.getCurrentInvoices().then(function(invoices){
+function loadCurrentInvoices() {
+    return facade.getCurrentInvoices().then(function(invoices){
         ctrl.searchParams.paid = false;
-        ctrl.loadTable(invoices);
+        loadTable(invoices);
     });
-};
+}
 
-ctrl.loadTable = function(data) {
+function loadTable(data) {
     data.currentPage = ctrl.currentPage;
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var temp = jsrender.templates(templatePath);
     var html = temp(data);
     $("#indexInvoiceTable").html(html);
 
-    // $("#invoice-table.clickable-row").click(function() {
-    //     var id = $(this).data("id");
-    //     ctrl.invoiceDetails(id);
-    // });
-};
+    $("#invoice-table button").click(function(){ctrl.details($(this).data("id"));});
+    $("#paginationNavBar li").click(function(){gotoPage($(this).data("page"));});
+}
 
-ctrl.searchOptions = function() {
+function search() {
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;
@@ -89,52 +90,80 @@ ctrl.searchOptions = function() {
     ctrl.searchParams = formData;
     ctrl.currentPage = 0;
 
-    contentManager.add(ctrl.ctrlName, "search", ctrl.reloadSearch.bind(this));
+    contentManager.add(ctrl.ctrlName, "search", reload.bind(this));
 
     return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        ctrl.loadTable(data);
+        loadTable(data);
     });
 
-};
+}
 
-ctrl.reloadSearch = function() {
+ctrl.getClientInvoices = function(clientId){
+    contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
+    ctrl.searchParams = {clientID: clientId};
+    initiatePage();
     return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        ctrl.loadTable(data);
+        loadTable(data);
     });
 };
 
-ctrl.gotoPage = function(page) {
-    ctrl.currentPage = page;
-    facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        ctrl.loadTable(data);
+function reload() {
+    return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+        loadTable(data);
     });
+}
+
+function gotoPage(page) {
+    if(page !== undefined) {
+        ctrl.currentPage = page;
+        return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+            loadTable(data);
+        });
+    }
+}
+
+//Creates the createInvoice page
+ctrl.create = function(id) {
+    ctrl.year = parseInt(new Date.today().toString("yyyy"));
+
+    if(id === undefined) {
+        return facade.getAllClients().then(function(query) {
+            return fillCreatePage({clients: query, year: ctrl.year});
+        });
+    }
+    else {
+        return facade.getClient(id).then(function(query) {
+            return fillCreatePage({client: query, year: ctrl.year});
+        });
+    }
 };
 
-ctrl.getCreateInvoice = function() {
-    facade.getAllClients().then(function(query) {
-        ctrl.year = parseInt(new Date.today().toString("yyyy"));
+//Create the create page based on the data given
+function fillCreatePage(data) {
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
+    var temp = jsrender.templates(templatePath);
+    var html = temp(data);
 
-        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
-        var temp = jsrender.templates(templatePath);
-        var html = temp({clients: query, year: ctrl.year});
+    sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this));
+    $("#sidebar-heading").html("Create Invoice");
+    $("#sidebar").html(html);
 
-        sidebarManager.add(ctrl.ctrlName, "create", ctrl.getCreateInvoice.bind(this));
-        $("#sidebar-heading").html("Create Invoice");
-        $("#sidebar").html(html);
-    });
-};
+    $("#subtractYearCounter").click(function(){subtractYear();});
+    $("#addYearCounter").click(function() {addYear();});
+    $("#generate-invoice").click(function(){create();});
+}
 
-ctrl.addYear = function() {
+function addYear() {
     ctrl.year++;
     $("#yearCounter").val(ctrl.year);
-};
+}
 
-ctrl.subtractYear = function() {
+function subtractYear() {
     ctrl.year--;
     $("#yearCounter").val(ctrl.year);
-};
+}
 
-ctrl.createInvoice = function() {
+function create() {
     var formData = $("#createInvoiceForm").serializeArray();
     formData[0].value = parseInt(formData[0].value);
     formData[1].value = ctrl.year;
@@ -158,10 +187,10 @@ ctrl.createInvoice = function() {
         }
         contentManager.reload();
     });
-};
+}
 
 
-ctrl.invoiceDetails = function(id) {
+ctrl.details = function(id) {
     facade.getInvoice(id).then(function(invoice){
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
@@ -169,16 +198,29 @@ ctrl.invoiceDetails = function(id) {
         $("#sidebar-heading").html("Invoice Details");
         $("#sidebar").html(html);
 
-        $("#client-job-table.clickable-row").click(function() {
+        $("#client-job-table .clickable-row").click(function() {
             var id = $(this).data("id");
-            UIFunctions.jobDetails(id);
+            ctrls.Jobs.details(id);
+        });
+
+        $("#paid-button").click(function(){paid(id);});
+        $("#cancel-button").click(function(){invoiced(id);});
+        $("#print-button").click(function(){print(id);});
+        $("#delete-invoice-button").click(function(){
+            new Promise(function(resolve, reject){
+                $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
+                    resolve();
+                });
+            }).then(function(){
+                remove(id);
+            });
         });
     });
-    sidebarManager.add(ctrl.ctrlName, "details", ctrl.invoiceDetails.bind(this), id);
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.details.bind(this), id);
 };
 
 
-ctrl.printInvoice = function(invoiceId) {
+function print(invoiceId) {
     facade.generateInvoice(invoiceId).then(function(){
         $.notify({
             //options
@@ -189,26 +231,28 @@ ctrl.printInvoice = function(invoiceId) {
             delay: 3000
         });
     });
-};
+}
 
-ctrl.deleteInvoice = function(invoiceId) {
-    facade.deleteInvoice(invoiceId).then(function(data){
+function remove(invoiceId) {
+    return facade.deleteInvoice(invoiceId).then(function(data){
         sidebarManager.removeHtml();
         contentManager.reload();
     });
-};
+}
 
-ctrl.invoicePaid = function(invoiceId) {
-    facade.invoicePaid(invoiceId).then(function(invoice){
-        ctrl.invoiceDetails(invoiceId);
+function paid(invoiceId) {
+    return facade.invoicePaid(invoiceId).then(function(invoice){
+        ctrl.details(invoiceId);
+        contentManager.reload();
     });
-};
+}
 
-ctrl.invoiceInvoiced = function(invoiceId) {
-    facade.invoiceInvoiced(invoiceId).then(function(invoice){
-        ctrl.invoiceDetails(invoiceId);
+function invoiced(invoiceId) {
+    return facade.invoiceInvoiced(invoiceId).then(function(invoice){
+        ctrl.details(invoiceId);
+        contentManager.reload();
     });
-};
+}
 
 module.exports = function getController() {
     return require('../scripts/Facade.js')().then(function(data){

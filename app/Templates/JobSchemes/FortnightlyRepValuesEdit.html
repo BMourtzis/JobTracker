@@ -3,7 +3,7 @@
     <div class="col-md-6 col-lg-5">
         <div class="form-group">
             <label for="week">Week of the Month</label>
-            <select id="week" class="form-control" name="weekSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
+            <select id="week" class="form-control datetimepicker" name="weekSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
             <option value="0" {{if week === 0}} selected{{/if}}>1</option>
             <option value="1" {{if week === 1}} selected{{/if}}>2</option>
         </select>
@@ -26,7 +26,7 @@
     <div class="col-md-4 col-lg-4">
         <div class="form-group">
             <label for="timeBooked">Booking Time</label>
-            <div class="input-group date timepicker">
+            <div id="timepicker" class="input-group date timepicker">
                 <input id="time" type="text" class="form-control" value="{{:hour}}:{{:minute}}" onblur="validRules.isEmptyField($(this))" onkeyup="validRules.isEmptyField($(this))">
                 <span class="input-group-addon">
                 <span class="glyphicon glyphicon-time"></span>
@@ -36,7 +36,7 @@
     </div>
     <div class="col-md-2 col-lg-2">
         <div class="clickable-span remove-span span-button">
-            <span class="glyphicon glyphicon-remove" onclick="UIFunctions.removeRepValues($(this).parent().parent())"></span>
+            <span class="glyphicon glyphicon-remove"></span>
         </div>
     </div>
 </div>

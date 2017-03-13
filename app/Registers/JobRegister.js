@@ -10,7 +10,7 @@ register.getAllJobs = function(){
     };
 
 
-    return register.FindJobs(register.generateQuery(searchParams), "timeBooked DESC", 0);
+    return register.FindJobs(generateQuery(searchParams), "timeBooked DESC", 0);
 };
 
 //Search Functions
@@ -50,7 +50,7 @@ register.getDayJobs = function(from) {
         to: moment(new Date(from).at({hour: 23, minute: 59}))
     };
 
-    return register.FindJobs(register.generateQuery(searchParams), "timeBooked ASC", 0);
+    return register.FindJobs(generateQuery(searchParams), "timeBooked ASC", 0);
 };
 
 ////Searches jobs with the specified parameters.
@@ -67,7 +67,7 @@ register.FindJobs = function(searchParams, orderParams, page) {
         offset: page*100,
         limit: 100
     }).then(function(query){
-        return register.getJobPageCount(searchParams).then(function(count){
+        return getJobPageCount(searchParams).then(function(count){
             var jobs = [];
             for (var i = 0; i < query.length; i++) {
                 jobs.push(query[i].get({plain:true}));
@@ -89,7 +89,7 @@ register.getClientJobs = function(searchParams, orderParams, page){
         orderParams = "timeBooked DESC";
     }
 
-    return register.FindJobs(register.generateQuery(searchParams), orderParams, page);
+    return register.FindJobs(generateQuery(searchParams), orderParams, page);
 };
 
 //Returns Jobs for the specified month
@@ -124,20 +124,32 @@ register.searchJobs = function(searchParams, orderParams, page) {
         orderParams = "timeBooked DESC";
     }
 
-    return register.FindJobs(register.generateQuery(searchParams), orderParams, page);
+    return register.FindJobs(generateQuery(searchParams), orderParams, page);
 };
 
 ////Gets the count of the jobs for a specified search
-register.getJobPageCount = function(searchParams){
-    return orm.job.count({
-        where: searchParams
-    }).then(function (count) {
+function getJobPageCount(searchParams){
+    return getCount(searchParams).then(function (count) {
         return Math.floor(count/100);
     });
+}
+
+function getCount(searchParams){
+    return orm.job.count({
+        where: searchParams
+    });
+}
+
+register.getJobCount = function(clientId) {
+    return getCount(generateQuery({clientID: clientId}));
+};
+
+register.getPendingJobCount = function(clientId) {
+    return getCount(generateQuery({clientID: clientId, state: "Placed"}));
 };
 
 //Query Generator Helper
-register.generateQuery = function(searchParams) {
+function generateQuery(searchParams) {
     var query = {};
 
     if(searchParams.from !== undefined && searchParams.to !== undefined){
@@ -168,7 +180,7 @@ register.generateQuery = function(searchParams) {
     }
 
     return query;
-};
+}
 
 //Create Functions
 register.createJob = function(jobname, timebooked, payment, clientid) {

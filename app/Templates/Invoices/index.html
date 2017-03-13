@@ -2,10 +2,10 @@
 <div class="row">
     <h1 class="float-left">Invoices</h1>
     <div class="custom-button">
-        <button id="advance-search-button" type="button" class="btn btn-default" data-toggle="modal" data-target="#advSearchModal">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#advSearchModal">
             <span class="glyphicon glyphicon-search"></span> Advance Search
         </button>
-        <button id="create-button" type="button" class="btn btn-primary" onclick="UIFunctions.getCreateInvoice()">
+        <button id="create-button" type="button" class="btn btn-primary">
             <span class="glyphicon glyphicon-plus"></span> Generate
         </button>
     </div>
@@ -26,7 +26,7 @@
                         <div class="col-md-6 col-md-6">
                             <div class="form-group">
                                 <label for="timeBooked">From Date</label>
-                                <div class="input-group date" id="fromDatepicker">
+                                <div class="input-group date datetimepicker" id="fromDatepicker">
                                     <input type="text" class="form-control" placeholder="" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -37,7 +37,7 @@
                         <div class="col-md-6 col-md-6">
                             <div class="form-group">
                                 <label for="timeBooked">To Date</label>
-                                <div class="input-group date" id="toDatepicker">
+                                <div class="input-group date datetimepicker" id="toDatepicker">
                                     <input type="text" class="form-control" placeholder="" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -72,7 +72,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="UIFunctions.searchOptions()">Search</button>
+                <button id="search-button" type="button" class="btn btn-primary" data-dismiss="modal">Search</button>
             </div>
         </div>
     </div>

@@ -6,6 +6,7 @@ window.app = require('electron').remote.app;
 
 //Back-end Modules
 window.datejs = require('datejs');
+Date.i18n.setLanguage(["en-AU"]);
 window.fs = require('fs');
 window.path = require('path');
 
@@ -22,16 +23,18 @@ require('./app/scripts/JSRenderExtensions.js');
 window.bootstrap = require('bootstrap');
 window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // window.$.fn.datetimepicker = $.fn.datetimepicker; Need this!
 window.templateHelper = require("./app/scripts/TemplateHelper.js");
+window.numberFormatter = require("./app/scripts/numberFormatter.js");
 
 //Managers
 window.contentManager = new require("./app/scripts/Manager.js")("content", false);
 window.sidebarManager = new require("./app/scripts/Manager.js")("sidebar", true);
 
 window.validRules = require("./app/scripts/ValidationRulesHelper.js");
+require('./app/scripts/script.js');
 
 //Scripts
-require('./app/Registers/SettingsRegister.js')();
-require('./app/scripts/script.js')().then(function(data) {
-    window.UIFunctions = data;
-    UIFunctions.home();
+window.settings = require("./app/scripts/Settings.js");
+require("./app/Controller/Controllers.js")().then(function(data){
+    window.ctrls = data;
+    ctrls.Home.index();
 });

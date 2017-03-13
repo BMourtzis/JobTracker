@@ -24,22 +24,10 @@ register.getClient = function(id){
     });
 };
 
-//HACK: I have to limit and sort jobs after the query.
 ////Gets the specfied client and includes the Jobs and JobSchemes, Limits the jobs to 10
 register.getClientFull = function(id) {
-    return orm.client.findById(id,{include: [orm.job, orm.jobScheme]}).then(function(query){
+    return orm.client.findById(id).then(function(query){
         return query.get({plain:true});
-    }).then(function(data){
-
-        //Sorts the jobs by time
-        data.jobs.sort(function(a,b){
-            return b.timeBooked - a.timeBooked;
-        });
-
-        //Limits the jobs to the first 10
-        data.jobs = data.jobs.slice(0,9);
-
-        return data;
     });
 };
 

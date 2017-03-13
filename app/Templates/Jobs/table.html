@@ -14,7 +14,7 @@
     <tbody>
         {{for jobs}}
         <tr>
-            <td> <input type="checkbox" onclick="UIFunctions.updateJobSelectedList()" value="{{:id}}"></td>
+            <td><input class="job-checkbox" type="checkbox" data-id="{{:id}}"></td>
             <td>{{:client.businessName}}</td>
             <td>{{:jobName}}</td>
             <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
@@ -22,7 +22,7 @@
             <td>${{:payment + gst}}</td>
             <td>{{:state}}</td>
             <td>
-                <button id="" type="button" class="btn btn-primary btn-xs" onclick="UIFunctions.jobDetails({{:id}})">More...</button>
+                <button type="button" class="btn btn-primary btn-xs details-button" data-id="{{:id}}">More...</button>
             </td>
         </tr>
         {{/for }}
@@ -39,7 +39,7 @@
                 </a>
             </li>
             {{else}}
-            <li onclick="UIFunctions.gotoJobPage({{:currentPage-1}})">
+            <li data-page="{{:currentPage-1}}">
                 <a href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -52,7 +52,7 @@
                     <a href="#">{{:#getIndex()+1}}</a>
                 </li>
                 {{else}}
-                <li onclick="UIFunctions.gotoJobPage({{:#getIndex()}})">
+                <li data-page="{{:#getIndex()}}">
                     <a href="#">{{:#getIndex()+1}}</a>
                 </li>
                 {{/if}}
@@ -65,7 +65,7 @@
                 </a>
             </li>
             {{else}}
-            <li onclick="UIFunctions.gotoJobPage({{:currentPage+1}})">
+            <li data-page="{{:currentPage+1}}">
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>

@@ -15,13 +15,13 @@ ctrl.index = function() {
     $("#content").html(html);
 
     ctrl.selectedDate = Date.today();
-    ctrl.loadDayJobs();
+    loadDayJobs();
 
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
 //Loads day jobs for the selectedDate of the object
-ctrl.loadDayJobs = function() {
+function loadDayJobs() {
     facade.getDayJobs(ctrl.selectedDate).then(function(data){
         data.selectedDay = ctrl.selectedDate.toString("dd/MM/yyyy");
         data.next = new Date(ctrl.selectedDate).add(1).day().toString("dd/MM/yyyy");
@@ -38,38 +38,45 @@ ctrl.loadDayJobs = function() {
         var tableTemp = jsrender.templates(templatePath);
         var table = tableTemp(data);
         $("#homeDailyTable").html(table);
+
+        $("#prev-day-button").click(function(){previousDay();});
+        $("#reload-day-button").click(function(){loadDayJobs();});
+        $("#next-day-button").click(function(){nextDay();});
+        $(".placed").click(function(){done($(this).data("id"));});
+        $(".done").click(function(){placed($(this).data("id"));});
+        $("#home-job-table button").click(function(){ctrls.Jobs.details($(this).data("id"));});
     });
-};
+}
 
 //Goes to the next day
-ctrl.nextDay = function(){
+function nextDay(){
     ctrl.selectedDate.add(1).day();
-    ctrl.loadDayJobs();
+    loadDayJobs();
 
-    contentManager.add(ctrl.ctrlName, ctrl.nextDay.bind(this));
-};
+    contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
+}
 
 //Goes to the previous day
-ctrl.previousDay = function(){
+function previousDay(){
     ctrl.selectedDate.add(-1).day();
-    ctrl.loadDayJobs();
+    loadDayJobs();
 
-    contentManager.add(ctrl.ctrlName, ctrl.previousDay.bind(this));
-};
+    contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
+}
 
 //Changes the status of a job to placed
-ctrl.placed = function(id){
+function placed(id){
     facade.placed(id).then(function(){
-        ctrl.loadDayJobs();
+        loadDayJobs();
     });
-};
+}
 
 //Changes the status of a job to done
-ctrl.done = function(id){
+function done(id){
     facade.done(id).then(function(data){
-        ctrl.loadDayJobs();
+        loadDayJobs();
     });
-};
+}
 
 module.exports = function getController() {
     return require('../scripts/Facade.js')().then(function(data){

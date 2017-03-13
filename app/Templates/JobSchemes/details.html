@@ -3,7 +3,7 @@
     <h2 class="details-heading float-left">{{:jobName}}</h2>
 </div>
 <div class="row button-row">
-        <button id="edit-button" type="button" class="btn btn-warning" onclick="UIFunctions.getEditJobScheme({{:id}})">
+        <button id="edit-button" type="button" class="btn btn-warning">
             <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
         </button>
         <button id="generate-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#generateJobsOptionsModal">
@@ -12,7 +12,6 @@
         <button id="delete-button" type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
             <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
         </button>
-        <!-- <button type="button" class="btn btn-success" onclick="UIFunctions.generateNextMonthsJobs({{:id}})">Generate for Next Month</button> -->
 </div>
 <div class="row">
     <p>
@@ -61,12 +60,12 @@
 <div class="row">
     <div class="custom-button">
         {{if enabled}}
-        <button id="disable-button" type="button" class="btn btn-warning" onclick="UIFunctions.disableJobScheme({{:id}})">
+        <button id="disable-button" type="button" class="btn btn-warning">
             <span class="glyphicon glyphicon-unchecked"></span>
             Disable
         </button>
         {{else}}
-        <button id="enable-button" type="button" class="btn btn-warning" onclick="UIFunctions.enableJobScheme({{:id}})">
+        <button id="enable-button" type="button" class="btn btn-warning">
             <span class="glyphicon glyphicon-check"></span>
             Enabled
         </button>
@@ -83,14 +82,13 @@
             <h4 class="modal-title modalLabel">Are you sure you want to delete {{:jobName}}</h4>
         </div>
         <div class="modal-body">
-            <button type="button" class="btn btn-danger" onclick="UIFunctions.removeJobScheme({{:id}})">Delete Service</button>
+            <button id="removeJobSchemeButton" type="button" class="btn btn-danger" data-dismiss="modal">Delete Service</button>
             <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
         </div>
     </div>
   </div>
 </div>
 
-<!-- TODO: fix year counter issue -->
 <!-- Modal -->
 <div class="modal fade" id="generateJobsOptionsModal" tabindex="" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-medium" role="document">
@@ -107,11 +105,11 @@
                                 <label for="client">Year</label>
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" onclick="UIFunctions.subtractYear()"><span class="glyphicon glyphicon-minus"></span></button>
+                                        <button id="subtractYearButton" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
                                     </span>
                                     <input id="yearCounter" type="text" class="form-control" name="year" value="{{:year}}"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" onclick="UIFunctions.addYear()"><span class="glyphicon glyphicon-plus"></span></button>
+                                        <button id="addYearButton" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
                                     </span>
                                 </div>
                             </div>
@@ -139,7 +137,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="UIFunctions.generateJobs({{:id}})">Generate Job</button>
+                <button id="generateJobsButton" type="button" class="btn btn-primary" data-dismiss="modal">Generate Job</button>
             </div>
         </div>
     </div>

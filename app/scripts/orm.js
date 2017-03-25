@@ -2,6 +2,9 @@
 
 var orm = {};
 
+/**
+ * connectionInitialization - Initiates the connection to the database
+ */
 function connectionInitialization() {
     orm.connStr = new sequelize(null, null, null, {
         host: 'localhost',
@@ -16,6 +19,9 @@ function connectionInitialization() {
     initializeModels();
 }
 
+/**
+ * initializeModels - Initiates the models of the database
+ */
 function initializeModels() {
     orm.client = orm.connStr.define('client', {
         id: {
@@ -104,6 +110,7 @@ function initializeModels() {
     });
 
     //TODO: add notes and what needs to be done.
+
     orm.job = orm.connStr.define('job', {
         id: {
             type: sequelize.INTEGER,
@@ -232,7 +239,7 @@ function initializeModels() {
                             hour: repvalues[i].hour,
                             minute: repvalues[i].minute
                         });
-                        
+
                         var jobDate = new Date(date);
                         promises.push(this.createJob(jobDate));
                     }
@@ -363,7 +370,11 @@ function initializeModels() {
     });
 }
 
-//Association Definitions
+/**
+ * createAssociations - Initiates the associations of the models
+ *
+ * @return {Promise}  An empty promise
+ */
 function createAssociations() {
     return Promise.all([
         orm.client.hasMany(orm.job),
@@ -385,9 +396,9 @@ function createAssociations() {
     ]);
 }
 
-
-
-//Utility Functions
+/**
+ * orm.testConnection - Tests the connection to the database
+ */
 orm.testConnection = function() {
     orm.connStr
         .authenticate()
@@ -399,6 +410,11 @@ orm.testConnection = function() {
         });
 };
 
+/**
+ * reinitializeTables - Re initializes the tables of the database if they don't exist
+ *
+ * @return {Promise}  An empty promise
+ */
 function reinitializeTables() {
     return Promise.all([
         orm.job.sync(),
@@ -408,6 +424,11 @@ function reinitializeTables() {
     ]);
 }
 
+/**
+ * validateDB - Validates that the database file exists, if not it creates it
+ *
+ * @return {Object}  The orm
+ */
 function validateDB() {
     var exists = true;
 
@@ -434,6 +455,13 @@ function validateDB() {
     }
 }
 
-module.exports = function getORM() {
+/**
+ * initiateORM - Initialises the ORM
+ *
+ * @return {Object}  The initiated ORM
+ */
+function initiateORM() {
     return Promise.resolve(validateDB());
-};
+}
+
+module.exports = initiateORM();

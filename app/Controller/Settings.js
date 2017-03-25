@@ -6,6 +6,9 @@ var ctrl = {};
 ctrl.ctrlName = "Settings";
 ctrl.templateDir = "../Templates/";
 
+/**
+ * ctrl.index - Loads the settings page on the content div
+ */
 ctrl.index = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
     var temp = jsrender.templates(templatePath);
@@ -20,6 +23,9 @@ ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
 
+/**
+ * UpdateInvoiceTemplatePath - Updates the Invoice Template Path in the settings file
+ */
 function UpdateInvoiceTemplatePath() {
     var dialogReturn = dialog.showOpenDialog({ defaultPath: settings.InvoiceTemplatePath, properties: ['openFile']});
     if(dialogReturn !== undefined) {
@@ -29,6 +35,9 @@ function UpdateInvoiceTemplatePath() {
     }
 }
 
+/**
+ * UpdateInvoiceOutputPath - Updates the Invoice Output Path in the settings file
+ */
 function UpdateInvoiceOutputPath(){
     var dialogReturn = dialog.showOpenDialog({defaultPath: settings.InvoiceOutputPath, properties: ['openDirectory']});
     if(dialogReturn !== undefined) {
@@ -38,6 +47,9 @@ function UpdateInvoiceOutputPath(){
     }
 }
 
+/**
+ * UpdateBackupPath - Updates the Backup Path in the settings file
+ */
 function UpdateBackupPath(){
     var dialogReturn = dialog.showOpenDialog({ defaultPath: settings.BackupPath, properties: ['openDirectory']});
     if(dialogReturn !== undefined) {
@@ -47,6 +59,9 @@ function UpdateBackupPath(){
     }
 }
 
+/**
+ * UpdateGSTPercentage - Updates the GST Percentage in the settings file
+ */
 function UpdateGSTPercentage(){
     var gst = parseInt($($("#GSTPercentage :input")[0]).val());
     if(!Number.isNaN(gst)) {
@@ -54,9 +69,16 @@ function UpdateGSTPercentage(){
     }
 }
 
-module.exports = function getController() {
-    return require('../scripts/Facade.js')().then(function(data) {
+/**
+ * initiateController - Initiates the controller
+ *
+ * @return {Object}  Settings controller
+ */
+function initiateController() {
+    return require('../scripts/Facade.js').then(function(data) {
         facade = data;
         return ctrl;
     });
-};
+}
+
+module.exports = initiateController();

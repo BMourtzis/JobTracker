@@ -14,6 +14,11 @@ ctrl.year = 0 ;
 ctrl.currentPage = 0;
 ctrl.searchParams = {};
 
+/**
+ * ctrl.index - Add the index page for jobschemes to the content
+ *
+ * @return {Promise}  an empty promise
+ */
 ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
     return initiatePage().then(function(){
@@ -21,6 +26,11 @@ ctrl.index = function() {
     });
 };
 
+/**
+ * initiatePage - Initiates the basic content of the index page
+ *
+ * @return {Prommise}  an empty promise
+ */
 function initiatePage() {
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
@@ -50,13 +60,24 @@ function initiatePage() {
     });
 }
 
+/**
+ * loadActiveJobs - Fetches all active (enabled) jobschemes
+ *
+ * @return {Promise}  an empty promise
+ */
 function loadActiveJobs() {
     ctrl.searchParams = { enabled: true };
     return facade.getActiveJobSchemes().then(function(data) {
-        loadTable(data);
+        return loadTable(data);
     });
 }
 
+/**
+ * loadTable - Loads a list of jobschemes to the table
+ *
+ * @param  {Object} data a list of jobschemes
+ * @return {Promise}      an empty promise
+ */
 function loadTable(data) {
     data.currentPage = ctrl.currentPage;
 
@@ -69,6 +90,11 @@ function loadTable(data) {
     $("#jobSchemes-table button").click(function(){ctrl.details($(this).data("id"));});
 }
 
+/**
+ * search - Gets search parameters from the fields and searches with them
+ *
+ * @return {Promise}  an empty promise
+ */
 function search() {
     $("#advSearchModal").modal('hide');
     contentManager.add(ctrl.ctrlName, "search", reload.bind(this));
@@ -85,6 +111,12 @@ function search() {
     });
 }
 
+/**
+ * ctrl.getClientSchemes - fetches a list of jobschemes that belong to the client
+ *
+ * @param  {Number} clientId the id of the client
+ * @return {Promise}          an empty promise
+ */
 ctrl.getClientSchemes = function(clientId) {
     contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
     ctrl.searchParams = {client: clientId};
@@ -94,18 +126,34 @@ ctrl.getClientSchemes = function(clientId) {
     });
 };
 
+/**
+ * reload - Reloads the table with the same search parameters
+ *
+ * @return {Promise}  an empty promise
+ */
 function reload() {
     return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data){
-        loadTable(data);
+        return loadTable(data);
     });
 }
 
+/**
+ * gotoPage - changes the page of the table
+ *
+ * @param  {Number} page the number of the page
+ * @return {Promise}      an empty promise
+ */
 function gotoPage(page) {
     ctrl.currentPage = page;
     return reload();
 }
 
-//Get and Displays the jobScheme details on the sidebar
+/**
+ * ctrl.details - Gets and Displays the jobScheme details on the sidebar
+ *
+ * @param  {Number} id the id of the jobScheme
+ * @return {Promise}    an empty promise
+ */
 ctrl.details = function(id) {
     sidebarManager.add(ctrl.ctrlName, "details", ctrl.details.bind(this), id);
     ctrl.year = parseInt(new Date.today().toString("yyyy"));
@@ -142,16 +190,27 @@ ctrl.details = function(id) {
     });
 };
 
+/**
+ * addYear - +1 to the year counter and refreshes the input
+ */
 function addYear() {
     ctrl.year++;
     $("#yearCounter").val(ctrl.year);
 }
 
+/**
+ * subtractYear - -1 to the year counter and refreshes the input
+ */
 function subtractYear() {
     ctrl.year--;
     $("#yearCounter").val(ctrl.year);
 }
 
+/**
+ * ctrl.generate - Loads generate jobs page
+ *
+ * @return {Promise}  an empty promise
+ */
 ctrl.generate = function() {
     sidebarManager.add(ctrl.ctrlName, "generate", ctrl.generate.bind(this));
     ctrl.year = parseInt(new Date.today().toString("yyyy"));
@@ -169,6 +228,11 @@ ctrl.generate = function() {
     });
 };
 
+/**
+ * generateForClients - Generates jobs based on all the jobschemes of the client selected
+ *
+ * @return {Promise}  an empty promise
+ */
 function generateForClients() {
     var formData = $("#GenerateClientJobsForm").serializeArray().reduce(function(obj, item) {
         obj[item.name] = item.value;
@@ -190,7 +254,12 @@ function generateForClients() {
     });
 }
 
-//Generates Jobs for the month given, based on the jobScheme
+/**
+ * generate - Generates Jobs for the month given, based on the jobScheme
+ *
+ * @param  {Number} id the id of the jobscheme
+ * @return {Promise}    an empty promise
+ */
 function generate(id) {
     var formData = $("#JobGenerationForm").serializeArray();
     return facade.generateJobs(id, ctrl.year, parseInt(formData[1].value)).then(function() {
@@ -206,7 +275,13 @@ function generate(id) {
     });
 }
 
-//Displays the create job scheme page
+/**
+ * ctrl.create - Displays the create job scheme page
+ *
+ * @param  {Number} id Optional, the id of the client, if empty, all the clients will be loaded
+ * @return {Promise}    An empty promise
+ */
+
 ctrl.create = function(id) {
     sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this), id);
     if(id === undefined) {
@@ -222,6 +297,12 @@ ctrl.create = function(id) {
 
 };
 
+/**
+ * fillCreatePage - Fills sidebar with the create jobscheme page
+ *
+ * @param  {Object} data A list of clients
+ * @return {Promise}      an empty promise
+ */
 function fillCreatePage(data) {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
     var temp = jsrender.templates(templatePath);
@@ -240,20 +321,28 @@ function fillCreatePage(data) {
     $("#repetitionSelector").change(function(){changeRepFields();});
 }
 
-//create a new job scheme based on the field values
+/**
+ * create - create a new job scheme based on the field values
+ *
+ * @return {Promise}  an empty promise
+ */
 function create() {
     var formData = $("#createJobSchemeForm").serializeArray();
     var repvalues = getRepValues();
 
-    facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function(data) {
+    return facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function(data) {
         sidebarManager.pop();
         data = data.get({plain: true});
         contentManager.reload();
-        ctrl.details(data.id);
+        return ctrl.details(data.id);
     });
 }
 
-//Returns the rep values from the fields
+/**
+ * getRepValues - Returns the rep values from the fields
+ *
+ * @return {Object}  repetition values
+ */
 function getRepValues(){
     var repvalues = [];
     var selected = $("#repetitionSelector").val();
@@ -279,8 +368,9 @@ function getRepValues(){
     return repvalues;
 }
 
-
-//Adds new repetition field based on the selected repetition value
+/**
+ * addRepValues - Adds new repetition field based on the selected repetition value
+ */
 function addRepValues() {
     var selected = $("#repetitionSelector").val();
 
@@ -315,8 +405,10 @@ function addRepValues() {
     }
 }
 
-//Checks if the repetition value has changed.
-//If yes, it will remove all the repValues
+/**
+ * changeRepFields - Checks if the repetition value has changed. If yes, it will remove all the repValues
+ */
+
 function changeRepFields() {
     if (ctrl.selectedRep !== $("#repetitionSelector").val()) {
         $("#repValuesDiv").html("");
@@ -325,7 +417,12 @@ function changeRepFields() {
     ctrl.selectedRep = $("#repetitionSelector").val();
 }
 
-//Remove the specified repValue
+/**
+ * removeRepValues - Removes the specified repValue
+ *
+ * @param  {Object} span The span to be removed
+ */
+
 function removeRepValues(span) {
     $(span).parent().parent().parent().remove();
     if(ctrl.repval > 0) {
@@ -333,9 +430,14 @@ function removeRepValues(span) {
     }
 }
 
-//Displays the edit job scheme page
+/**
+ * ctrl.edit - Displays the edit job scheme page
+ *
+ * @param  {Number} id the id of the jobScheme
+ * @return {Promise}    an empty promise
+ */
 ctrl.edit = function(id) {
-    facade.getJobScheme(id).then(function(data) {
+    return facade.getJobScheme(id).then(function(data) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
@@ -371,7 +473,12 @@ ctrl.edit = function(id) {
     });
 };
 
-//Edit a job scheme based on the field values
+/**
+ * edit - Edit a job scheme based on the field values
+ *
+ * @param  {Number} id the id of the JobScheme
+ * @return {Promise}    an empty promise
+ */
 function edit(id) {
     var formData = $("#editJobSchemeForm").serializeArray();
     formData.splice(3,4);
@@ -383,19 +490,29 @@ function edit(id) {
     return facade.editJobScheme(id, formData).then(function(data){
         sidebarManager.pop();
         contentManager.reload();
-        ctrl.details(id);
+        return ctrl.details(id);
     });
 }
 
-//Disables a jobScheme
+/**
+ * disableJobScheme - Disables a jobScheme
+ *
+ * @param  {Number} id the id of the jobScheme
+ * @return {Promise}    an empty promise
+ */
 function disableJobScheme(id){
     return facade.disableJobScheme(id).then(function(data){
         contentManager.reload();
-        ctrl.details(id);
+        return ctrl.details(id);
     });
 }
 
-//Enables a jobScheme
+/**
+ * enableJobScheme - Enables a jobScheme
+ *
+ * @param  {Number} id the id of the jobScheme
+ * @return {Promise}    an empty promise
+ */
 function enableJobScheme(id){
     return facade.enableJobScheme(id).then(function(data){
         contentManager.reload();
@@ -403,6 +520,12 @@ function enableJobScheme(id){
     });
 }
 
+/**
+ * remove - Removes a jobScheme
+ *
+ * @param  {Number} id the id of the jobScheme
+ * @return {Promise}    an empty promise
+ */
 function remove(id) {
     return facade.removeJobScheme(id).then(function() {
         contentManager.reload();
@@ -410,9 +533,16 @@ function remove(id) {
     });
 }
 
-module.exports = function getController() {
-    return require('../scripts/Facade.js')().then(function(data){
+/**
+ * initiateController - Initiates the controller
+ *
+ * @return {Object}  JobSchemes controller
+ */
+function initiateController() {
+    return require('../scripts/Facade.js').then(function(data){
         facade = data;
         return ctrl;
     });
-};
+}
+
+module.exports = initiateController();

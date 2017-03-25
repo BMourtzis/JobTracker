@@ -2,8 +2,11 @@ var orm = require('../scripts/orm.js');
 
 var register = {};
 
-//Client Functions
-////Get all Clients
+/**
+ * register.getAllClients - Gets all clients from the database
+ *
+ * @return {Promise}  A promise with a list of clients
+ */
 register.getAllClients = function() {
     return orm.client.findAll({
         order: "businessName ASC"
@@ -16,29 +19,42 @@ register.getAllClients = function() {
     });
 };
 
-//Search Functions
-////Simple Search
+/**
+ * register.getClient - Gets the client specified
+ *
+ * @param  {Number} id The id of the client
+ * @return {Promise}    A promise with a client
+ */
 register.getClient = function(id){
     return orm.client.findById(id).then(function(query){
         return query.get({plain:true});
     });
 };
 
-////Gets the specfied client and includes the Jobs and JobSchemes, Limits the jobs to 10
+/**
+ * register.getClientFull - Gets the client specficied including jobs and jobschemes
+ *
+ * @param  {Number} id The id of the client
+ * @return {Promise}   A promise with the client
+ */
 register.getClientFull = function(id) {
-    return orm.client.findById(id).then(function(query){
+    return orm.client.findById(id, {inlcude:[orm.job, orm.jobScheme]}).then(function(query){
         return query.get({plain:true});
     });
 };
 
-//////Advanced Search
-// facade.findClients = function(searchParams) {
-//   return orm.Client.findAll({
-//     where: searchParams
-//   });
-// }
-
-////Create Functions
+/**
+ * register.createClient - Creates a new client
+ *
+ * @param  {String} firstname    The first name of the client
+ * @param  {String} lastname     The last name of the client
+ * @param  {String} businessname The business name of the client
+ * @param  {String} shortname    The short name of the client, used for invoicing
+ * @param  {String} address      The address of the client
+ * @param  {String} email        The email of the client
+ * @param  {Number} phone        The phone of the client
+ * @return {Promise}             A promise with the new client
+ */
 register.createClient = function(firstname, lastname, businessname, shortname, address, email, phone) {
     return orm.client.create({
         firstName: firstname,
@@ -51,7 +67,13 @@ register.createClient = function(firstname, lastname, businessname, shortname, a
      });
 };
 
-////Edit Function
+/**
+ * register.editClient - Edits the client with new data
+ *
+ * @param  {Number} id   The id of the client
+ * @param  {Object} data An object that includes the changes data for the client
+ * @return {Promise}     A promise with the edited client
+ */
 register.editClient = function(id, data){
     return orm.client.findById(id).then(function(query){
         for (var i = 0; i < data.length; i++) {
@@ -65,15 +87,28 @@ register.editClient = function(id, data){
     });
 };
 
+/**
+ * register.removeClient - Removes a client
+ *
+ * @param  {Number} id The id of the client
+ * @return {Promise}   A promise with the removed client
+ */
 register.removeClient = function(id) {
     return orm.client.findById(id).then(function(client){
         return client.destroy();
     });
 };
 
-module.exports = function getRegister(){
-    return require('../scripts/orm.js')().then(function(data){
+/**
+ * initiateRegister - Returns the initiated Client Register
+ *
+ * @return {Promise}  A promise with the Client Register
+ */
+function initiateRegister(){
+    return require('../scripts/orm.js').then(function(data){
         orm = data;
         return register;
     });
-};
+}
+
+module.exports = initiateRegister();

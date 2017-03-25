@@ -2,12 +2,18 @@ var facade;
 
 var ctrl = { };
 
+// NOTE: Do they need to be properties?
 ctrl.ctrlName = "Home";
 ctrl.templateDir = "../Templates/";
 ctrl.selectedDate = Date.today();
 
-//Renders the index page for Home
+/**
+ * ctrl.index - Renders the index page for Home
+ *
+ * @return {Promise}  an empty promise
+ */
 ctrl.index = function() {
+    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
 
     var temp = jsrender.templates(templatePath);
@@ -15,14 +21,16 @@ ctrl.index = function() {
     $("#content").html(html);
 
     ctrl.selectedDate = Date.today();
-    loadDayJobs();
-
-    contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
+    return loadDayJobs();
 };
 
-//Loads day jobs for the selectedDate of the object
+/**
+ * loadDayJobs - Loads day jobs for the selectedDate of the object
+ *
+ * @return {Promise}  an empty promise
+ */
 function loadDayJobs() {
-    facade.getDayJobs(ctrl.selectedDate).then(function(data){
+    return facade.getDayJobs(ctrl.selectedDate).then(function(data){
         data.selectedDay = ctrl.selectedDate.toString("dd/MM/yyyy");
         data.next = new Date(ctrl.selectedDate).add(1).day().toString("dd/MM/yyyy");
         data.previous = new Date(ctrl.selectedDate).add(-1).day().toString("dd/MM/yyyy");
@@ -48,39 +56,66 @@ function loadDayJobs() {
     });
 }
 
-//Goes to the next day
+/**
+ * nextDay - Goes to the next day
+ *
+ * @return {Promise}  an empty promise
+ */
 function nextDay(){
     ctrl.selectedDate.add(1).day();
-    loadDayJobs();
-
     contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
+    return loadDayJobs();
 }
 
-//Goes to the previous day
+/**
+ * previousDay - Goes to the previous day
+ *
+ * @return {Promise}  an empty promise
+ */
+
 function previousDay(){
     ctrl.selectedDate.add(-1).day();
-    loadDayJobs();
-
     contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
+    return loadDayJobs();
 }
 
-//Changes the status of a job to placed
-function placed(id){
-    facade.placed(id).then(function(){
-        loadDayJobs();
+/**
+ * placed - Changes the status of a job to placed
+ *
+ * @param  {number} clientId the id of the client
+ * @return {Promise}
+ */
+
+function placed(clientId){
+    return facade.placed(clientId).then(function(){
+        return loadDayJobs();
     });
 }
 
-//Changes the status of a job to done
-function done(id){
-    facade.done(id).then(function(data){
-        loadDayJobs();
+/**
+ * done - Changes the status of a job to done
+ *
+ * @param  {number} clientId the id of the client
+ * @return {Promise}
+ */
+
+function done(clientId){
+    return facade.done(clientId).then(function(data){
+        return loadDayJobs();
     });
 }
 
-module.exports = function getController() {
-    return require('../scripts/Facade.js')().then(function(data){
-        facade = data;
-        return ctrl;
-    });
-};
+
+/**
+ * getController - Initiates the controller
+ *
+ * @return {Object}  Client controller
+ */
+ function initaitesController() {
+     return require('../scripts/Facade.js').then(function(data){
+         facade = data;
+         return ctrl;
+     });
+ }
+
+module.exports = initaitesController();

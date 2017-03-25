@@ -6,7 +6,7 @@ window.app = require('electron').remote.app;
 
 //Back-end Modules
 window.datejs = require('datejs');
-Date.i18n.setLanguage(["en-AU"]);
+Date.i18n.setLanguage(["en-AU"]); //Change the locale to en-AU
 window.fs = require('fs');
 window.path = require('path');
 
@@ -38,3 +38,6 @@ require("./app/Controller/Controllers.js")().then(function(data){
     window.ctrls = data;
     ctrls.Home.index();
 });
+
+//Debug
+require("devtron").install();

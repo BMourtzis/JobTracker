@@ -12,14 +12,24 @@ ctrl.searchParams = {};
 //var for generateInvoice page;
 ctrl.year = 0 ;
 
-ctrl.index = function() {
-    initiatePage().then(function() {
-        loadCurrentInvoices();
-    });
 
+/**
+ * ctrl.index - calls the initiatePage for Invoices and then loads the pending invoices
+ *
+ * @return {Promise}  an empty promise
+ */
+ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
+    return initiatePage().then(function() {
+        return loadPendingInvoices();
+    });
 };
 
+/**
+ * initiatePage - Iniates the index page for invoices
+ *
+ * @return {Promise}  an empty promise
+ */
 function initiatePage() {
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
@@ -48,13 +58,23 @@ function initiatePage() {
     });
 }
 
-function loadCurrentInvoices() {
+/**
+ * loadPendingInvoices - Loads the unpaid invoices
+ *
+ * @return {Promise}  an empty promise
+ */
+function loadPendingInvoices() {
     return facade.getCurrentInvoices().then(function(invoices){
         ctrl.searchParams.paid = false;
-        loadTable(invoices);
+        return loadTable(invoices);
     });
 }
 
+/**
+ * loadTable - Loads the table in content delete-invoice-button
+ *
+ * @param  {Object} data The list of invoices to be loads on the table
+ */
 function loadTable(data) {
     data.currentPage = ctrl.currentPage;
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
@@ -66,6 +86,11 @@ function loadTable(data) {
     $("#paginationNavBar li").click(function(){gotoPage($(this).data("page"));});
 }
 
+/**
+ * search - Gets the search parameters from the fields, searches for them and then calls loads table
+ *
+ * @return {Promise}  an emtpy promise
+ */
 function search() {
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
@@ -93,11 +118,17 @@ function search() {
     contentManager.add(ctrl.ctrlName, "search", reload.bind(this));
 
     return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        loadTable(data);
+        return loadTable(data);
     });
 
 }
 
+/**
+ * ctrl.getClientInvoices - Usually called from another controller. It fetches the invoices based on the client and loads them on the invoice content page
+ *
+ * @param  {number} clientId the id of the client
+ * @return {Promise}          an empty promise
+ */
 ctrl.getClientInvoices = function(clientId){
     contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
     ctrl.searchParams = {clientID: clientId};
@@ -107,22 +138,39 @@ ctrl.getClientInvoices = function(clientId){
     });
 };
 
+/**
+ * reload - reloads the content page with the same search params
+ *
+ * @return {Promise}  an empty promise
+ */
 function reload() {
     return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-        loadTable(data);
+        return loadTable(data);
     });
 }
 
+/**
+ * gotoPage - changes page to the specified one
+ *
+ * @param  {number} page the number of the page starting from 0
+ * @return {Promise}      an empty promise
+ */
 function gotoPage(page) {
     if(page !== undefined) {
         ctrl.currentPage = page;
         return facade.invoiceSearchOptions(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
-            loadTable(data);
+            return loadTable(data);
         });
     }
 }
 
-//Creates the createInvoice page
+/**
+ * ctrl - Creates the createInvoice page based on the id given
+ *
+ * @param  {number} id the id of the client, if empty is loads all the clients
+ * @return {Promise}    an empty promise
+ */
+
 ctrl.create = function(id) {
     ctrl.year = parseInt(new Date.today().toString("yyyy"));
 
@@ -138,7 +186,12 @@ ctrl.create = function(id) {
     }
 };
 
-//Create the create page based on the data given
+/**
+ * fillCreatePage - Create the create page based on the data given
+ *
+ * @param  {Object} data an Object of the data to be rendered, it should have a list of clients or just one client
+ */
+
 function fillCreatePage(data) {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
     var temp = jsrender.templates(templatePath);
@@ -153,22 +206,33 @@ function fillCreatePage(data) {
     $("#generate-invoice").click(function(){create();});
 }
 
+/**
+ * addYear - +1 to the year field and updates it on the page
+ */
 function addYear() {
     ctrl.year++;
     $("#yearCounter").val(ctrl.year);
 }
 
+/**
+ * subtractYear - -1 to the year field and updates it on the page
+ */
 function subtractYear() {
     ctrl.year--;
     $("#yearCounter").val(ctrl.year);
 }
 
+/**
+ * create - Creates the Invoice by taking the parameters from the form
+ *
+ * @return {type}  description
+ */
 function create() {
     var formData = $("#createInvoiceForm").serializeArray();
     formData[0].value = parseInt(formData[0].value);
     formData[1].value = ctrl.year;
     formData[2].value = parseInt(formData[2].value);
-    facade.createInvoice(formData[0].value, formData[1].value, formData[2].value).then(function(data) {
+    return facade.createInvoice(formData[0].value, formData[1].value, formData[2].value).then(function(data) {
         $.notify({
             //options
             message: "Invoice(s) successfully generated"
@@ -189,9 +253,15 @@ function create() {
     });
 }
 
-
+/**
+ * ctrl.details - loads the detail of the invoice specified
+ *
+ * @param  {number} id the id of the invoice
+ * @return {Promise}    an empty promise
+ */
 ctrl.details = function(id) {
-    facade.getInvoice(id).then(function(invoice){
+    sidebarManager.add(ctrl.ctrlName, "details", ctrl.details.bind(this), id);
+    return facade.getInvoice(id).then(function(invoice){
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(invoice);
@@ -216,12 +286,16 @@ ctrl.details = function(id) {
             });
         });
     });
-    sidebarManager.add(ctrl.ctrlName, "details", ctrl.details.bind(this), id);
 };
 
-
+/**
+ * print - Prints the invoice on a docx again
+ *
+ * @param  {number} invoiceId the id of the Invoice
+ * @return {Promise}           an empty promise
+ */
 function print(invoiceId) {
-    facade.generateInvoice(invoiceId).then(function(){
+    return facade.printInvoice(invoiceId).then(function(){
         $.notify({
             //options
             message: "Invoice successfully printed"
@@ -233,6 +307,12 @@ function print(invoiceId) {
     });
 }
 
+/**
+ * remove - Removes the invoice specified
+ *
+ * @param  {number} invoiceId the id of the invoice
+ * @return {Promise}           an empty promise
+ */
 function remove(invoiceId) {
     return facade.deleteInvoice(invoiceId).then(function(data){
         sidebarManager.removeHtml();
@@ -240,6 +320,12 @@ function remove(invoiceId) {
     });
 }
 
+/**
+ * paid - Changes the state of the invoice to Paid
+ *
+ * @param  {number} invoiceId the id of the invoice
+ * @return {Promise}           an empty promise
+ */
 function paid(invoiceId) {
     return facade.invoicePaid(invoiceId).then(function(invoice){
         ctrl.details(invoiceId);
@@ -247,6 +333,12 @@ function paid(invoiceId) {
     });
 }
 
+/**
+ * invoiced - Changes the state of the invoice to Invoiced
+ *
+ * @param  {number} invoiceId the id of the invoice
+ * @return {Promise}           an empty promise
+ */
 function invoiced(invoiceId) {
     return facade.invoiceInvoiced(invoiceId).then(function(invoice){
         ctrl.details(invoiceId);
@@ -254,9 +346,16 @@ function invoiced(invoiceId) {
     });
 }
 
-module.exports = function getController() {
-    return require('../scripts/Facade.js')().then(function(data){
+/**
+ * initiateController - Initiates the controller
+ *
+ * @return {Object}  the Invoice controller
+ */
+function initiateController() {
+    return require('../scripts/Facade.js').then(function(data){
         facade = data;
         return ctrl;
     });
-};
+}
+
+module.exports = initiateController();

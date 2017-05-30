@@ -1,34 +1,32 @@
 var validationRules = {};
 
 validationRules.Selected = function(select) {
-    if(select.serializeArray().length === 0) {
+    if (select.serializeArray().length === 0) {
         validationRules.hasError(select.parent());
-    }
-    else {
+    } else {
         validationRules.isSuccess(select.parent());
     }
 };
 
 validationRules.isEmptyField = function(field) {
-    if(field.val() === "") {
+    if (field.val() === "") {
         validationRules.hasError(field.parent());
         return true;
-    }
-    else {
+    } else {
         validationRules.isSuccess(field.parent());
         return false;
     }
 };
 
 validationRules.isNumeric = function(field) {
-    if(!validationRules.isEmptyField(field) && !$.isNumeric(field.val())) {
+    if (!validationRules.isEmptyField(field) && !$.isNumeric(field.val())) {
         validationRules.hasError(field.parent());
     }
 };
 
 validationRules.isEmail = function(field) {
-     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    if(!validationRules.isEmptyField(field) && !regex.test(field.val())) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (!validationRules.isEmptyField(field) && !regex.test(field.val())) {
         validationRules.hasError(field.parent());
     }
 };

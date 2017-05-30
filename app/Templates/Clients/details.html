@@ -10,7 +10,9 @@
         <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
     </button>
 </div>
-<div class="row"><h3>Details</h3></div>
+<div class="row">
+    <h3>Details</h3>
+</div>
 <div class="row">
     <dl>
         <dt>First Name:&nbsp;</dt>
@@ -27,7 +29,8 @@
         <dd>{{:phone}}&nbsp;</dd>
     </dl>
 </div>
-<div class="row"><h3>Statistics</h3></div>
+<div class="row">
+    <h3>Statistics</h3></div>
 <div class="row">
     <h4 class="details-heading float-left">Services</h4>
     <button id="see-all-schemes-button" type="button" class="btn btn-success custom-button">
@@ -96,16 +99,16 @@
 
 <!-- Delete confirmation Modal -->
 <div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-medium" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title modalLabel">Are you sure you want to delete {{:businessName}}</h4>
-        </div>
-        <div class="modal-body">
-            <button id="delete-button" type="button" class="btn btn-danger" data-dismiss="modal">Delete Client</button>
-            <button type="button" class="btn btn-default float-right">Close</button>
+    <div class="modal-dialog modal-medium" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title modalLabel">Are you sure you want to delete {{:businessName}}</h4>
+            </div>
+            <div class="modal-body">
+                <button id="delete-button" type="button" class="btn btn-danger" data-dismiss="modal">Delete Client</button>
+                <button type="button" class="btn btn-default float-right">Close</button>
+            </div>
         </div>
     </div>
-  </div>
 </div>

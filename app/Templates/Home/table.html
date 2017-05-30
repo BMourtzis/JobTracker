@@ -34,10 +34,8 @@
             <td>${{:payment + gst}}</td>
             <td>
                 {{if state === "Placed"}}
-                <input class="placed" type="checkbox" data-id="{{:id}}">
-                {{else}}
-                <input class="done" type="checkbox" data-id="{{:id}}" checked>
-                {{/if}}
+                <input class="placed" type="checkbox" data-id="{{:id}}"> {{else}}
+                <input class="done" type="checkbox" data-id="{{:id}}" checked> {{/if}}
             </td>
             <td><button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">More...</button></td>
         </tr>

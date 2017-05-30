@@ -1,6 +1,6 @@
 var register = {};
 
-register.settings = { };
+register.settings = {};
 
 function initiate() {
     register.settings = settings;
@@ -27,7 +27,7 @@ register.UpdateGSTPercentage = function(gst) {
     register.writeSettings();
 };
 
-register.writeSettings = function(){
+register.writeSettings = function() {
     window.settings = register.settings;
     fs.writeFileSync(settings.settingsPath, JSON.stringify(register.settings));
 };

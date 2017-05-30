@@ -11,9 +11,11 @@ register.getAllClients = function() {
     return orm.client.findAll({
         order: "businessName ASC"
     }).then(function(query) {
-        var data =  [];
+        var data = [];
         for (var i = 0; i < query.length; i++) {
-            data.push(query[i].get({plain:true}));
+            data.push(query[i].get({
+                plain: true
+            }));
         }
         return data;
     });
@@ -25,9 +27,11 @@ register.getAllClients = function() {
  * @param  {Number} id The id of the client
  * @return {Promise}    A promise with a client
  */
-register.getClient = function(id){
-    return orm.client.findById(id).then(function(query){
-        return query.get({plain:true});
+register.getClient = function(id) {
+    return orm.client.findById(id).then(function(query) {
+        return query.get({
+            plain: true
+        });
     });
 };
 
@@ -38,8 +42,12 @@ register.getClient = function(id){
  * @return {Promise}   A promise with the client
  */
 register.getClientFull = function(id) {
-    return orm.client.findById(id, {inlcude:[orm.job, orm.jobScheme]}).then(function(query){
-        return query.get({plain:true});
+    return orm.client.findById(id, {
+        inlcude: [orm.job, orm.jobScheme]
+    }).then(function(query) {
+        return query.get({
+            plain: true
+        });
     });
 };
 
@@ -64,7 +72,7 @@ register.createClient = function(firstname, lastname, businessname, shortname, a
         address: address,
         email: email,
         phone: phone,
-     });
+    });
 };
 
 /**
@@ -74,11 +82,10 @@ register.createClient = function(firstname, lastname, businessname, shortname, a
  * @param  {Object} data An object that includes the changes data for the client
  * @return {Promise}     A promise with the edited client
  */
-register.editClient = function(id, data){
-    return orm.client.findById(id).then(function(query){
+register.editClient = function(id, data) {
+    return orm.client.findById(id).then(function(query) {
         for (var i = 0; i < data.length; i++) {
-            if(data[i].value !== "")
-            {
+            if (data[i].value !== "") {
                 query[data[i].name] = data[i].value;
             }
         }
@@ -94,7 +101,7 @@ register.editClient = function(id, data){
  * @return {Promise}   A promise with the removed client
  */
 register.removeClient = function(id) {
-    return orm.client.findById(id).then(function(client){
+    return orm.client.findById(id).then(function(client) {
         return client.destroy();
     });
 };
@@ -104,8 +111,8 @@ register.removeClient = function(id) {
  *
  * @return {Promise}  A promise with the Client Register
  */
-function initiateRegister(){
-    return require('../scripts/orm.js').then(function(data){
+function initiateRegister() {
+    return require('../scripts/orm.js').then(function(data) {
         orm = data;
         return register;
     });

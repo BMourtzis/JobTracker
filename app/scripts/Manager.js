@@ -1,6 +1,6 @@
 function getManager(id, button) {
     var manager = {};
-    var htmlid = "#"+id;
+    var htmlid = "#" + id;
     var goBack = button;
 
     var lineUp = [];
@@ -9,10 +9,15 @@ function getManager(id, button) {
     // TODO: make internal used methods functions
 
     manager.add = function(ctrl, name, func, params) {
-        var lastitem = lineUp[lineUp.length-1];
+        var lastitem = lineUp[lineUp.length - 1];
 
-        if(lineUp.length === 0 || lastitem.ctrl !== ctrl || lastitem.name !== name || lastitem.params !==  params) {
-            lineUp.push({ctrl: ctrl, name: name, func: func, params: params});
+        if (lineUp.length === 0 || lastitem.ctrl !== ctrl || lastitem.name !== name || lastitem.params !== params) {
+            lineUp.push({
+                ctrl: ctrl,
+                name: name,
+                func: func,
+                params: params
+            });
         }
 
         limitLineUp();
@@ -32,11 +37,10 @@ function getManager(id, button) {
     };
 
     manager.reload = function() {
-        if(lineUp.length > 0) {
-            var item = lineUp[lineUp.length-1];
+        if (lineUp.length > 0) {
+            var item = lineUp[lineUp.length - 1];
             return item.func(item.params);
-        }
-        else {
+        } else {
             manager.removeHtml();
         }
     };
@@ -60,18 +64,17 @@ function getManager(id, button) {
     };
 
     function limitLineUp() {
-        if(lineUp.length > 30) {
+        if (lineUp.length > 30) {
             lineUp.splice(0, 1);
             manager.limitLineUp();
         }
     }
 
     manager.toggleGoBack = function() {
-        if(goBack) {
-            if(manager.getCount() > 0) {
+        if (goBack) {
+            if (manager.getCount() > 0) {
                 $("#goBack-button").show();
-            }
-            else {
+            } else {
                 $("#goBack-button").hide();
             }
         }

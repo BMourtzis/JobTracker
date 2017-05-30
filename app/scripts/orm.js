@@ -79,7 +79,7 @@ function initializeModels() {
                     payment: payment,
                     state: 'Placed',
                     clientId: this.id,
-                    gst: (payment/settings.GSTPercentage)
+                    gst: (payment / settings.GSTPercentage)
                 });
             },
             addNewJobScheme: function addNewJobScheme(jobname, payment, repetition, repetitionvalues) {
@@ -234,7 +234,7 @@ function initializeModels() {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
                 for (; date.toString("M") < (nextMonth); date.next().day()) {
-                    for (var i= 0; i< repvalues.length; i++) {
+                    for (var i = 0; i < repvalues.length; i++) {
                         date.at({
                             hour: repvalues[i].hour,
                             minute: repvalues[i].minute
@@ -283,7 +283,7 @@ function initializeModels() {
             monthlyGenerator: function monthlyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
-                for(var i = 0; i < repvalues.length; i++) {
+                for (var i = 0; i < repvalues.length; i++) {
                     var jobDate = new Date(date);
                     jobDate.add(repvalues[i].day).day().at({
                         hour: repvalues[i].hour,
@@ -441,14 +441,13 @@ function validateDB() {
 
     connectionInitialization();
 
-    if(!exists){
-        return reinitializeTables().then(function(){
+    if (!exists) {
+        return reinitializeTables().then(function() {
             return createAssociations().then(function() {
                 return orm;
             });
         });
-    }
-    else {
+    } else {
         return createAssociations().then(function() {
             return orm;
         });

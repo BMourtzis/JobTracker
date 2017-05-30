@@ -15,10 +15,18 @@ ctrl.index = function() {
     var html = temp(settings);
     $("#content").html(html);
 
-    $("#InvoiceTemplatePath").click(function(){UpdateInvoiceTemplatePath();});
-    $("#InvoiceOutputPath").click(function(){UpdateInvoiceOutputPath();});
-    $("#BackupPath").click(function(){UpdateBackupPath();});
-    $("#GSTPercentage").keyup(function(){UpdateGSTPercentage();});
+    $("#InvoiceTemplatePath").click(function() {
+        UpdateInvoiceTemplatePath();
+    });
+    $("#InvoiceOutputPath").click(function() {
+        UpdateInvoiceOutputPath();
+    });
+    $("#BackupPath").click(function() {
+        UpdateBackupPath();
+    });
+    $("#GSTPercentage").keyup(function() {
+        UpdateGSTPercentage();
+    });
 
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
@@ -27,8 +35,11 @@ ctrl.index = function() {
  * UpdateInvoiceTemplatePath - Updates the Invoice Template Path in the settings file
  */
 function UpdateInvoiceTemplatePath() {
-    var dialogReturn = dialog.showOpenDialog({ defaultPath: settings.InvoiceTemplatePath, properties: ['openFile']});
-    if(dialogReturn !== undefined) {
+    var dialogReturn = dialog.showOpenDialog({
+        defaultPath: settings.InvoiceTemplatePath,
+        properties: ['openFile']
+    });
+    if (dialogReturn !== undefined) {
         var path = dialogReturn[0];
         facade.UpdateInvoiceTemplatePath(path);
         $($("#InvoiceTemplatePath :input")[0]).val(path);
@@ -38,9 +49,12 @@ function UpdateInvoiceTemplatePath() {
 /**
  * UpdateInvoiceOutputPath - Updates the Invoice Output Path in the settings file
  */
-function UpdateInvoiceOutputPath(){
-    var dialogReturn = dialog.showOpenDialog({defaultPath: settings.InvoiceOutputPath, properties: ['openDirectory']});
-    if(dialogReturn !== undefined) {
+function UpdateInvoiceOutputPath() {
+    var dialogReturn = dialog.showOpenDialog({
+        defaultPath: settings.InvoiceOutputPath,
+        properties: ['openDirectory']
+    });
+    if (dialogReturn !== undefined) {
         var path = dialogReturn[0];
         facade.UpdateInvoiceOutputPath(path);
         $($("#InvoiceOutputPath :input")[0]).val(path);
@@ -50,9 +64,12 @@ function UpdateInvoiceOutputPath(){
 /**
  * UpdateBackupPath - Updates the Backup Path in the settings file
  */
-function UpdateBackupPath(){
-    var dialogReturn = dialog.showOpenDialog({ defaultPath: settings.BackupPath, properties: ['openDirectory']});
-    if(dialogReturn !== undefined) {
+function UpdateBackupPath() {
+    var dialogReturn = dialog.showOpenDialog({
+        defaultPath: settings.BackupPath,
+        properties: ['openDirectory']
+    });
+    if (dialogReturn !== undefined) {
         var path = dialogReturn[0];
         facade.UpdateBackupPath(path);
         $($("#BackupPath :input")[0]).val(path);
@@ -62,9 +79,9 @@ function UpdateBackupPath(){
 /**
  * UpdateGSTPercentage - Updates the GST Percentage in the settings file
  */
-function UpdateGSTPercentage(){
+function UpdateGSTPercentage() {
     var gst = parseInt($($("#GSTPercentage :input")[0]).val());
-    if(!Number.isNaN(gst)) {
+    if (!Number.isNaN(gst)) {
         facade.UpdateGSTPercentage(gst);
     }
 }

@@ -8,7 +8,7 @@ ctrl.repval = 0;
 ctrl.selectedRep = "";
 
 //var for generateJobs page;
-ctrl.year = 0 ;
+ctrl.year = 0;
 
 //Search Options
 ctrl.currentPage = 0;
@@ -21,7 +21,7 @@ ctrl.searchParams = {};
  */
 ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
-    return initiatePage().then(function(){
+    return initiatePage().then(function() {
         return loadActiveJobs();
     });
 };
@@ -35,24 +35,34 @@ function initiatePage() {
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
         var temp = jsrender.templates(templatePath);
-        var html = temp({clients: query});
+        var html = temp({
+            clients: query
+        });
         $("#content").html(html);
 
-        $("#searchJobSchemesButton").click(function(){search();});
-        $("#generate-button").click(function(){ctrl.generate();});
-        $("#create-button").click(function(){ctrl.create();});
+        $("#searchJobSchemesButton").click(function() {
+            search();
+        });
+        $("#generate-button").click(function() {
+            ctrl.generate();
+        });
+        $("#create-button").click(function() {
+            ctrl.create();
+        });
 
-        $('#fromTimepicker').datetimepicker({format: 'HH:mm'});
+        $('#fromTimepicker').datetimepicker({
+            format: 'HH:mm'
+        });
         $('#toTimepicker').datetimepicker({
             format: 'HH:mm',
             useCurrent: false
         });
 
-        $('#fromTimepicker').on("dp.change", function(e){
+        $('#fromTimepicker').on("dp.change", function(e) {
             $('#toTimepicker').data("DateTimePicker").minDate(e.date);
         });
 
-        $('#toTimepicker').on("dp.change", function(e){
+        $('#toTimepicker').on("dp.change", function(e) {
             $('#fromTimepicker').data("DateTimePicker").maxDate(e.date);
         });
 
@@ -66,7 +76,9 @@ function initiatePage() {
  * @return {Promise}  an empty promise
  */
 function loadActiveJobs() {
-    ctrl.searchParams = { enabled: true };
+    ctrl.searchParams = {
+        enabled: true
+    };
     return facade.getActiveJobSchemes().then(function(data) {
         return loadTable(data);
     });
@@ -86,8 +98,12 @@ function loadTable(data) {
     var table = tableTemp(data);
     $("#JobSchemesTable").html(table);
 
-    $("#paginationNavBar li").click(function(){gotoPage($(this).data("id"));});
-    $("#jobSchemes-table button").click(function(){ctrl.details($(this).data("id"));});
+    $("#paginationNavBar li").click(function() {
+        gotoPage($(this).data("id"));
+    });
+    $("#jobSchemes-table button").click(function() {
+        ctrl.details($(this).data("id"));
+    });
 }
 
 /**
@@ -102,7 +118,7 @@ function search() {
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
         obj[item.name] = item.value;
         return obj;
-    },{});
+    }, {});
 
     ctrl.currentPage = 0;
     ctrl.searchParams = formData;
@@ -119,7 +135,9 @@ function search() {
  */
 ctrl.getClientSchemes = function(clientId) {
     contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
-    ctrl.searchParams = {client: clientId};
+    ctrl.searchParams = {
+        client: clientId
+    };
     initiatePage();
     return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data) {
         return loadTable(data);
@@ -132,7 +150,7 @@ ctrl.getClientSchemes = function(clientId) {
  * @return {Promise}  an empty promise
  */
 function reload() {
-    return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data){
+    return facade.searchJobSchemes(ctrl.searchParams, ctrl.currentPage).then(function(data) {
         return loadTable(data);
     });
 }
@@ -167,25 +185,37 @@ ctrl.details = function(id) {
         $("#sidebar").html(html);
 
         //Adds clicks events on buttons
-        $("#edit-button").click(function(){ctrl.edit(id);});
-        $("#generateJobsButton").click(function() {generate(id);});
-        $("#removeJobSchemeButton").click(function(){
+        $("#edit-button").click(function() {
+            ctrl.edit(id);
+        });
+        $("#generateJobsButton").click(function() {
+            generate(id);
+        });
+        $("#removeJobSchemeButton").click(function() {
             //Wait until modal is dissmissed
-            new Promise(function(resolve, reject){
-                $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
+            new Promise(function(resolve, reject) {
+                $("#deleteConfirmationModal").on('hidden.bs.modal', function(e) {
                     resolve();
                 });
-            }).then(function(){
+            }).then(function() {
                 //Then remove
                 remove(id);
             });
         });
 
-        $("#disable-button").click(function(){disableJobScheme(data.id);});
-        $("#enable-button").click(function(){enableJobScheme(data.id);});
+        $("#disable-button").click(function() {
+            disableJobScheme(data.id);
+        });
+        $("#enable-button").click(function() {
+            enableJobScheme(data.id);
+        });
 
-        $("#subtractYearButton").click(function(){subtractYear();});
-        $("#addYearButton").click(function(){addYear();});
+        $("#subtractYearButton").click(function() {
+            subtractYear();
+        });
+        $("#addYearButton").click(function() {
+            addYear();
+        });
 
     });
 };
@@ -217,14 +247,23 @@ ctrl.generate = function() {
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/generateJobs.html");
         var temp = jsrender.templates(templatePath);
-        var html = temp({clients: query, year: ctrl.year});
+        var html = temp({
+            clients: query,
+            year: ctrl.year
+        });
 
         $("#sidebar-heading").html("Generate Jobs");
         $("#sidebar").html(html);
 
-        $("#subtractYearButton").click(function(){subtractYear();});
-        $("#addYearButton").click(function(){addYear();});
-        $("#generateClientJobsButton").click(function(){generateForClients();});
+        $("#subtractYearButton").click(function() {
+            subtractYear();
+        });
+        $("#addYearButton").click(function() {
+            addYear();
+        });
+        $("#generateClientJobsButton").click(function() {
+            generateForClients();
+        });
     });
 };
 
@@ -237,13 +276,13 @@ function generateForClients() {
     var formData = $("#GenerateClientJobsForm").serializeArray().reduce(function(obj, item) {
         obj[item.name] = item.value;
         return obj;
-    },{});
+    }, {});
 
-    return facade.generateClientJobs(formData.client, formData.year, formData.month).then(function(){
+    return facade.generateClientJobs(formData.client, formData.year, formData.month).then(function() {
         $.notify({
             //options
             message: "Jobs successfully generated"
-        },{
+        }, {
             //settings
             type: "success",
             delay: 3000
@@ -266,7 +305,7 @@ function generate(id) {
         $.notify({
             //options
             message: "Jobs successfully generated"
-        },{
+        }, {
             //settings
             type: "success",
             delay: 3000
@@ -284,14 +323,17 @@ function generate(id) {
 
 ctrl.create = function(id) {
     sidebarManager.add(ctrl.ctrlName, "create", ctrl.create.bind(this), id);
-    if(id === undefined) {
+    if (id === undefined) {
         return facade.getAllClients().then(function(data) {
-            return fillCreatePage({clients: data});
+            return fillCreatePage({
+                clients: data
+            });
         });
-    }
-    else {
-        return facade.getClient(id).then(function(data){
-            return fillCreatePage({client: data});
+    } else {
+        return facade.getClient(id).then(function(data) {
+            return fillCreatePage({
+                client: data
+            });
         });
     }
 
@@ -311,14 +353,22 @@ function fillCreatePage(data) {
     $("#sidebar-heading").html("Create Service");
     $("#sidebar").html(html);
 
-    $('.timepicker').datetimepicker({format: 'HH:mm'});
+    $('.timepicker').datetimepicker({
+        format: 'HH:mm'
+    });
 
     //Add click events
-    $("#form-submit-button").click(function(){create();});
-    $("#addRepValues").children("span").click(function(){addRepValues();});
+    $("#form-submit-button").click(function() {
+        create();
+    });
+    $("#addRepValues").children("span").click(function() {
+        addRepValues();
+    });
 
     //Add other events
-    $("#repetitionSelector").change(function(){changeRepFields();});
+    $("#repetitionSelector").change(function() {
+        changeRepFields();
+    });
 }
 
 /**
@@ -332,7 +382,9 @@ function create() {
 
     return facade.createJobScheme(formData[1].value, formData[2].value, formData[3].value, repvalues, formData[0].value).then(function(data) {
         sidebarManager.pop();
-        data = data.get({plain: true});
+        data = data.get({
+            plain: true
+        });
         contentManager.reload();
         return ctrl.details(data.id);
     });
@@ -343,18 +395,15 @@ function create() {
  *
  * @return {Object}  repetition values
  */
-function getRepValues(){
+function getRepValues() {
     var repvalues = [];
     var selected = $("#repetitionSelector").val();
 
     $("#repValuesDiv").children().each(function(no, data) {
         var day = 0;
-        if(selected === "Monthly" || selected === "Fortnightly")
-        {
-            day = parseInt($(data).find("#day").val()) + 7*parseInt($(data).find("#week").val());
-        }
-        else if(selected === "Weekly")
-        {
+        if (selected === "Monthly" || selected === "Fortnightly") {
+            day = parseInt($(data).find("#day").val()) + 7 * parseInt($(data).find("#week").val());
+        } else if (selected === "Weekly") {
             day = parseInt($(data).find("#day").val());
         }
 
@@ -374,8 +423,7 @@ function getRepValues(){
 function addRepValues() {
     var selected = $("#repetitionSelector").val();
 
-    if(ctrl.repval < 7 && selected !== null)
-    {
+    if (ctrl.repval < 7 && selected !== null) {
         var repValuesTmpl = "/";
         switch (selected) {
             case "Monthly":
@@ -396,12 +444,18 @@ function addRepValues() {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + repValuesTmpl);
         var temp = jsrender.templates(templatePath);
         ctrl.repval++;
-        var data = { no: ctrl.repval };
+        var data = {
+            no: ctrl.repval
+        };
         var html = temp(data);
         $("#repValuesDiv").append(html);
-        $(".clickable-span span").click(function(){removeRepValues($(this));});
+        $(".clickable-span span").click(function() {
+            removeRepValues($(this));
+        });
 
-        $('.timepicker').datetimepicker({format: 'HH:mm'});
+        $('.timepicker').datetimepicker({
+            format: 'HH:mm'
+        });
     }
 }
 
@@ -425,7 +479,7 @@ function changeRepFields() {
 
 function removeRepValues(span) {
     $(span).parent().parent().parent().remove();
-    if(ctrl.repval > 0) {
+    if (ctrl.repval > 0) {
         ctrl.repval--;
     }
 }
@@ -446,12 +500,18 @@ ctrl.edit = function(id) {
         $("#sidebar-heading").html("Edit Service");
         $("#sidebar").html(html);
 
-        $("#editJobSchemeSubmitButton").click(function(){edit(data.id);});
-        $("#addRepValues span").click(function(){addRepValues();});
-        $("#repetitionSelector").change(function(){changeRepFields();});
+        $("#editJobSchemeSubmitButton").click(function() {
+            edit(data.id);
+        });
+        $("#addRepValues span").click(function() {
+            addRepValues();
+        });
+        $("#repetitionSelector").change(function() {
+            changeRepFields();
+        });
 
         var innerhtml = "";
-        data.repetitionValues.forEach(function(value){
+        data.repetitionValues.forEach(function(value) {
             switch (data.repetition) {
                 case "Monthly":
                     innerhtml += jsrender.templates(templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/MonthlyRepValuesEdit.html"))(value);
@@ -468,8 +528,12 @@ ctrl.edit = function(id) {
             }
         });
         $("#repValuesDiv").html(innerhtml);
-        $(".clickable-span span").click(function(){removeRepValues($(this));});
-        $('.timepicker').datetimepicker({format: 'HH:mm'});
+        $(".clickable-span span").click(function() {
+            removeRepValues($(this));
+        });
+        $('.timepicker').datetimepicker({
+            format: 'HH:mm'
+        });
     });
 };
 
@@ -481,13 +545,13 @@ ctrl.edit = function(id) {
  */
 function edit(id) {
     var formData = $("#editJobSchemeForm").serializeArray();
-    formData.splice(3,4);
+    formData.splice(3, 4);
     formData.push({
         name: "repetitionValues",
         value: getRepValues()
     });
 
-    return facade.editJobScheme(id, formData).then(function(data){
+    return facade.editJobScheme(id, formData).then(function(data) {
         sidebarManager.pop();
         contentManager.reload();
         return ctrl.details(id);
@@ -500,8 +564,8 @@ function edit(id) {
  * @param  {Number} id the id of the jobScheme
  * @return {Promise}    an empty promise
  */
-function disableJobScheme(id){
-    return facade.disableJobScheme(id).then(function(data){
+function disableJobScheme(id) {
+    return facade.disableJobScheme(id).then(function(data) {
         contentManager.reload();
         return ctrl.details(id);
     });
@@ -513,8 +577,8 @@ function disableJobScheme(id){
  * @param  {Number} id the id of the jobScheme
  * @return {Promise}    an empty promise
  */
-function enableJobScheme(id){
-    return facade.enableJobScheme(id).then(function(data){
+function enableJobScheme(id) {
+    return facade.enableJobScheme(id).then(function(data) {
         contentManager.reload();
         ctrl.details(id);
     });
@@ -539,7 +603,7 @@ function remove(id) {
  * @return {Object}  JobSchemes controller
  */
 function initiateController() {
-    return require('../scripts/Facade.js').then(function(data){
+    return require('../scripts/Facade.js').then(function(data) {
         facade = data;
         return ctrl;
     });

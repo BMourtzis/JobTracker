@@ -51,7 +51,7 @@ function getClient() {
 
         },
         instanceMethods: {
-            addNewJob: function(jobname, timebooked, payment){
+            addNewJob: function(jobname, timebooked, payment) {
                 console.log(this);
                 return job.create({
                     jobName: jobname,
@@ -62,7 +62,7 @@ function getClient() {
                     total: parseFloat(payment) + (0.1 * payment)
                 });
             },
-            addNewJobScheme: function addNewJobScheme(jobname, payment, repeatition, repetitionvalues){
+            addNewJobScheme: function addNewJobScheme(jobname, payment, repeatition, repetitionvalues) {
                 return jobScheme.create({
                     jobName: jobname,
                     enabled: true,

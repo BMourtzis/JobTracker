@@ -3,7 +3,7 @@ var helper = {};
 helper.getRelativePath = function(dirname, todir) {
     var templatePath = path.relative("./", path.resolve(dirname, todir));
     templatePath = templatePath.replaceAll("\\", "/");
-    return "./"+templatePath;
+    return "./" + templatePath;
 };
 
 String.prototype.replaceAll = function(search, replacement) {
@@ -13,7 +13,7 @@ String.prototype.replaceAll = function(search, replacement) {
 };
 
 function escapeRegExp(str) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 }
 
 module.exports = helper;

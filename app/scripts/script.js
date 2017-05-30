@@ -1,14 +1,31 @@
-
 function initiate() {
-    $("#home-nav-item").click(function(){home();});
-    $("#jobs-nav-item").click(function(){jobs();});
-    $("#schemes-nav-item").click(function(){services();});
-    $("#clients-nav-item").click(function(){clients();});
-    $("#invoices-nav-item").click(function(){invoices();});
-    $("#timetable-nav-item").click(function(){timetable();});
-    $("#finances-nav-item").click(function(){finances();});
-    $("#settings-nav-item").click(function(){settings();});
-    $("#goBack-button").click(function(){goBack();});
+    $("#home-nav-item").click(function() {
+        home();
+    });
+    $("#jobs-nav-item").click(function() {
+        jobs();
+    });
+    $("#schemes-nav-item").click(function() {
+        services();
+    });
+    $("#clients-nav-item").click(function() {
+        clients();
+    });
+    $("#invoices-nav-item").click(function() {
+        invoices();
+    });
+    $("#timetable-nav-item").click(function() {
+        timetable();
+    });
+    $("#finances-nav-item").click(function() {
+        finances();
+    });
+    $("#settings-nav-item").click(function() {
+        settings();
+    });
+    $("#goBack-button").click(function() {
+        goBack();
+    });
 }
 
 function home() {

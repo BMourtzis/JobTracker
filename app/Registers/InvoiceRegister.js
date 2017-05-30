@@ -8,11 +8,13 @@ var register = {};
  * @param  {Number} id The id of the invoice
  * @return {Promise}   A promise with an invoice
  */
-register.getInvoice = function(id){
-    return orm.invoice.findById(id,{
-        include:[orm.job, orm.client]
-    }).then(function(data){
-        return data.get({plain:true});
+register.getInvoice = function(id) {
+    return orm.invoice.findById(id, {
+        include: [orm.job, orm.client]
+    }).then(function(data) {
+        return data.get({
+            plain: true
+        });
     });
 };
 
@@ -22,7 +24,9 @@ register.getInvoice = function(id){
  * @return {Promise}  A promise with a list of invoices
  */
 register.getCurrentInvoices = function() {
-    return findInvoices(generateQuery({paid: false}),"invoiceNo ASC", 0);
+    return findInvoices(generateQuery({
+        paid: false
+    }), "invoiceNo ASC", 0);
 };
 
 /**
@@ -46,10 +50,9 @@ register.invoiceSearchOptions = function(searchParams, orderParams, page) {
  * @return {Promise}      Promise with a list of invoices
  */
 register.invoiceGeneration = function(id, year, month) {
-    if(id === 0){
+    if (id === 0) {
         return generateAllInvoices(year, month);
-    }
-    else {
+    } else {
         return register.createInvoice(year, month, id);
     }
 };
@@ -64,25 +67,33 @@ register.invoiceGeneration = function(id, year, month) {
  */
 register.createInvoice = function(year, month, clientId) {
     return getJobs(year, month, clientId, "Done").then(function(client) {
-        if(client){
-            var clientData = client.get({plain: true});
+        if (client) {
+            var clientData = client.get({
+                plain: true
+            });
             var sum = 0;
             clientData.jobs.forEach(function(job) {
                 sum += job.payment + job.gst;
             });
 
-            sum = Math.round(sum*10)/10;
-            var date = new Date.today().set({year: year, month: month-1, day: 1});
+            sum = Math.round(sum * 10) / 10;
+            var date = new Date.today().set({
+                year: year,
+                month: month - 1,
+                day: 1
+            });
             var invoiceNo = clientData.shortName + date.toString("yy") + date.toString("MM");
 
-            if(client.jobs.length > 0) {
+            if (client.jobs.length > 0) {
                 return client.addNewInvoice(year, month, sum, invoiceNo).then(function(data) {
-                    return InvoiceJobList(clientData.jobs, data.id).then(function(smth){
-                        return generateInvoice(data.id).then(function(){
+                    return InvoiceJobList(clientData.jobs, data.id).then(function(smth) {
+                        return generateInvoice(data.id).then(function() {
                             return data.id;
                         });
                     });
-                }, function(err){ console.log(err);});
+                }, function(err) {
+                    console.log(err);
+                });
             }
         }
     });
@@ -105,16 +116,20 @@ register.printInvoice = function(invoiceId) {
  * @return {Promise}          A promise with the edited invoice
  */
 register.invoicePaid = function(invoiceId) {
-    return orm.invoice.findById(invoiceId, {include:[orm.job]}).then(function(invoice) {
+    return orm.invoice.findById(invoiceId, {
+        include: [orm.job]
+    }).then(function(invoice) {
         invoice.paid = true;
         invoice.paidAt = new Date.today();
 
-        return invoice.save().then(function(data){
-            return data.get({plain:true});
+        return invoice.save().then(function(data) {
+            return data.get({
+                plain: true
+            });
         });
 
-    }).then(function(data){
-        return PaidJobList(data.jobs).then(function(){
+    }).then(function(data) {
+        return PaidJobList(data.jobs).then(function() {
             return data;
         });
     });
@@ -127,16 +142,20 @@ register.invoicePaid = function(invoiceId) {
  * @return {Promise}          A promise with the edited Invoice
  */
 register.invoiceInvoiced = function(invoiceId) {
-    return orm.invoice.findById(invoiceId, {include:[orm.job]}).then(function(invoice) {
+    return orm.invoice.findById(invoiceId, {
+        include: [orm.job]
+    }).then(function(invoice) {
         invoice.paid = false;
         invoice.paidAt = null;
 
-        return invoice.save().then(function(data){
-            return data.get({plain:true});
+        return invoice.save().then(function(data) {
+            return data.get({
+                plain: true
+            });
         });
 
-    }).then(function(data){
-        return InvoiceJobList(data.jobs, invoiceId).then(function(){
+    }).then(function(data) {
+        return InvoiceJobList(data.jobs, invoiceId).then(function() {
             return data;
         });
     });
@@ -154,10 +173,12 @@ function generateInvoice(invoiceId) {
     var docxtemplater = require('docxtemplater');
 
     //TODO: find how to make proper errors
-    if(!fs.existsSync(settings.InvoiceTemplatePath)) {
+    if (!fs.existsSync(settings.InvoiceTemplatePath)) {
         var dialog = require('electron').remote.dialog;
         dialog.showErrorBox("Error!", "The Receipt Template doesn't exist.");
-        var err = {Error: "Receipt Template doesn't exist."};
+        var err = {
+            Error: "Receipt Template doesn't exist."
+        };
         throw err;
     }
 
@@ -166,25 +187,30 @@ function generateInvoice(invoiceId) {
     var doc = new docxtemplater();
     doc.loadZip(zip);
 
-    return register.getInvoice(invoiceId).then(function(invoice){
+    return register.getInvoice(invoiceId).then(function(invoice) {
         invoice.subtotal = 0;
-        for(var i = 0; i< invoice.jobs.length; i++){
+        for (var i = 0; i < invoice.jobs.length; i++) {
             invoice.jobs[i].timeBooked = new Date(invoice.jobs[i].timeBooked).toString("dd/MM/yyyy");
             invoice.subtotal += invoice.jobs[i].payment;
         }
 
         invoice.gst = invoice.total - invoice.subtotal;
 
-        var period = new Date().set({year: invoice.year, month: invoice.month-1});
+        var period = new Date().set({
+            year: invoice.year,
+            month: invoice.month - 1
+        });
         invoice.issueDate = new Date.today().toString("dd-MM-yyyy");
         invoice.invoicePeriod = period.toString("MMMM yyyy");
         invoice.address = invoice.client.address;
 
-        return getJobs(invoice.year, invoice.month+1, invoice.clientId, "Placed").then(function(data){
-            if(data) {
-                data = data.get({plain: true});
+        return getJobs(invoice.year, invoice.month + 1, invoice.clientId, "Placed").then(function(data) {
+            if (data) {
+                data = data.get({
+                    plain: true
+                });
                 var nextServ = [];
-                for(var i = 0; i < data.jobs.length; i++){
+                for (var i = 0; i < data.jobs.length; i++) {
                     nextServ.push(new Date(data.jobs[i].timeBooked).toString("dd/MM/yyyy"));
                 }
                 return nextServ;
@@ -197,9 +223,11 @@ function generateInvoice(invoiceId) {
             doc.setData(invoice);
             doc.render();
 
-            var buf = doc.getZip().generate({type: "nodebuffer"});
+            var buf = doc.getZip().generate({
+                type: "nodebuffer"
+            });
             var invoiceFolder = checkCreateDirectory(period.toString("yyyy"), period.toString("MM"));
-            fs.writeFileSync(path.resolve(invoiceFolder, invoice.client.businessName+".docx"), buf);
+            fs.writeFileSync(path.resolve(invoiceFolder, invoice.client.businessName + ".docx"), buf);
 
             return true;
         });
@@ -213,9 +241,13 @@ function generateInvoice(invoiceId) {
  * @return {Promise}          A promise with the deleted invoice
  */
 register.deleteInvoice = function(invoiceId) {
-    return orm.invoice.findById(invoiceId, {include:[orm.client, orm.job]}).then(function(invoice){
-        var invoiceData = invoice.get({plain:true});
-        return DoneJobList(invoiceData.jobs, invoiceId).then(function(){
+    return orm.invoice.findById(invoiceId, {
+        include: [orm.client, orm.job]
+    }).then(function(invoice) {
+        var invoiceData = invoice.get({
+            plain: true
+        });
+        return DoneJobList(invoiceData.jobs, invoiceId).then(function() {
             return invoice.destroy();
         });
     });
@@ -228,7 +260,9 @@ register.deleteInvoice = function(invoiceId) {
  * @return {Promise}         A promise with the count
  */
 register.getInvoiceCount = function(clientId) {
-    return getCount(generateQuery({clientID: clientId}));
+    return getCount(generateQuery({
+        clientID: clientId
+    }));
 };
 
 /**
@@ -238,7 +272,10 @@ register.getInvoiceCount = function(clientId) {
  * @return {Promise}         A promise with count
  */
 register.getPendingInvoiceCount = function(clientId) {
-    return getCount(generateQuery({clientID: clientId, paid: false}));
+    return getCount(generateQuery({
+        clientID: clientId,
+        paid: false
+    }));
 };
 
 /**
@@ -248,7 +285,9 @@ register.getPendingInvoiceCount = function(clientId) {
  * @return {Promise}         A promise with sum
  */
 register.getPaidSum = function(clientId) {
-    return getTotalSum(generateQuery({clientID: clientId}));
+    return getTotalSum(generateQuery({
+        clientID: clientId
+    }));
 };
 
 /**
@@ -258,7 +297,10 @@ register.getPaidSum = function(clientId) {
  * @return {Promise}         A promise with the sum
  */
 register.getPendingSum = function(clientId) {
-    return getTotalSum(generateQuery({clientID: clientId, paid: false}));
+    return getTotalSum(generateQuery({
+        clientID: clientId,
+        paid: false
+    }));
 };
 
 /**
@@ -268,19 +310,19 @@ register.getPendingSum = function(clientId) {
  * @param  {Number} month      The month of the invoice
  * @return {String}            The final folder directory
  */
-function checkCreateDirectory(year,month) {
+function checkCreateDirectory(year, month) {
     baseFolder = settings.InvoiceOutputPath;
-    if(!fs.existsSync(baseFolder)){
+    if (!fs.existsSync(baseFolder)) {
         fs.mkdirSync(baseFolder);
     }
 
-    baseFolder = path.resolve(baseFolder, year+"/");
-    if(!fs.existsSync(baseFolder)) {
+    baseFolder = path.resolve(baseFolder, year + "/");
+    if (!fs.existsSync(baseFolder)) {
         fs.mkdirSync(baseFolder);
     }
 
-    baseFolder = path.resolve(baseFolder, month+"/");
-    if(!fs.existsSync(baseFolder)){
+    baseFolder = path.resolve(baseFolder, month + "/");
+    if (!fs.existsSync(baseFolder)) {
         fs.mkdirSync(baseFolder);
     }
     return baseFolder;
@@ -294,10 +336,10 @@ function checkCreateDirectory(year,month) {
  * @return {Promise}      A chained promise for all the invoices of the month
  */
 function generateAllInvoices(year, month) {
-    return orm.client.findAll().then(function(data){
-        return Promise.resolve(0).then(function loop(i){
-            if(i < data.length){
-                return createInvoicePromiseHelper(i, data, year, month).then(function(){
+    return orm.client.findAll().then(function(data) {
+        return Promise.resolve(0).then(function loop(i) {
+            if (i < data.length) {
+                return createInvoicePromiseHelper(i, data, year, month).then(function() {
                     i++;
                     return loop(i);
                 });
@@ -316,9 +358,11 @@ function generateAllInvoices(year, month) {
  * @return {Promise}               A promise that when done it will call the loop functin again
  */
 function createInvoicePromiseHelper(i, data, year, month) {
-    return new Promise(function(resolve){
-        var clientData = data[i].get({plain: true});
-        return register.createInvoice(year, month, clientData.id).then(function(){
+    return new Promise(function(resolve) {
+        var clientData = data[i].get({
+            plain: true
+        });
+        return register.createInvoice(year, month, clientData.id).then(function() {
             resolve();
         });
     });
@@ -335,8 +379,8 @@ function createInvoicePromiseHelper(i, data, year, month) {
 function generateQuery(searchParams) {
     var query = {};
 
-    if(searchParams.from !== undefined && searchParams.to !== undefined){
-        if(searchParams.from === undefined){
+    if (searchParams.from !== undefined && searchParams.to !== undefined) {
+        if (searchParams.from === undefined) {
             query.year = {
                 lt: parseInt(searchParams.to.toString("yyyy"))
             };
@@ -344,8 +388,7 @@ function generateQuery(searchParams) {
             query.month = {
                 lt: parseInt(searchParams.to.toString("MM"))
             };
-        }
-        else if(searchParams.to === undefined){
+        } else if (searchParams.to === undefined) {
             query.year = {
                 gt: parseInt(searchParams.from.toString("yyyy"))
             };
@@ -353,33 +396,32 @@ function generateQuery(searchParams) {
             query.month = {
                 gt: parseInt(searchParams.from.toString("MM"))
             };
-        }
-        else{
+        } else {
             query.year = {
                 lt: parseInt(searchParams.to.toString("yyyy")),
                 gt: parseInt(searchParams.from.toString("yyyy"))
             };
 
-            if(query.year.lt === query.year.gt) {
+            if (query.year.lt === query.year.gt) {
                 query.year = parseInt(searchParams.to.toString("yyyy"));
             }
 
             query.month = {
-                lt: parseInt(searchParams.to.toString("MM"))+1,
+                lt: parseInt(searchParams.to.toString("MM")) + 1,
                 gt: parseInt(searchParams.from.toString("MM"))
             };
 
-            if(query.month.lt === query.month.gt) {
+            if (query.month.lt === query.month.gt) {
                 query.month = parseInt(searchParams.to.toString("MM"));
             }
         }
     }
 
-    if(searchParams.paid !== "" && searchParams.paid !== undefined){
+    if (searchParams.paid !== "" && searchParams.paid !== undefined) {
         query.paid = searchParams.paid;
     }
 
-    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== ""){
+    if (!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== "") {
         query.clientID = searchParams.clientID;
     }
 
@@ -394,24 +436,26 @@ function generateQuery(searchParams) {
  * @param  {Number} page         The page of the list
  * @return {Promise}             A promise with a list of invoices
  */
-function findInvoices(searchParams, orderParams, page){
-    if(orderParams === "") {
+function findInvoices(searchParams, orderParams, page) {
+    if (orderParams === "") {
         orderParams = "year DESC, month DESC";
     }
 
     return orm.invoice.findAll({
         where: searchParams,
-        include:[orm.client],
+        include: [orm.client],
         order: orderParams,
-        offset: page*100,
+        offset: page * 100,
         limit: 100
     }).then(function(query) {
-        return getPageCount(searchParams).then(function(count){
+        return getPageCount(searchParams).then(function(count) {
             var data = {};
             data.count = count;
             data.invoices = [];
-            query.forEach(function(invoice){
-                data.invoices.push(invoice.get({plain:true}));
+            query.forEach(function(invoice) {
+                data.invoices.push(invoice.get({
+                    plain: true
+                }));
             });
             return data;
         });
@@ -425,8 +469,8 @@ function findInvoices(searchParams, orderParams, page){
  * @return {Number}              The number of pages
  */
 function getPageCount(searchParams) {
-    return getCount(searchParams).then(function (count) {
-        return Math.floor(count/100);
+    return getCount(searchParams).then(function(count) {
+        return Math.floor(count / 100);
     });
 }
 
@@ -448,8 +492,8 @@ function getCount(searchParams) {
  * @param  {Object} searchParams Search Parameters
  * @return {Number}              The total sum of the searched jobs
  */
-function getTotalSum(searchParams){
-    return orm.jobScheme.sum('payment',{
+function getTotalSum(searchParams) {
+    return orm.jobScheme.sum('payment', {
         where: searchParams
     });
 }
@@ -461,7 +505,7 @@ function getTotalSum(searchParams){
  * @return {Number}              The total sum of the searched jobs
  */
 function getTotalSum(searchParams) {
-    return orm.invoice.sum('total',{
+    return orm.invoice.sum('total', {
         where: searchParams
     });
 }
@@ -476,17 +520,25 @@ function getTotalSum(searchParams) {
  * @return {Promise}         A promise with a list of jobs
  */
 function getJobs(year, month, clientId, state) {
-    var from = new Date.today().set({year: year, month: month-1, day: 1});
-    var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
+    var from = new Date.today().set({
+        year: year,
+        month: month - 1,
+        day: 1
+    });
+    var to = new Date(from).set({
+        day: from.getDaysInMonth(),
+        hour: 23,
+        minute: 59
+    });
 
     return orm.client.findOne({
-        where:{
+        where: {
             id: clientId
         },
-        include:[{
+        include: [{
             model: orm.job,
-            where:{
-                timeBooked:{
+            where: {
+                timeBooked: {
                     gt: from,
                     lt: to
                 },
@@ -506,15 +558,17 @@ function getJobs(year, month, clientId, state) {
  */
 function updateJobList(jobs, updateList) {
     var idList = [];
-    if(jobs.length > 0){
-        jobs.forEach(function(job){
+    if (jobs.length > 0) {
+        jobs.forEach(function(job) {
             idList.push(job.id);
         });
     }
 
     return orm.job.update(updateList, {
         where: {
-            id: {$in: idList}
+            id: {
+                $in: idList
+            }
         }
     });
 }
@@ -527,18 +581,24 @@ function updateJobList(jobs, updateList) {
  * @return {Promise}          A promise with the updated jobs
  */
 function DoneJobList(jobs, invoiceId) {
-    return updateJobList(jobs, {state: "Done", invoiceId: null});
+    return updateJobList(jobs, {
+        state: "Done",
+        invoiceId: null
+    });
 }
 
 /**
-* InvoiceJobList - Updates the list of jobs with the Invoiced state and a new InvoiceId
-*
-* @param  {Array} jobs       A list of jobs
-* @param  {Number} invoiceId The id of the invoice
-* @return {Promise}          A promise with the updated jobs
+ * InvoiceJobList - Updates the list of jobs with the Invoiced state and a new InvoiceId
+ *
+ * @param  {Array} jobs       A list of jobs
+ * @param  {Number} invoiceId The id of the invoice
+ * @return {Promise}          A promise with the updated jobs
  */
 function InvoiceJobList(jobs, invoiceId) {
-    return updateJobList(jobs, {state: "Invoiced", invoiceId: invoiceId});
+    return updateJobList(jobs, {
+        state: "Invoiced",
+        invoiceId: invoiceId
+    });
 }
 
 /**
@@ -548,7 +608,9 @@ function InvoiceJobList(jobs, invoiceId) {
  * @return {Promise}          A promise with the updated jobs
  */
 function PaidJobList(jobs) {
-    return updateJobList(jobs, {state: "Paid"});
+    return updateJobList(jobs, {
+        state: "Paid"
+    });
 }
 
 /**
@@ -556,8 +618,8 @@ function PaidJobList(jobs) {
  *
  * @return {Promise}  The Invoice Register
  */
-function initiateRegister(){
-    return require('../scripts/orm.js').then(function(data){
+function initiateRegister() {
+    return require('../scripts/orm.js').then(function(data) {
         orm = data;
         return register;
     });

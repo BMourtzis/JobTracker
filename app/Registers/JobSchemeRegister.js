@@ -26,7 +26,9 @@ register.getJobScheme = function(id) {
  * @return {Promis}  A promise with all the active (enabled) jobSchemes
  */
 register.getActiveJobSchemes = function() {
-    var searchParams = { "enabled": true };
+    var searchParams = {
+        "enabled": true
+    };
     return findJobSchemes(searchParams, "", 0);
 };
 
@@ -48,7 +50,9 @@ register.searchJobSchemes = function(searchParams, page) {
  * @return {Promise}         A promise with the count
  */
 register.getJobSchemeCount = function(clientId) {
-    return getCount(generateQuery({client: clientId}));
+    return getCount(generateQuery({
+        client: clientId
+    }));
 };
 
 /**
@@ -58,7 +62,10 @@ register.getJobSchemeCount = function(clientId) {
  * @return {Promise}         A promise with the count
  */
 register.getActiveJobSchemeCount = function(clientId) {
-    return getCount(generateQuery({client: clientId, enabled: true}));
+    return getCount(generateQuery({
+        client: clientId,
+        enabled: true
+    }));
 };
 
 /**
@@ -68,7 +75,10 @@ register.getActiveJobSchemeCount = function(clientId) {
  * @return {Promise}         A promise with the sum
  */
 register.getActiveJobSchemeSum = function(clientId) {
-    return getTotalSum(generateQuery({client: clientId, enabled: true}));
+    return getTotalSum(generateQuery({
+        client: clientId,
+        enabled: true
+    }));
 };
 
 /**
@@ -132,7 +142,10 @@ register.editJobScheme = function(id, data) {
  * @return {Promise}   A promise with the disabled jobScheme
  */
 register.disableJobScheme = function(id) {
-    return register.editJobScheme(id, [{name: "enabled", value: false}]);
+    return register.editJobScheme(id, [{
+        name: "enabled",
+        value: false
+    }]);
 };
 
 /**
@@ -142,7 +155,10 @@ register.disableJobScheme = function(id) {
  * @return {Promise}   A promise the enabled jobScheme
  */
 register.enableJobScheme = function(id) {
-    return register.editJobScheme(id, [{name: "enabled", value: true}]);
+    return register.editJobScheme(id, [{
+        name: "enabled",
+        value: true
+    }]);
 };
 
 /**
@@ -169,11 +185,10 @@ register.generateJobs = function(id, year, month) {
  */
 register.generateClientJobs = function(clientId, year, month) {
     year = parseInt(year);
-    month = parseInt(month)-1;
-    if(clientId === "") {
+    month = parseInt(month) - 1;
+    if (clientId === "") {
         return GenerateAllActiveJobs(year, month);
-    }
-    else {
+    } else {
         clientId = parseInt(clientId);
         return GenerateClientActiveJobs(clientId, year, month);
     }
@@ -186,7 +201,7 @@ register.generateClientJobs = function(clientId, year, month) {
  * @return {Promise}   A promise with the deleted jobScheme
  */
 register.removeJobScheme = function(id) {
-    return orm.jobScheme.findById(id).then(function(jobScheme){
+    return orm.jobScheme.findById(id).then(function(jobScheme) {
         return jobScheme.destroy();
     });
 };
@@ -202,25 +217,23 @@ function generateQuery(searchParams) {
 
     searchParams.client = parseInt(searchParams.client);
 
-    if(searchParams.enabled === "true") {
+    if (searchParams.enabled === "true") {
         searchParams.enabled = true;
-    }
-    else if(searchParams.enabled === "false") {
+    } else if (searchParams.enabled === "false") {
         searchParams.enabled = false;
-    }
-    else {
+    } else {
         searchParams.enabled = "";
     }
 
-    if(searchParams.repetition !== "" && searchParams.repetition !== undefined) {
+    if (searchParams.repetition !== "" && searchParams.repetition !== undefined) {
         query.repetition = searchParams.repetition;
     }
 
-    if(searchParams.enabled !== "" && searchParams.enabled !== undefined) {
+    if (searchParams.enabled !== "" && searchParams.enabled !== undefined) {
         query.enabled = searchParams.enabled;
     }
 
-    if(!Number.isNaN(searchParams.client) && searchParams.client !== undefined && searchParams.client !== "") {
+    if (!Number.isNaN(searchParams.client) && searchParams.client !== undefined && searchParams.client !== "") {
         query.clientId = searchParams.client;
     }
 
@@ -236,7 +249,7 @@ function generateQuery(searchParams) {
  * @return {Promise}             A promise with a list of jobSchemes
  */
 function findJobSchemes(searchParams, orderParams, page) {
-    if(!Number.isInteger(page)) {
+    if (!Number.isInteger(page)) {
         page = 0;
     }
 
@@ -244,13 +257,15 @@ function findJobSchemes(searchParams, orderParams, page) {
         include: [orm.client],
         where: searchParams,
         order: orderParams,
-        offset: page*100,
+        offset: page * 100,
         limit: 100
     }).then(function(query) {
         return getPageCount(searchParams).then(function(count) {
             var schemes = [];
-            for(var i = 0; i<query.length; i++) {
-                schemes.push(query[i].get({plain:true}));
+            for (var i = 0; i < query.length; i++) {
+                schemes.push(query[i].get({
+                    plain: true
+                }));
             }
 
             var data = {
@@ -269,8 +284,8 @@ function findJobSchemes(searchParams, orderParams, page) {
  * @return {Promise}             A promise with the page count
  */
 function getPageCount(searchParams) {
-    return getCount(searchParams).then(function(count){
-        return Math.floor(count/100);
+    return getCount(searchParams).then(function(count) {
+        return Math.floor(count / 100);
     });
 }
 
@@ -280,7 +295,7 @@ function getPageCount(searchParams) {
  * @param  {Object} searchParams The formated search parameters
  * @return {Promise}             A promise with the count of the search
  */
-function getCount(searchParams){
+function getCount(searchParams) {
     return orm.jobScheme.count({
         where: searchParams
     });
@@ -292,8 +307,8 @@ function getCount(searchParams){
  * @param  {Object} searchParams The formatted search parameters
  * @return {Promise}             A promise with the sum of the search
  */
-function getTotalSum(searchParams){
-    return orm.jobScheme.sum('payment',{
+function getTotalSum(searchParams) {
+    return orm.jobScheme.sum('payment', {
         where: searchParams
     });
 }
@@ -310,7 +325,7 @@ function GenerateAllActiveJobs(year, month) {
         where: {
             enabled: true
         }
-    }).then(function(data){
+    }).then(function(data) {
         return generateMultipleJobs(data, year, month);
     });
 }
@@ -329,7 +344,7 @@ function GenerateClientActiveJobs(clientId, year, month) {
             enabled: true,
             clientId: clientId
         }
-    }).then(function(data){
+    }).then(function(data) {
         return generateMultipleJobs(data, year, month);
     });
 }
@@ -343,9 +358,9 @@ function GenerateClientActiveJobs(clientId, year, month) {
  * @return {Promise}      A promise with the generated job(s)
  */
 function generateMultipleJobs(data, year, month) {
-    return Promise.resolve(0).then(function loop(i){
-        if(i < data.length){
-            return generateMultipleJobsHelper(data[i], year, month).then(function(){
+    return Promise.resolve(0).then(function loop(i) {
+        if (i < data.length) {
+            return generateMultipleJobsHelper(data[i], year, month).then(function() {
                 i++;
                 return loop(i);
             });
@@ -362,7 +377,7 @@ function generateMultipleJobs(data, year, month) {
  * @return {Promise}                  A promise with a list of jobSchemes
  */
 function generateMultipleJobsHelper(scheme, year, month) {
-    return new Promise(function(resolve){
+    return new Promise(function(resolve) {
         return scheme.generateJobs(year, month).then(function() {
             resolve();
         });
@@ -375,32 +390,32 @@ function generateMultipleJobsHelper(scheme, year, month) {
  * @param  {Object(JobScheme)} data The jobScheme to be formatted
  */
 function jobSchemeHelper(data) {
-        data.week = Math.floor(data.day/7);
-        data.day %= 7;
+    data.week = Math.floor(data.day / 7);
+    data.day %= 7;
 
-        switch (data.day) {
-            case 0:
-                data.day = "Sunday";
-                break;
-            case 1:
-                data.day = "Monday";
-                break;
-            case 2:
-                data.day = "Tuesday";
-                break;
-            case 3:
-                data.day = "Wednesday";
-                break;
-            case 4:
-                data.day = "Thurday";
-                break;
-            case 5:
-                data.day = "Friday";
-                break;
-            case 6:
-                data.day = "Saturday";
-                break;
-        }
+    switch (data.day) {
+        case 0:
+            data.day = "Sunday";
+            break;
+        case 1:
+            data.day = "Monday";
+            break;
+        case 2:
+            data.day = "Tuesday";
+            break;
+        case 3:
+            data.day = "Wednesday";
+            break;
+        case 4:
+            data.day = "Thurday";
+            break;
+        case 5:
+            data.day = "Friday";
+            break;
+        case 6:
+            data.day = "Saturday";
+            break;
+    }
 
     if (data.hour < 10 && data.hour > -1) {
         data.hour = "0" + data.hour;
@@ -420,7 +435,7 @@ function jobSchemeHelper(data) {
  */
 function jobSchemeEditHelper(data) {
     if (data.day) {
-        data.week = Math.floor(data.day/7);
+        data.week = Math.floor(data.day / 7);
         data.day %= 7;
     }
 
@@ -439,7 +454,7 @@ function jobSchemeEditHelper(data) {
  * @return {Object}  Returns the initiated JobScheme Register
  */
 function initiateRegister() {
-    return require('../scripts/orm.js').then(function(data){
+    return require('../scripts/orm.js').then(function(data) {
         orm = data;
         return register;
     });

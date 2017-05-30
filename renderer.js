@@ -34,7 +34,7 @@ require('./app/scripts/script.js');
 
 //Scripts
 window.settings = require("./app/scripts/Settings.js");
-require("./app/Controller/Controllers.js")().then(function(data){
+require("./app/Controller/Controllers.js")().then(function(data) {
     window.ctrls = data;
     ctrls.Home.index();
 });

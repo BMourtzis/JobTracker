@@ -22,7 +22,7 @@ ctrl.selectedList = [];
 
 ctrl.index = function() {
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
-    return initiatePage().then(function(){
+    return initiatePage().then(function() {
         return loadAllJobs();
     });
 };
@@ -33,30 +33,40 @@ ctrl.index = function() {
  * @return {Promise}  an empty promise
  */
 
-function initiatePage(){
+function initiatePage() {
     return facade.getAllClients().then(function(query) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
         var temp = jsrender.templates(templatePath);
-        var html = temp({clients: query});
+        var html = temp({
+            clients: query
+        });
         $("#content").html(html);
 
-        $('#fromDatepicker').datetimepicker({format: 'DD/MM/YYYY'});
+        $('#fromDatepicker').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
         $('#toDatepicker').datetimepicker({
             format: 'DD/MM/YYYY',
             useCurrent: false
         });
 
-        $('#fromDatepicker').on("dp.change", function(e){
+        $('#fromDatepicker').on("dp.change", function(e) {
             $('#toDatepicker').data("DateTimePicker").minDate(e.date);
         });
 
-        $('#toDatepicker').on("dp.change", function(e){
+        $('#toDatepicker').on("dp.change", function(e) {
             $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
         });
 
-        $("#jobAllCheckbox").click(function(){updateAllCheckboxes();});
-        $("#create-button").click(function(){ctrl.create();});
-        $("#search-button").click(function(){search();});
+        $("#jobAllCheckbox").click(function() {
+            updateAllCheckboxes();
+        });
+        $("#create-button").click(function() {
+            ctrl.create();
+        });
+        $("#search-button").click(function() {
+            search();
+        });
 
         ctrl.currentPage = 0;
     });
@@ -71,9 +81,11 @@ function initiatePage(){
 
 ctrl.getClientJobs = function(clientId) {
     contentManager.add(ctrl.ctrlName, "reload", reload.bind(this));
-    return initiatePage().then(function(){
-        ctrl.searchParams = {clientID: clientId};
-        return facade.getClientJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+    return initiatePage().then(function() {
+        ctrl.searchParams = {
+            clientID: clientId
+        };
+        return facade.getClientJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data) {
             return loadTable(data);
         });
     });
@@ -87,8 +99,17 @@ ctrl.getClientJobs = function(clientId) {
 
 function loadAllJobs() {
     ctrl.searchParams = {
-        from: Date.today().last().year().set({month: 0, day: 1}),
-        to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
+        from: Date.today().last().year().set({
+            month: 0,
+            day: 1
+        }),
+        to: Date.today().set({
+            month: 11,
+            day: 31
+        }).at({
+            hour: 23,
+            minute: 59
+        })
     };
     facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(query) {
         loadTable(query);
@@ -107,20 +128,20 @@ function search() {
     var formData = $("#searchOptionsForm").serializeArray().reduce(function(obj, item) {
         obj[item.name] = item.value;
         return obj;
-    },{});
+    }, {});
 
-    if($('#fromDatepicker :input').val() !== "") {
+    if ($('#fromDatepicker :input').val() !== "") {
         formData.from = Date.parse($('#fromDatepicker :input').val());
     }
 
-    if($('#toDatepicker :input').val() !== "") {
+    if ($('#toDatepicker :input').val() !== "") {
         formData.to = Date.parse($('#toDatepicker :input').val());
     }
 
     contentManager.add(ctrl.ctrlName, "search", search.bind(this));
 
     ctrl.searchParams = formData;
-    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data) {
         loadTable(data);
     });
 }
@@ -131,7 +152,7 @@ function search() {
  * @return {Promise}  an empty promise
  */
 function reload() {
-    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data){
+    return facade.searchJobs(ctrl.searchParams, "", ctrl.currentPage).then(function(data) {
         return loadTable(data);
     });
 }
@@ -143,18 +164,22 @@ function updateSelectedList() {
     var tdList = $("#indexJobTable :checked");
     ctrl.selectedList = [];
 
-    tdList.each(function(){
+    tdList.each(function() {
         ctrl.selectedList.push(parseInt($(this).data("id")));
     });
 
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
     var temp = jsrender.templates(templatePath);
-    var html = temp({count: ctrl.selectedList.length});
+    var html = temp({
+        count: ctrl.selectedList.length
+    });
     sidebarManager.add(ctrl.ctrlName, "updateSelectedList", updateSelectedList.bind(this));
     $("#sidebar-heading").html("Selection List");
     $("#sidebar").html(html);
 
-    $("#delete-button").click(function(){bulkDelete();});
+    $("#delete-button").click(function() {
+        bulkDelete();
+    });
 }
 
 /**
@@ -166,7 +191,7 @@ function updateAllCheckboxes() {
     var checked = $("#jobAllCheckbox").is(":checked");
     var tdList = $("#indexJobTable :checkbox");
 
-    tdList.each(function(){
+    tdList.each(function() {
         $(this).prop("checked", checked);
     });
 
@@ -181,7 +206,7 @@ function updateAllCheckboxes() {
  */
 
 function gotoPage(page) {
-    if(page !== undefined) {
+    if (page !== undefined) {
         ctrl.currentPage = page;
         return reload();
     }
@@ -193,7 +218,7 @@ function gotoPage(page) {
  * @param  {Object} data A list of data to be loaded on the table
  */
 
-function loadTable(data){
+function loadTable(data) {
     data.currentPage = ctrl.currentPage;
 
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
@@ -201,9 +226,15 @@ function loadTable(data){
     var table = tableTemp(data);
     $("#indexJobTable").html(table);
 
-    $(".job-checkbox").click(function(){updateSelectedList();});
-    $(".details-button").click(function(){ctrl.details($(this).data("id"));});
-    $("#paginationNavBar li").click(function(){gotoPage($(this).data("page"));});
+    $(".job-checkbox").click(function() {
+        updateSelectedList();
+    });
+    $(".details-button").click(function() {
+        ctrl.details($(this).data("id"));
+    });
+    $("#paginationNavBar li").click(function() {
+        gotoPage($(this).data("page"));
+    });
 }
 
 /**
@@ -222,16 +253,24 @@ ctrl.details = function(id) {
         $("#sidebar-heading").html("Job Details");
         $("#sidebar").html(html);
 
-        $("#done-button").click(function(){done(id);});
-        $("#placed-button").click(function(){placed(id);});
-        $("#rebook-button").click(function(){ctrl.rebook(id);});
-        $("#edit-button").click(function(){ctrl.edit(id);});
-        $("#delete-button").click(function(){
-            new Promise(function(resolve, reject){
-                $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
+        $("#done-button").click(function() {
+            done(id);
+        });
+        $("#placed-button").click(function() {
+            placed(id);
+        });
+        $("#rebook-button").click(function() {
+            ctrl.rebook(id);
+        });
+        $("#edit-button").click(function() {
+            ctrl.edit(id);
+        });
+        $("#delete-button").click(function() {
+            new Promise(function(resolve, reject) {
+                $("#deleteConfirmationModal").on('hidden.bs.modal', function(e) {
                     resolve();
                 });
-            }).then(function(){
+            }).then(function() {
                 remove(data.id);
             });
         });
@@ -246,14 +285,17 @@ ctrl.details = function(id) {
  */
 
 ctrl.create = function(id) {
-    if(id === undefined) {
+    if (id === undefined) {
         return facade.getAllClients().then(function(query) {
-            return fillCreatePage({clients: query});
+            return fillCreatePage({
+                clients: query
+            });
         });
-    }
-    else {
+    } else {
         return facade.getClient(id).then(function(query) {
-            return fillCreatePage({client: query});
+            return fillCreatePage({
+                client: query
+            });
         });
     }
 };
@@ -273,10 +315,16 @@ function fillCreatePage(data) {
     $("#sidebar-heading").html("Create Job");
     $("#sidebar").html(html);
 
-    $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
-    $('#timepicker').datetimepicker({format: 'HH:mm'});
+    $('#datepicker').datetimepicker({
+        format: 'DD/MM/YYYY'
+    });
+    $('#timepicker').datetimepicker({
+        format: 'HH:mm'
+    });
 
-    $("#form-submit-button").click(function(){create();});
+    $("#form-submit-button").click(function() {
+        create();
+    });
 }
 
 /**
@@ -291,7 +339,7 @@ function create() {
     var time = $('#timepicker :input').val();
     var dateTimeFormat = "DD/MM/YYYY HH:mm";
 
-    formData.push(moment(date+" "+time, dateTimeFormat)._d);
+    formData.push(moment(date + " " + time, dateTimeFormat)._d);
     return facade.createJob(formData[1].value, formData[3], formData[2].value, formData[0].value).then(function(job) {
         sidebarManager.pop();
         contentManager.reload();
@@ -318,8 +366,8 @@ function remove(id) {
  * @return {Promise}  an empty promise
  */
 function bulkDelete() {
-    return facade.bulkDeleteJobs(ctrl.selectedList).then(function(){
-        contentManager.reload().then(function(){
+    return facade.bulkDeleteJobs(ctrl.selectedList).then(function() {
+        contentManager.reload().then(function() {
             return updateSelectedList();
         });
     });
@@ -341,7 +389,9 @@ ctrl.edit = function(id) {
         $("#sidebar-heading").html("Edit Job");
         $("#sidebar").html(html);
 
-        $("#save-edit-button").click(function(){edit(id);});
+        $("#save-edit-button").click(function() {
+            edit(id);
+        });
     });
 };
 
@@ -377,10 +427,16 @@ ctrl.rebook = function(id) {
         $("#sidebar-heading").html("Rebook Job");
         $("#sidebar").html(html);
 
-        $('#datepicker').datetimepicker({format: 'DD/MM/YYYY'});
-        $('#timepicker').datetimepicker({format: 'HH:mm'});
+        $('#datepicker').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#timepicker').datetimepicker({
+            format: 'HH:mm'
+        });
 
-        $("#save-rebook-button").click(function(){rebook(id);});
+        $("#save-rebook-button").click(function() {
+            rebook(id);
+        });
     });
 };
 
@@ -390,7 +446,7 @@ ctrl.rebook = function(id) {
  * @param  {number} id the id of the job
  * @return {Promise}    an empty promise
  */
-function rebook(id){
+function rebook(id) {
     var formData = [];
     var date = $('#datepicker :input').val();
     var time = $('#timepicker :input').val();
@@ -398,7 +454,7 @@ function rebook(id){
 
     formData.push({
         name: "timeBooked",
-        value: moment(date+" "+time, dateTimeFormat)._d
+        value: moment(date + " " + time, dateTimeFormat)._d
     });
 
     return facade.editJob(id, formData).then(function() {
@@ -417,8 +473,8 @@ function rebook(id){
  * @return {Promise}    an empty promise
  */
 
-function placed(id){
-    return facade.placed(id).then(function(data){
+function placed(id) {
+    return facade.placed(id).then(function(data) {
         return ctrl.details(id);
     });
 }
@@ -429,8 +485,8 @@ function placed(id){
  * @param  {number} id the id of the job
  * @return {Promise}    an empty promise
  */
-function done(id){
-    return facade.done(id).then(function(data){
+function done(id) {
+    return facade.done(id).then(function(data) {
         return ctrl.details(id);
     });
 }
@@ -441,7 +497,7 @@ function done(id){
  * @return {Object}  Jobs controller
  */
 function initiateController() {
-    return require('../scripts/Facade.js').then(function(data){
+    return require('../scripts/Facade.js').then(function(data) {
         facade = data;
         return ctrl;
     });

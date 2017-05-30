@@ -3,32 +3,28 @@
     <h2 class="details-heading float-left">{{:jobName}}</h2>
 </div>
 <div class="row button-row">
-        <button id="edit-button" type="button" class="btn btn-warning">
+    <button id="edit-button" type="button" class="btn btn-warning">
             <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
         </button>
-        <button id="generate-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#generateJobsOptionsModal">
+    <button id="generate-button" type="button" class="btn btn-success" data-toggle="modal" data-target="#generateJobsOptionsModal">
             <span class="glyphicon glyphicon-cog"></span>&nbsp;Generate Jobs
         </button>
-        <button id="delete-button" type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
+    <button id="delete-button" type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
             <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
         </button>
 </div>
 <div class="row">
     <p>
-        <strong>Business Name:</strong>
-        {{:client.businessName}}
+        <strong>Business Name:</strong> {{:client.businessName}}
     </p>
     <p>
-        <strong>Repetition:</strong>
-        {{:repetition}}
+        <strong>Repetition:</strong> {{:repetition}}
     </p>
     <p>
-        <strong>Payment:</strong>
-        ${{:payment}}
+        <strong>Payment:</strong> ${{:payment}}
     </p>
     <p>
-        <strong>Enabled:</strong>
-        {{:enabled}}
+        <strong>Enabled:</strong> {{:enabled}}
     </p>
 </div>
 <div class="row">
@@ -37,24 +33,22 @@
 
 {{for repetitionValues}}
 <div class="row sub-details">
-    <div class="col-md-1"><h5>{{:#index+1}}.</h5></div>
+    <div class="col-md-1">
+        <h5>{{:#index+1}}.</h5></div>
     <div class="col-md-offset-1">
-    {{if #parent.parent.data.repetition === "Monthly" || #parent.parent.data.repetition === "Fortnightly"}}
-    <p>
-        <strong>Week:</strong>
-        {{:week+1}}
-    </p>
-    {{/if}}
-    {{if #parent.parent.data.repetition !== "Daily"}}
-    <p>
-        <strong>Day:</strong>
-        {{:day}}
-    </p>
-    {{/if}}
-    <p>
-        <strong>Time:</strong>
-        {{:hour}}:{{:minute}}
-    </p></div>
+        {{if #parent.parent.data.repetition === "Monthly" || #parent.parent.data.repetition === "Fortnightly"}}
+        <p>
+            <strong>Week:</strong> {{:week+1}}
+        </p>
+        {{/if}} {{if #parent.parent.data.repetition !== "Daily"}}
+        <p>
+            <strong>Day:</strong> {{:day}}
+        </p>
+        {{/if}}
+        <p>
+            <strong>Time:</strong> {{:hour}}:{{:minute}}
+        </p>
+    </div>
 </div>
 {{/for}}
 <div class="row">
@@ -63,30 +57,28 @@
         <button id="disable-button" type="button" class="btn btn-warning">
             <span class="glyphicon glyphicon-unchecked"></span>
             Disable
-        </button>
-        {{else}}
+        </button> {{else}}
         <button id="enable-button" type="button" class="btn btn-warning">
             <span class="glyphicon glyphicon-check"></span>
             Enabled
-        </button>
-        {{/if}}
+        </button> {{/if}}
     </div>
 </div>
 
 <!-- Delete confirmation Modal -->
 <div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-medium" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title modalLabel">Are you sure you want to delete {{:jobName}}</h4>
-        </div>
-        <div class="modal-body">
-            <button id="removeJobSchemeButton" type="button" class="btn btn-danger" data-dismiss="modal">Delete Service</button>
-            <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
+    <div class="modal-dialog modal-medium" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title modalLabel">Are you sure you want to delete {{:jobName}}</h4>
+            </div>
+            <div class="modal-body">
+                <button id="removeJobSchemeButton" type="button" class="btn btn-danger" data-dismiss="modal">Delete Service</button>
+                <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
-  </div>
 </div>
 
 <!-- Modal -->
@@ -107,7 +99,7 @@
                                     <span class="input-group-btn">
                                         <button id="subtractYearButton" class="btn btn-default" type="button"><span class="glyphicon glyphicon-minus"></span></button>
                                     </span>
-                                    <input id="yearCounter" type="text" class="form-control" name="year" value="{{:year}}"/>
+                                    <input id="yearCounter" type="text" class="form-control" name="year" value="{{:year}}" />
                                     <span class="input-group-btn">
                                         <button id="addYearButton" class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span></button>
                                     </span>

@@ -23,8 +23,12 @@ ctrl.index = function() {
         var html = temp(data);
         $("#content").html(html);
 
-        $("#create-button").click(function(){ctrl.create();});
-        $("#client-table button").click(function(){ctrl.details($(this).data("id"));});
+        $("#create-button").click(function() {
+            ctrl.create();
+        });
+        $("#client-table button").click(function() {
+            ctrl.details($(this).data("id"));
+        });
     });
 };
 
@@ -45,19 +49,33 @@ ctrl.details = function(clientId) {
         $("#sidebar").html(html);
 
         //Add click functinality
-        $("#edit-button").click(function(){ctrl.edit(clientId);});
-        $("#create-jobscheme-button").click(function(){ctrls.JobSchemes.create(clientId);});
-        $("#create-job-button").click(function(){ctrls.Jobs.create(clientId);});
-        $("#create-invoice-button").click(function(){ctrls.Invoices.create(clientId);});
-        $("#see-all-jobs-button").click(function(){ctrls.Jobs.getClientJobs(clientId);});
-        $("#see-all-schemes-button").click(function(){ctrls.JobSchemes.getClientSchemes(clientId);});
-        $("#see-all-invoices-button").click(function(){ctrls.Invoices.getClientInvoices(clientId);});
-        $("#delete-button").click(function(){
-            new Promise(function(resolve, reject){
-                $("#deleteConfirmationModal").on('hidden.bs.modal', function (e) {
+        $("#edit-button").click(function() {
+            ctrl.edit(clientId);
+        });
+        $("#create-jobscheme-button").click(function() {
+            ctrls.JobSchemes.create(clientId);
+        });
+        $("#create-job-button").click(function() {
+            ctrls.Jobs.create(clientId);
+        });
+        $("#create-invoice-button").click(function() {
+            ctrls.Invoices.create(clientId);
+        });
+        $("#see-all-jobs-button").click(function() {
+            ctrls.Jobs.getClientJobs(clientId);
+        });
+        $("#see-all-schemes-button").click(function() {
+            ctrls.JobSchemes.getClientSchemes(clientId);
+        });
+        $("#see-all-invoices-button").click(function() {
+            ctrls.Invoices.getClientInvoices(clientId);
+        });
+        $("#delete-button").click(function() {
+            new Promise(function(resolve, reject) {
+                $("#deleteConfirmationModal").on('hidden.bs.modal', function(e) {
                     resolve();
                 });
-            }).then(function(){
+            }).then(function() {
                 remove(clientId);
             });
         });
@@ -90,7 +108,7 @@ function getClientStats(clientId) {
  * @returns an empty promise
  */
 function getJobCount(clientId) {
-    return facade.getJobCount(clientId).then(function(count){
+    return facade.getJobCount(clientId).then(function(count) {
         $("#client-no-jobs").html(count);
     });
 }
@@ -103,7 +121,7 @@ function getJobCount(clientId) {
  * @return {Promise}          an empty promise
  */
 function getJobPendingCount(clientId) {
-    return facade.getPendingJobCount(clientId).then(function(count){
+    return facade.getPendingJobCount(clientId).then(function(count) {
         $("#client-pending-jobs").html(count);
     });
 }
@@ -116,7 +134,7 @@ function getJobPendingCount(clientId) {
  * @return {Promise}          an empty promise
  */
 function getSchemeCount(clientId) {
-    return facade.getJobSchemeCount(clientId).then(function(count){
+    return facade.getJobSchemeCount(clientId).then(function(count) {
         $("#client-no-services").html(count);
     });
 }
@@ -129,7 +147,7 @@ function getSchemeCount(clientId) {
  * @return {Promise}          an empty promise
  */
 function getSchemeActiveCount(clientId) {
-    return facade.getActiveJobSchemeCount(clientId).then(function(count){
+    return facade.getActiveJobSchemeCount(clientId).then(function(count) {
         $("#client-active-services").html(count);
     });
 }
@@ -142,8 +160,10 @@ function getSchemeActiveCount(clientId) {
  * @return {Promise}          an empty promise
  */
 function getSchemeActiveTotal(clientId) {
-    return facade.getActiveJobSchemeSum(clientId).then(function(sum){
-        if(Number.isNaN(sum)) {sum = 0;}
+    return facade.getActiveJobSchemeSum(clientId).then(function(sum) {
+        if (Number.isNaN(sum)) {
+            sum = 0;
+        }
         sum = numberFormatter(sum).format();
         $("#client-total-services").html(sum);
     });
@@ -184,7 +204,9 @@ function getInvoicePendingCount(clientId) {
  */
 function getInvoicePaidTotal(clientId) {
     return facade.getPaidSum(clientId).then(function(sum) {
-        if(Number.isNaN(sum)) {sum = 0;}
+        if (Number.isNaN(sum)) {
+            sum = 0;
+        }
         sum = numberFormatter(sum).format();
         $("#client-total-paid-invoices").html(sum);
     });
@@ -199,7 +221,9 @@ function getInvoicePaidTotal(clientId) {
  */
 function getInvoicePendingTotal(clientId) {
     return facade.getPendingSum(clientId).then(function(sum) {
-        if(Number.isNaN(sum)) {sum = 0;}
+        if (Number.isNaN(sum)) {
+            sum = 0;
+        }
         sum = numberFormatter(sum).format();
         $("#client-total-pending-invoices").html(sum);
     });
@@ -217,7 +241,9 @@ ctrl.create = function() {
     $("#sidebar-heading").html("Create Client");
     $("#sidebar").html(temp);
 
-    $("#form-submit-button").click(function(){create();});
+    $("#form-submit-button").click(function() {
+        create();
+    });
 };
 
 //
@@ -230,22 +256,28 @@ ctrl.create = function() {
 function create() {
     var formData = $("#createClientForm").serializeArray();
     formData[1].value = formData[1].value.toUpperCase();
-    if(formData[5].value === "") { formData[5].value = null; }
-    formData[6].value =  parseInt(formData[6].value);
-    if(Number.isNaN(formData[6].value)){ formData[6].value = null; }
+    if (formData[5].value === "") {
+        formData[5].value = null;
+    }
+    formData[6].value = parseInt(formData[6].value);
+    if (Number.isNaN(formData[6].value)) {
+        formData[6].value = null;
+    }
 
     return facade.createClient(formData[2].value, formData[3].value, formData[0].value, formData[1].value, formData[4].value, formData[5].value, formData[6].value).then(function(data) {
-        data = data.get({plain: true});
+        data = data.get({
+            plain: true
+        });
         sidebarManager.pop();
         contentManager.reload();
         ctrl.details(data.id);
-    }, function(err){
-        if(err.errors[0].message === "shortname must be unique" ) {
+    }, function(err) {
+        if (err.errors[0].message === "shortname must be unique") {
             $.notify({
                 //options
                 icon: 'glyphicon glyphicon-warning-sign',
                 message: "Short Name is taken. Please change it."
-            },{
+            }, {
                 //settings
                 type: "danger",
                 delay: 10000
@@ -272,7 +304,9 @@ ctrl.edit = function(id) {
         $("#sidebar-heading").html("Edit Client");
         $("#sidebar").html(html);
 
-        $("#form-submit-button").click(function(){edit(id);});
+        $("#form-submit-button").click(function() {
+            edit(id);
+        });
     });
 };
 
@@ -286,17 +320,17 @@ function edit(id) {
     var formData = $("#editClientForm").serializeArray();
     formData[1].value = formData[1].value.toUpperCase();
 
-    return facade.editClient(id, formData).then(function(){
+    return facade.editClient(id, formData).then(function() {
         sidebarManager.pop();
         contentManager.reload();
         ctrl.details(id);
-    }, function(err){
-        if(err.errors[0].message === "shortname must be unique" ) {
+    }, function(err) {
+        if (err.errors[0].message === "shortname must be unique") {
             $.notify({
                 //options
                 icon: 'glyphicon glyphicon-warning-sign',
                 message: "Short Name is taken. Please change it."
-            },{
+            }, {
                 //settings
                 type: "danger",
                 delay: 10000
@@ -312,7 +346,7 @@ function edit(id) {
  * @return {Promise}    an empty promise
  */
 function remove(id) {
-    return facade.removeClient(id).then(function(){
+    return facade.removeClient(id).then(function() {
         sidebarManager.goBack();
         contentManager.reload();
     });
@@ -325,10 +359,10 @@ function remove(id) {
  *
  * @return {Object}  Client controller
  */
- function initiateController() {
-     return require('../scripts/Facade.js').then(function(data){
-         facade = data;
-         return ctrl;
-     });
- }
+function initiateController() {
+    return require('../scripts/Facade.js').then(function(data) {
+        facade = data;
+        return ctrl;
+    });
+}
 module.exports = initiateController();

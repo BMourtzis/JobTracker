@@ -5,7 +5,7 @@ var ctrl = {};
 ctrl.ctrlName = "Misc";
 ctrl.templateDir = "../Templates/";
 
-ctrl.comingsoon = function(){
+ctrl.comingsoon = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/comingsoon.html");
     var temp = jsrender.templates(templatePath);
     var html = temp();

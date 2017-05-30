@@ -5,7 +5,7 @@ var invoiceRegister;
 var settingsRegister;
 var backupRegister;
 
-var facade = { };
+var facade = {};
 
 
 /*
@@ -32,7 +32,7 @@ facade.getAllClients = function() {
  * @param  {Number} id the id of the client
  * @return {Promise}    A promise with the client object
  */
-facade.getClient = function(id){
+facade.getClient = function(id) {
     return clientRegister.getClient(id);
 };
 
@@ -60,7 +60,7 @@ facade.getClientFull = function(id) {
  * @return {Promise}              A promise with the newly created client
  */
 facade.createClient = function(firstname, lastname, businessname, shortname, address, email, phone) {
-    return clientRegister.createClient(firstname, lastname, businessname, shortname, address, email, phone).then(function(data){
+    return clientRegister.createClient(firstname, lastname, businessname, shortname, address, email, phone).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -73,8 +73,8 @@ facade.createClient = function(firstname, lastname, businessname, shortname, add
  * @param  {Object} data An object with the changes to the client
  * @return {Promise}      A promise with the edited client
  */
-facade.editClient = function(id, data){
-    return clientRegister.editClient(id, data).then(function(data){
+facade.editClient = function(id, data) {
+    return clientRegister.editClient(id, data).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -86,8 +86,8 @@ facade.editClient = function(id, data){
  * @param  {Number} id the id of the client
  * @return {Promise}    an empty promise
  */
-facade.removeClient = function(id){
-    return clientRegister.removeClient(id).then(function(data){
+facade.removeClient = function(id) {
+    return clientRegister.removeClient(id).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -108,7 +108,7 @@ facade.removeClient = function(id){
  *
  * @return {Promise}  A promise with all jobs
  */
-facade.getAllJobs = function(){
+facade.getAllJobs = function() {
     return jobRegister.getAllJobs();
 };
 
@@ -118,7 +118,7 @@ facade.getAllJobs = function(){
  * @param  {Number} id the id of the job
  * @return {Promise}    A promise with the job requested
  */
-facade.getJob =  function(id) {
+facade.getJob = function(id) {
     return jobRegister.getJob(id);
 };
 
@@ -128,7 +128,7 @@ facade.getJob =  function(id) {
  * @param  {Number} id the id of the job
  * @return {Promise}    A promise with the requested job
  */
-facade.getJobFull = function(id){
+facade.getJobFull = function(id) {
     return jobRegister.getJobFull(id);
 };
 
@@ -150,7 +150,7 @@ facade.getDayJobs = function(date) {
  * @param  {Number} page         The page of the list
  * @return {Promise}             A promise with a list of jobs
  */
-facade.getClientJobs = function(searchParams, orderParams, page){
+facade.getClientJobs = function(searchParams, orderParams, page) {
     return jobRegister.getClientJobs(searchParams, orderParams, page);
 };
 
@@ -161,7 +161,7 @@ facade.getClientJobs = function(searchParams, orderParams, page){
  * @param  {Date} date     the date to be searched, only the month and year will be used
  * @return {Promise}          A promise with a list of jobs
  */
-facade.getMonthJobs = function(clientId, date){
+facade.getMonthJobs = function(clientId, date) {
     return jobRegister.getMonthJobs(clientId, date);
 };
 
@@ -207,7 +207,7 @@ facade.getPendingJobCount = function(clientId) {
  * @return {Promise}           A promise with the new client
  */
 facade.createJob = function(jobname, timebooked, payment, clientid) {
-    return jobRegister.createJob(jobname, timebooked, payment, clientid).then(function(data){
+    return jobRegister.createJob(jobname, timebooked, payment, clientid).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -220,8 +220,8 @@ facade.createJob = function(jobname, timebooked, payment, clientid) {
  * @param  {Object} data An object that contains the data to be changed
  * @return {Promise}      A promise with the edited job
  */
-facade.editJob = function(id, data){
-    return jobRegister.editJob(id, data).then(function(data){
+facade.editJob = function(id, data) {
+    return jobRegister.editJob(id, data).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -235,8 +235,8 @@ facade.editJob = function(id, data){
  * @param  {Number} id The id of the job
  * @return {Promise}   A promise with the job
  */
-facade.placed = function(id){
-    return jobRegister.placed(id).then(function(data){
+facade.placed = function(id) {
+    return jobRegister.placed(id).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -248,8 +248,8 @@ facade.placed = function(id){
  * @param  {Number} id The if of the job
  * @return {Promise}    A promise with the edited job
  */
-facade.done = function(id){
-    return jobRegister.done(id).then(function(data){
+facade.done = function(id) {
+    return jobRegister.done(id).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -262,7 +262,7 @@ facade.done = function(id){
  * @return {Promise}        A promise with a list of jobs
  */
 facade.jobListDone = function(idList) {
-    return jobRegister.jobListDone(idList).then(function(data){
+    return jobRegister.jobListDone(idList).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -274,8 +274,8 @@ facade.jobListDone = function(idList) {
  * @param  {Number} id the id of the job
  * @return {Promise}    A promise with the edited job
  */
-facade.removeJob = function(id){
-    return jobRegister.removeJob(id).then(function(data){
+facade.removeJob = function(id) {
+    return jobRegister.removeJob(id).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -288,7 +288,7 @@ facade.removeJob = function(id){
  * @return {Promise}        A promise with the deleted jobs
  */
 facade.bulkDeleteJobs = function(idList) {
-    return jobRegister.bulkDeleteJobs(idList).then(function(data){
+    return jobRegister.bulkDeleteJobs(idList).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -385,7 +385,7 @@ facade.searchJobSchemes = function(searchParams, page) {
  * @return {Promise}                 A promise with the new JobScheme
  */
 facade.createJobScheme = function(jobname, payment, repetition, repetitionvalues, clientid) {
-    return schemeRegister.createJobScheme(jobname, payment, repetition, repetitionvalues, clientid).then(function(data){
+    return schemeRegister.createJobScheme(jobname, payment, repetition, repetitionvalues, clientid).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -398,8 +398,8 @@ facade.createJobScheme = function(jobname, payment, repetition, repetitionvalues
  * @param  {Object} data An object of the objects to be changed
  * @return {Promise}     A promise with the edited JobScheme
  */
-facade.editJobScheme = function(id, data){
-    return schemeRegister.editJobScheme(id, data).then(function(data){
+facade.editJobScheme = function(id, data) {
+    return schemeRegister.editJobScheme(id, data).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -412,7 +412,7 @@ facade.editJobScheme = function(id, data){
  * @return {Promise}   A promise with the removed jobScheme
  */
 facade.removeJobScheme = function(id) {
-    return schemeRegister.removeJobScheme(id).then(function(data){
+    return schemeRegister.removeJobScheme(id).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -425,7 +425,7 @@ facade.removeJobScheme = function(id) {
  * @return {Promise}   A promise with the edited jobScheme
  */
 facade.disableJobScheme = function(id) {
-    return schemeRegister.disableJobScheme(id).then(function(data){
+    return schemeRegister.disableJobScheme(id).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -438,7 +438,7 @@ facade.disableJobScheme = function(id) {
  * @return {Promise}   A promise with the edited jobScheme
  */
 facade.enableJobScheme = function(id) {
-    return schemeRegister.enableJobScheme(id).then(function(data){
+    return schemeRegister.enableJobScheme(id).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -453,7 +453,7 @@ facade.enableJobScheme = function(id) {
  * @return {Promise}      A promise with the newly created jobs
  */
 facade.generateJobs = function(id, year, month) {
-    return schemeRegister.generateJobs(id, year, month).then(function(data){
+    return schemeRegister.generateJobs(id, year, month).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -468,7 +468,7 @@ facade.generateJobs = function(id, year, month) {
  * @return {Promise}         A promise with the newly created jobs
  */
 facade.generateClientJobs = function(clientId, year, month) {
-    return schemeRegister.generateClientJobs(clientId, year, month).then(function(data){
+    return schemeRegister.generateClientJobs(clientId, year, month).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -510,7 +510,7 @@ facade.getInvoice = function(invoiceId) {
  * @return {Promise}          A promise with the edited Invoice
  */
 facade.invoicePaid = function(invoiceId) {
-    return invoiceRegister.invoicePaid(invoiceId).then(function(data){
+    return invoiceRegister.invoicePaid(invoiceId).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -523,7 +523,7 @@ facade.invoicePaid = function(invoiceId) {
  * @return {Promise}          A promise with the invoice
  */
 facade.invoiceInvoiced = function(invoiceId) {
-    return invoiceRegister.invoiceInvoiced(invoiceId).then(function(data){
+    return invoiceRegister.invoiceInvoiced(invoiceId).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -537,8 +537,8 @@ facade.invoiceInvoiced = function(invoiceId) {
  * @param  {type} month description
  * @return {type}       description
  */
-facade.createInvoice =  function(id, year, month){
-    return invoiceRegister.invoiceGeneration(id, year, month).then(function(data){
+facade.createInvoice = function(id, year, month) {
+    return invoiceRegister.invoiceGeneration(id, year, month).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -551,7 +551,7 @@ facade.createInvoice =  function(id, year, month){
  * @return {Promise}          A promsie with an invoice
  */
 facade.printInvoice = function(invoiceId) {
-    return invoiceRegister.printInvoice(invoiceId).then(function(data){
+    return invoiceRegister.printInvoice(invoiceId).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -565,7 +565,7 @@ facade.printInvoice = function(invoiceId) {
  * @param  {Number} page         The page of the list
  * @return {Promise}             A promise with a list of invoices
  */
-facade.invoiceSearchOptions = function(searchParams, orderParams, page){
+facade.invoiceSearchOptions = function(searchParams, orderParams, page) {
     return invoiceRegister.invoiceSearchOptions(searchParams, orderParams, page);
 };
 
@@ -576,7 +576,7 @@ facade.invoiceSearchOptions = function(searchParams, orderParams, page){
  * @return {Promise}          A promise with the deleted invoice
  */
 facade.deleteInvoice = function(invoiceId) {
-    return invoiceRegister.deleteInvoice(invoiceId).then(function(data){
+    return invoiceRegister.deleteInvoice(invoiceId).then(function(data) {
         backupRegister.updateBackup();
         return data;
     });
@@ -648,7 +648,7 @@ facade.UpdateInvoiceTemplatePath = function(path) {
  * @param  {String} path THe new path of the invoice output path
  * @return {Promise}     description
  */
-facade.UpdateInvoiceOutputPath = function(path){
+facade.UpdateInvoiceOutputPath = function(path) {
     return settingsRegister.UpdateInvoiceOutputPath(path);
 };
 
@@ -668,7 +668,7 @@ facade.UpdateBackupPath = function(path) {
  * @param  {Number} gst The new GST percentage
  * @return {Promise}    description
  */
-facade.UpdateGSTPercentage = function(gst){
+facade.UpdateGSTPercentage = function(gst) {
     return settingsRegister.UpdateGSTPercentage(gst);
 };
 
@@ -707,7 +707,7 @@ function initiateFacade() {
     settingsRegister = require('../Registers/SettingsRegister.js');
     backupRegister = require('../Registers/BackupRegister');
 
-    return Promise.all([clients, jobs, schemes, invoices]).then(function(data){
+    return Promise.all([clients, jobs, schemes, invoices]).then(function(data) {
         return facade;
     });
 }

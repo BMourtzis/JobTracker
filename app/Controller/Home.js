@@ -1,6 +1,6 @@
 var facade;
 
-var ctrl = { };
+var ctrl = {};
 
 // NOTE: Do they need to be properties?
 ctrl.ctrlName = "Home";
@@ -30,14 +30,14 @@ ctrl.index = function() {
  * @return {Promise}  an empty promise
  */
 function loadDayJobs() {
-    return facade.getDayJobs(ctrl.selectedDate).then(function(data){
+    return facade.getDayJobs(ctrl.selectedDate).then(function(data) {
         data.selectedDay = ctrl.selectedDate.toString("dd/MM/yyyy");
         data.next = new Date(ctrl.selectedDate).add(1).day().toString("dd/MM/yyyy");
         data.previous = new Date(ctrl.selectedDate).add(-1).day().toString("dd/MM/yyyy");
 
         data.sum = 0;
 
-        for(var i = 0; i < data.jobs.length; i++){
+        for (var i = 0; i < data.jobs.length; i++) {
             data.sum += data.jobs[i].payment + data.jobs[i].gst;
         }
 
@@ -47,12 +47,24 @@ function loadDayJobs() {
         var table = tableTemp(data);
         $("#homeDailyTable").html(table);
 
-        $("#prev-day-button").click(function(){previousDay();});
-        $("#reload-day-button").click(function(){loadDayJobs();});
-        $("#next-day-button").click(function(){nextDay();});
-        $(".placed").click(function(){done($(this).data("id"));});
-        $(".done").click(function(){placed($(this).data("id"));});
-        $("#home-job-table button").click(function(){ctrls.Jobs.details($(this).data("id"));});
+        $("#prev-day-button").click(function() {
+            previousDay();
+        });
+        $("#reload-day-button").click(function() {
+            loadDayJobs();
+        });
+        $("#next-day-button").click(function() {
+            nextDay();
+        });
+        $(".placed").click(function() {
+            done($(this).data("id"));
+        });
+        $(".done").click(function() {
+            placed($(this).data("id"));
+        });
+        $("#home-job-table button").click(function() {
+            ctrls.Jobs.details($(this).data("id"));
+        });
     });
 }
 
@@ -61,7 +73,7 @@ function loadDayJobs() {
  *
  * @return {Promise}  an empty promise
  */
-function nextDay(){
+function nextDay() {
     ctrl.selectedDate.add(1).day();
     contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
     return loadDayJobs();
@@ -73,7 +85,7 @@ function nextDay(){
  * @return {Promise}  an empty promise
  */
 
-function previousDay(){
+function previousDay() {
     ctrl.selectedDate.add(-1).day();
     contentManager.add(ctrl.ctrlName, "loadDayJobs", loadDayJobs.bind(this));
     return loadDayJobs();
@@ -86,8 +98,8 @@ function previousDay(){
  * @return {Promise}
  */
 
-function placed(clientId){
-    return facade.placed(clientId).then(function(){
+function placed(clientId) {
+    return facade.placed(clientId).then(function() {
         return loadDayJobs();
     });
 }
@@ -99,8 +111,8 @@ function placed(clientId){
  * @return {Promise}
  */
 
-function done(clientId){
-    return facade.done(clientId).then(function(data){
+function done(clientId) {
+    return facade.done(clientId).then(function(data) {
         return loadDayJobs();
     });
 }
@@ -111,11 +123,11 @@ function done(clientId){
  *
  * @return {Object}  Client controller
  */
- function initaitesController() {
-     return require('../scripts/Facade.js').then(function(data){
-         facade = data;
-         return ctrl;
-     });
- }
+function initaitesController() {
+    return require('../scripts/Facade.js').then(function(data) {
+        facade = data;
+        return ctrl;
+    });
+}
 
 module.exports = initaitesController();

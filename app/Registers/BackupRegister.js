@@ -11,7 +11,7 @@ function initiate() {
 function checkForWeeklyBackup() {
     var week = new Date.parse(settings.weeklyUpdate);
     var today = new Date.today();
-    if(settings.weeklyUpdate === "" || (week.getISOWeek() !== today.getISOWeek())) {
+    if (settings.weeklyUpdate === "" || (week.getISOWeek() !== today.getISOWeek())) {
         backup("weekly");
         updateWeeklyUpdate();
     }
@@ -23,7 +23,7 @@ function checkForDailyBackup() {
     var day = date.toString("dd") !== new Date.today().toString("dd");
     var month = date.toString("MM") !== new Date.today().toString("MM");
     var year = date.toString("YYYY") !== new Date.today().toString("YYYY");
-    if(settings.dailyUpdate === "" || (day || month || year)) {
+    if (settings.dailyUpdate === "" || (day || month || year)) {
         backup("daily");
         updateDailyUpdate();
     }
@@ -53,7 +53,7 @@ function writeDB() {
 
 //does the actual backup
 function backup(name) {
-    fs.createReadStream(settings.dbFile).pipe(fs.createWriteStream(path.resolve(settings.BackupPath, name+".db")));
+    fs.createReadStream(settings.dbFile).pipe(fs.createWriteStream(path.resolve(settings.BackupPath, name + ".db")));
 }
 
 module.exports = initiate();

@@ -7,10 +7,19 @@ var register = {};
  *
  * @return {Promise}  A promise with a list of jobs
  */
-register.getAllJobs = function(){
+register.getAllJobs = function() {
     var searchParams = {
-        from: Date.today().last().year().set({month: 0, day: 1}),
-        to: Date.today().set({month: 11, day: 31}).at({hour: 23, minute: 59})
+        from: Date.today().last().year().set({
+            month: 0,
+            day: 1
+        }),
+        to: Date.today().set({
+            month: 11,
+            day: 31
+        }).at({
+            hour: 23,
+            minute: 59
+        })
     };
 
 
@@ -24,8 +33,10 @@ register.getAllJobs = function(){
  * @return {Promise}   A promise with a job
  */
 register.getJob = function(id) {
-    return orm.job.findById(id).then(function(query){
-        return query.get({plain:true});
+    return orm.job.findById(id).then(function(query) {
+        return query.get({
+            plain: true
+        });
     });
 };
 
@@ -35,9 +46,13 @@ register.getJob = function(id) {
  * @param  {Number} id The id of the job
  * @return {Promise}   A Promise with a job
  */
-register.getJobFull = function(id){
-    return orm.job.findById(id,{include: [orm.client]}).then(function(query) {
-        return query.get({plain:true});
+register.getJobFull = function(id) {
+    return orm.job.findById(id, {
+        include: [orm.client]
+    }).then(function(query) {
+        return query.get({
+            plain: true
+        });
     });
 };
 
@@ -50,16 +65,18 @@ register.getJobFull = function(id){
  * @param  {Number} jobId    The id of the job
  * @return {Promise}         A promise with a client
  */
-register.getJobfromClient = function(clientId, jobId){
-    return orm.client.findById(id,{
-        include:[{
+register.getJobfromClient = function(clientId, jobId) {
+    return orm.client.findById(id, {
+        include: [{
             model: orm.job,
-            where:{
+            where: {
                 id: jobId
             }
         }]
-    }).then(function(data){
-        return data.get({plain:true});
+    }).then(function(data) {
+        return data.get({
+            plain: true
+        });
     });
 };
 
@@ -72,7 +89,10 @@ register.getJobfromClient = function(clientId, jobId){
 register.getDayJobs = function(from) {
     var searchParams = {
         from: moment(from),
-        to: moment(new Date(from).at({hour: 23, minute: 59}))
+        to: moment(new Date(from).at({
+            hour: 23,
+            minute: 59
+        }))
     };
 
     return register.FindJobs(generateQuery(searchParams), "timeBooked ASC", 0);
@@ -87,7 +107,7 @@ register.getDayJobs = function(from) {
  * @return {Promise}             A promise with a list of jobs
  */
 register.FindJobs = function(searchParams, orderParams, page) {
-    if(!Number.isInteger(page)) {
+    if (!Number.isInteger(page)) {
         page = 0;
     }
 
@@ -95,13 +115,15 @@ register.FindJobs = function(searchParams, orderParams, page) {
         include: [orm.client, orm.invoice],
         where: searchParams,
         order: orderParams,
-        offset: page*100,
+        offset: page * 100,
         limit: 100
-    }).then(function(query){
-        return getJobPageCount(searchParams).then(function(count){
+    }).then(function(query) {
+        return getJobPageCount(searchParams).then(function(count) {
             var jobs = [];
             for (var i = 0; i < query.length; i++) {
-                jobs.push(query[i].get({plain:true}));
+                jobs.push(query[i].get({
+                    plain: true
+                }));
             }
 
             var data = {
@@ -122,8 +144,8 @@ register.FindJobs = function(searchParams, orderParams, page) {
  * @param  {Number} page         The page of the list
  * @return {Promise}             A promise with a list of jobs
  */
-register.getClientJobs = function(searchParams, orderParams, page){
-    if(orderParams === "") {
+register.getClientJobs = function(searchParams, orderParams, page) {
+    if (orderParams === "") {
         orderParams = "timeBooked DESC";
     }
 
@@ -137,23 +159,31 @@ register.getClientJobs = function(searchParams, orderParams, page){
  * @param  {Date} date       The date with the month needed
  * @return {Promise}         A promise with a list of jobs
  */
-register.getMonthJobs = function(clientId, date){
-    var from = new Date(date).set({day: 1});
-    var to = new Date(from).set({day:from.getDaysInMonth(), hour: 23, minute: 59});
+register.getMonthJobs = function(clientId, date) {
+    var from = new Date(date).set({
+        day: 1
+    });
+    var to = new Date(from).set({
+        day: from.getDaysInMonth(),
+        hour: 23,
+        minute: 59
+    });
 
     return orm.job.findAll({
-        where:{
+        where: {
             clientID: clientId,
-            timeBooked:{
+            timeBooked: {
                 gt: from,
                 lt: to
             }
         }
-    }).then(function(data){
-        if(data){
+    }).then(function(data) {
+        if (data) {
             var jobs = [];
-            for(var i = 0; i< data.length; i++){
-                jobs.push(data[i].get({plain: true}));
+            for (var i = 0; i < data.length; i++) {
+                jobs.push(data[i].get({
+                    plain: true
+                }));
             }
 
             return jobs;
@@ -171,7 +201,7 @@ register.getMonthJobs = function(clientId, date){
  * @return {Promise}             A promise with a list of jobs
  */
 register.searchJobs = function(searchParams, orderParams, page) {
-    if(orderParams === "") {
+    if (orderParams === "") {
         orderParams = "timeBooked DESC";
     }
 
@@ -185,7 +215,9 @@ register.searchJobs = function(searchParams, orderParams, page) {
  * @return {Promise}         A promise with the count
  */
 register.getJobCount = function(clientId) {
-    return getCount(generateQuery({clientID: clientId}));
+    return getCount(generateQuery({
+        clientID: clientId
+    }));
 };
 
 /**
@@ -195,7 +227,10 @@ register.getJobCount = function(clientId) {
  * @return {Promise}         A promise with the count
  */
 register.getPendingJobCount = function(clientId) {
-    return getCount(generateQuery({clientID: clientId, state: "Placed"}));
+    return getCount(generateQuery({
+        clientID: clientId,
+        state: "Placed"
+    }));
 };
 
 /**
@@ -220,17 +255,16 @@ register.createJob = function(jobname, timebooked, payment, clientid) {
  * @param  {Object} data An object with the changed data
  * @return {Promise}     A promise with the edited job
  */
-register.editJob = function(id, data){
-    return orm.job.findById(id).then(function(job){
+register.editJob = function(id, data) {
+    return orm.job.findById(id).then(function(job) {
         for (var i = 0; i < data.length; i++) {
-            if(data[i].value !== "" && !Number.isNaN(data[i].value))
-            {
+            if (data[i].value !== "" && !Number.isNaN(data[i].value)) {
                 job[data[i].name] = data[i].value;
             }
         }
 
-        if(job.changed('payment')){
-            job.gst = job.payment/settings.GSTPercentage;
+        if (job.changed('payment')) {
+            job.gst = job.payment / settings.GSTPercentage;
         }
         return job.save();
     });
@@ -242,7 +276,7 @@ register.editJob = function(id, data){
  * @param  {Number} id The id of the job
  * @return {Promise}   A promise with the edited job
  */
-register.placed = function(id){
+register.placed = function(id) {
     var formData = [];
 
     formData.push({
@@ -258,7 +292,7 @@ register.placed = function(id){
  * @param  {Number} id The id of the job
  * @return {Promise}   A promise with the job
  */
-register.done = function(id){
+register.done = function(id) {
     var formData = [];
 
     formData.push({
@@ -277,11 +311,15 @@ register.done = function(id){
  * @param  {Object} updateList    An object with the new data
  * @return {Promise}              A promise with the list updated
  */
-register.bulkUpdateJobList = function(idList, updateList){
+register.bulkUpdateJobList = function(idList, updateList) {
     var query = {
-        id: {$in: idList}
+        id: {
+            $in: idList
+        }
     };
-    return orm.job.update(updateList, {where: query});
+    return orm.job.update(updateList, {
+        where: query
+    });
 };
 
 /**
@@ -291,7 +329,9 @@ register.bulkUpdateJobList = function(idList, updateList){
  * @return {Promise}              A promise with the list updated
  */
 register.jobListDone = function(idList) {
-    return register.bulkUpdateJobList(idList, {state: "Done"});
+    return register.bulkUpdateJobList(idList, {
+        state: "Done"
+    });
 };
 
 /**
@@ -300,8 +340,8 @@ register.jobListDone = function(idList) {
  * @param  {type} id description
  * @return {type}    description
  */
-register.removeJob = function(id){
-    return orm.job.findById(id).then(function(job){
+register.removeJob = function(id) {
+    return orm.job.findById(id).then(function(job) {
         return job.destroy();
     });
 };
@@ -314,7 +354,11 @@ register.removeJob = function(id){
  */
 register.bulkDeleteJobs = function(idList) {
     return orm.job.destroy({
-        where: {id:{$in: idList}}
+        where: {
+            id: {
+                $in: idList
+            }
+        }
     });
 };
 
@@ -324,9 +368,9 @@ register.bulkDeleteJobs = function(idList) {
  * @param  {Object} searchParams The search parameters
  * @return {Promise}             A promise with the count
  */
-function getJobPageCount(searchParams){
-    return getCount(searchParams).then(function (count) {
-        return Math.floor(count/100);
+function getJobPageCount(searchParams) {
+    return getCount(searchParams).then(function(count) {
+        return Math.floor(count / 100);
     });
 }
 
@@ -336,7 +380,7 @@ function getJobPageCount(searchParams){
  * @param  {Object} searchParams The search parameters
  * @return {Promise}             A promise with the count
  */
-function getCount(searchParams){
+function getCount(searchParams) {
     return orm.job.count({
         where: searchParams
     });
@@ -353,18 +397,16 @@ function getCount(searchParams){
 function generateQuery(searchParams) {
     var query = {};
 
-    if(searchParams.from !== undefined && searchParams.to !== undefined){
-        if(searchParams.from === undefined){
+    if (searchParams.from !== undefined && searchParams.to !== undefined) {
+        if (searchParams.from === undefined) {
             query.timeBooked = {
                 lt: searchParams.to
             };
-        }
-        else if(searchParams.to === undefined){
+        } else if (searchParams.to === undefined) {
             query.timeBooked = {
                 gt: searchParams.from
             };
-        }
-        else{
+        } else {
             query.timeBooked = {
                 gt: searchParams.from,
                 lt: searchParams.to
@@ -372,11 +414,11 @@ function generateQuery(searchParams) {
         }
     }
 
-    if(searchParams.state !== "" && searchParams.state !== undefined){
+    if (searchParams.state !== "" && searchParams.state !== undefined) {
         query.state = searchParams.state;
     }
 
-    if(!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== ""){
+    if (!Number.isNaN(searchParams.clientID) && searchParams.clientID !== undefined && searchParams.clientID !== "") {
         query.clientID = searchParams.clientID;
     }
 
@@ -389,7 +431,7 @@ function generateQuery(searchParams) {
  * @return {Promise}  A promise with the Job Register
  */
 function initiateRegister() {
-    return require('../scripts/orm.js').then(function(data){
+    return require('../scripts/orm.js').then(function(data) {
         orm = data;
         return register;
     });

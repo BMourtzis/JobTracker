@@ -16,7 +16,7 @@
     "Electron"
   ],
   "author": "Vasilis Mourtzis",
-  "license": "MIT 1.0",
+  "license": "GPL-3.0",
   "dependencies": {
     "bootstrap": "^3.3.6",
     "bootstrap-notify": "^3.1.3",

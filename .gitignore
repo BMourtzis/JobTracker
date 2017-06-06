@@ -1,2 +1,4 @@
 node_modules
 app/db
+npm-debug.log
+build

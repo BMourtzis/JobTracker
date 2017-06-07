@@ -2,3 +2,4 @@ node_modules
 app/db
 build/
 dist/
+npm-debug.log

@@ -1,7 +1,7 @@
 {
     "name": "JobTracker",
     "productName": "JobTracker-alpha",
-    "author": "Vasilis Mourtzis",
+    "author": "Vasilis Mourtzis <vasilis.mourtzis@outlook.com>",
     "version": "0.8.6",
     "description": "An easy-to-use and stylish Job tracking application",
     "main": "main.js",
@@ -9,10 +9,11 @@
         "appId": "me.vasileiosmourtzis.jobtracker",
         "asar": true,
         "electronVersion": "1.4.15",
-        "squirrelWindows": {
-            "msi": false
+        "win": {
+            "target": "nsis",
+            "icon": "build/icon.ico"
         },
-        "nodeGypRebuild": true
+        "npmRebuild": false
     },
     "scripts": {
         "start": "electron main.js",
@@ -49,6 +50,7 @@
         "devtron": "^1.4.0",
         "electron": "1.4.15",
         "electron-builder": "^18.3.5",
+        "electron-builder-squirrel-windows": "^18.6.0",
         "electron-debug": "^1.1.0",
         "spectron": "^3.2.3"
     }

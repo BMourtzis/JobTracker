@@ -9,11 +9,7 @@ autoUpdater.on('checking-for-updates', function() {
     }, {
         //settings
         type: "info",
-        delay: 3000,
-        placement: {
-            from: "bottom",
-            align: "center"
-        },
+        delay: 3000
     });
 });
 
@@ -24,11 +20,7 @@ autoUpdater.on('update-available', function(ev, info) {
     }, {
         //settings
         type: "info",
-        delay: 3000,
-        placement: {
-            from: "bottom",
-            align: "center"
-        },
+        delay: 3000
     });
 });
 
@@ -39,11 +31,7 @@ autoUpdater.on('download-progress', function(progressInfo) {
     }, {
         //settings
         type: "info",
-        delay: 100,
-        placement: {
-            from: "bottom",
-            align: "center"
-        },
+        delay: 100
     });
 });
 
@@ -54,11 +42,7 @@ autoUpdater.on('update-downloaded', function(ev, info) {
     }, {
         //settings
         type: "success",
-        delay: 100,
-        placement: {
-            from: "bottom",
-            align: "center"
-        },
+        delay: 100
     });
     // setTimout(function() {
     //     autoUpdater.quitAndInstall();

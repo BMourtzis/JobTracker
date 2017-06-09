@@ -24,7 +24,7 @@
   "scripts": {
     "start": "electron main.js",
     "rebuild": "",
-    "pack": "build --dir",
+    "pack": "build",
     "dist": "build -p always",
     "rebuild-sqlite3": "npm run configure-sqlite3 && npm run build-sqlite3",
     "configure-sqlite3": "cd node_modules/sqlite3 && npm run prepublish && node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/electron-v1.4-win32-x64",

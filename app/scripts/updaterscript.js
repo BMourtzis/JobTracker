@@ -1,4 +1,21 @@
-var autoUpdater = require("electron-updater");
+var autoUpdater = require("electron-updater").autoUpdater;
+
+console.log(autoUpdater);
+
+autoUpdater.on('checking-for-updates', function() {
+    $.notify({
+        //options
+        message: "Checking for Updates"
+    }, {
+        //settings
+        type: "info",
+        delay: 3000,
+        placement: {
+            from: "bottom",
+            align: "center"
+        },
+    });
+});
 
 autoUpdater.on('update-available', function(ev, info) {
     $.notify({
@@ -15,10 +32,10 @@ autoUpdater.on('update-available', function(ev, info) {
     });
 });
 
-autoUpdater.on('download-progress', functino(progressInfo) {
+autoUpdater.on('download-progress', function(progressInfo) {
     $.notify({
         //options
-        message: "Download in Progress .." + progressInfo.percent + "%";
+        message: "Download in Progress .." + progressInfo.percent + "%"
     }, {
         //settings
         type: "info",

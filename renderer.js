@@ -39,7 +39,5 @@ require("./app/Controller/Controllers.js")().then(function(data) {
     ctrls.Home.index();
 });
 
-require("./app/scripts/updaterscript.js")();
-
 //Debug
 require("devtron").install();

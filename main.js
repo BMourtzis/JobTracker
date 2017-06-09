@@ -9,6 +9,7 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow() {
+    require("./app/scripts/updaterscript.js")();
     //Get the width and height of the Primary Display
     const {
         width,

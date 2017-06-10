@@ -39,5 +39,9 @@ require("./app/Controller/Controllers.js")().then(function(data) {
     ctrls.Home.index();
 });
 
-//Debug
-require("devtron").install();
+if(window.isDev){
+    //Debug
+    require("devtron").install();
+}
+
+require("./app/scripts/IPCmessenger.js");

@@ -1,54 +1,48 @@
 var autoUpdater = require("electron-updater").autoUpdater;
+let main;
 
-// autoUpdater.on('checking-for-updates', function() {
-//     $.notify({
-//         //options
-//         message: "Checking for Updates"
-//     }, {
-//         //settings
-//         type: "info",
-//         delay: 3000
-//     });
-// });
-//
-// autoUpdater.on('update-available', function(ev, info) {
-//     $.notify({
-//         //options
-//         message: "New Update available"
-//     }, {
-//         //settings
-//         type: "info",
-//         delay: 3000
-//     });
-// });
-//
-// autoUpdater.on('download-progress', function(progressInfo) {
-//     $.notify({
-//         //options
-//         message: "Download in Progress .." + progressInfo.percent + "%"
-//     }, {
-//         //settings
-//         type: "info",
-//         delay: 100
-//     });
-// });
+autoUpdater.on('checking-for-update', function() {
+    main.webContents.send("message", {
+        message: "Checking for updates",
+        msgtype: "info",
+        time: "3000"
+    });
+});
+
+autoUpdater.on('update-available', function(ev, info) {
+    main.webContents.send("message", {
+        message: "Update available",
+        msgtype: "info",
+        time: "3000"
+    });
+});
+
+autoUpdater.on('download-progress', function(progressInfo) {
+    main.webContents.send("message", {
+        message: "download in progress." +progressInfo.percent+ "% completed.",
+        msgtype: "info",
+        time: "10"
+    });
+});
 
 autoUpdater.on('update-downloaded', function(ev, info) {
-    // $.notify({
-    //     //options
-    //     message: "Updated Downloaded, will install in 5 seconds."
-    // }, {
-    //     //settings
-    //     type: "success",
-    //     delay: 100
-    // });
+    main.webContents.send("message", {
+        message: "Download completed. JobTracker will quit and install the new update",
+        msgtype: "info",
+        time: "3000"
+    });
     setTimout(function() {
         autoUpdater.quitAndInstall();
     }, 5000);
 });
 
-function initiateUpdater() {
+function initiateUpdater(mainWindow) {
+    main = mainWindow;
     autoUpdater.checkForUpdates();
+        // main.webContents.send("message", {
+        //     message: "Checking for updates",
+        //     msgtype: "info"
+        // });
 }
 
 module.exports = initiateUpdater;

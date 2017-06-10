@@ -7,7 +7,7 @@ const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-
+let autoUpdater;
 
 function createWindow() {
     //Get the width and height of the Primary Display
@@ -41,7 +41,7 @@ function createWindow() {
 app.on('ready', function(){
     createWindow();
     mainWindow.webContents.on("did-finish-load", function(){
-        require("./app/scripts/updaterscript.js")(mainWindow);
+        autoUpdater = require("./app/scripts/updaterscript.js")(mainWindow);
     });
 });
 

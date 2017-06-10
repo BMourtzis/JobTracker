@@ -12,3 +12,7 @@ require('electron').ipcRenderer.on('message', function(event, messageObj){
         }
     });
 });
+
+require('electron').ipcRenderer.on("updateReady", function(event){
+    window.updateReady = true;
+});

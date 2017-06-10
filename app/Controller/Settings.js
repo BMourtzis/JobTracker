@@ -12,7 +12,11 @@ ctrl.templateDir = "../Templates/";
 ctrl.index = function() {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/index.html");
     var temp = jsrender.templates(templatePath);
-    var html = temp(settings);
+
+    var tempSettings = settings;
+    tempSettings.updateReady = window.updateReady;
+
+    var html = temp(tempSettings);
     $("#content").html(html);
 
     $("#InvoiceTemplatePath").click(function() {

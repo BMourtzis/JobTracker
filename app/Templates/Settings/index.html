@@ -4,7 +4,7 @@
 </div>
 <div class="row">
     <div class="col-md-2 setting-label">
-        <label for="InvoiceTemplatePath">Invoice Template :</label>
+        <label for="InvoiceTemplatePath">Invoice Template:</label>
     </div>
     <div class="col-md-10 col-lg-10">
         <div id="InvoiceTemplatePath" class="input-group">
@@ -15,7 +15,7 @@
 </div>
 <div class="row">
     <div class="col-md-2 setting-label">
-        <label for="InvoiceOutputPath">Invoice Output :</label>
+        <label for="InvoiceOutputPath">Invoice Output:</label>
     </div>
     <div class="col-md-10 col-lg-10">
         <div id="InvoiceOutputPath" class="input-group">
@@ -26,7 +26,7 @@
 </div>
 <div class="row">
     <div class="col-md-2 col-lg-2">
-        <label for="BackupPath">Backup Path :</label>
+        <label for="BackupPath">Backup Path:</label>
     </div>
     <div class="col-md-10 col-lg-10">
         <div id="BackupPath" class="input-group">
@@ -38,7 +38,7 @@
 <hr>
 <div class="row">
     <div class="col-md-2 setting-label">
-        <label for="GSTPercentage">GST :</label>
+        <label for="GSTPercentage">GST:</label>
     </div>
     <div class="col-md-2 col-lg-2">
         <div id="GSTPercentage" class="input-group">
@@ -47,3 +47,9 @@
         </div>
     </div>
 </div>
+{{if updateReady}}
+<hr>
+<div class="row">
+    <button id="update-version-button" type="button" class="btn btn-lg btn-primary">Update</button>
+</div>
+{{/if}}

@@ -3,6 +3,7 @@
 // All of the Node.js APIs are available in this process.
 
 window.app = require('electron').remote.app;
+window.updateReady = false;
 
 //Back-end Modules
 window.datejs = require('datejs');

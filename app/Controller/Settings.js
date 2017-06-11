@@ -31,6 +31,9 @@ ctrl.index = function() {
     $("#GSTPercentage").keyup(function() {
         UpdateGSTPercentage();
     });
+    $("#update-version-button").click(function(){
+        InstallUpdate();
+    });
 
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
@@ -88,6 +91,14 @@ function UpdateGSTPercentage() {
     if (!Number.isNaN(gst)) {
         facade.UpdateGSTPercentage(gst);
     }
+}
+
+/**
+ * InstallUpdate - Restarts the application
+ */
+function InstallUpdate() {
+    window.app.relaunch();
+    window.app.quit();
 }
 
 /**

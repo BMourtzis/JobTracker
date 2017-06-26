@@ -5,7 +5,7 @@ init:
 clone_folder: c:\projects\jobtracker
 
 environment:
-    nodejs_version: "7"
+    nodejs_version: "7.4"
 
 platform:
     - x86

@@ -34,11 +34,11 @@ artifacts:
       name: version file
 
     - path: dist\*.exe
-    name: installers
+      name: installers
 
 deploy:
     - provider: github
-    auth_token:
+      auth_token:
         secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
     artifact:
     draft: true
@@ -47,7 +47,7 @@ deploy:
         branch: master
 
     - provider: github
-    auth_token:
+      auth_token:
         secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
     artifact: /.\nupkg/
     draft: true

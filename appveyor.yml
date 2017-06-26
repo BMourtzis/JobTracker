@@ -1,4 +1,4 @@
-version: 1.0 {build}
+version: 0.8 {build}
 
 init:
 
@@ -20,11 +20,11 @@ install:
 build: off
 
 before_test:
-    -node --version
-    -npm --version
+    - node --version
+    - npm --version
 
 test_script:
-    -npm test
+    - npm test
 
 build_sucess:
     - npm run pack
@@ -40,17 +40,17 @@ deploy:
     - provider: github
       auth_token:
         secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
-    artifact:
-    draft: true
-    prerelease: false
-    on:
+     artifact:
+      draft: true
+      prerelease: false
+      on:
         branch: master
 
     - provider: github
       auth_token:
         secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
-    artifact: /.\nupkg/
-    draft: true
-    prerelease: true
-    on:
+      artifact: /.\nupkg/
+      draft: true
+      prerelease: true
+      on:
         branch: Dev

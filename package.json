@@ -42,7 +42,6 @@
         "datejs": "^1.0.0-rc3",
         "docxtemplater": "^3.0.3",
         "electron-is-dev": "^0.1.2",
-        "electron-updater": "^2.1.2",
         "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
         "jquery": "2.2",
         "jsrender": "^0.9.83",
@@ -51,8 +50,7 @@
         "moment": "^2.14.1",
         "nan": "^2.5.1",
         "numeral": "^2.0.4",
-        "sequelize": "^3.30.1",
-        "sqlite": "^2.3.0"
+        "sequelize": "^3.30.1"
     },
     "devDependencies": {
         "devtron": "^1.4.0",

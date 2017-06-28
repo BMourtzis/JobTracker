@@ -13,7 +13,7 @@ platform:
 
 install:
     - ps: Install-Product node $env:nodejs_version
-    - npm install --global node-gyp
+    - npm install --global node-gyp@3.6.2
     - npm install --global windows-build-tools
     - npm install
     - npm run rebuild-sqlite3

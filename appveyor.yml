@@ -15,6 +15,8 @@ install:
     - ps: Install-Product node $env:nodejs_version
     - npm install --global node-gyp@3.6.2
     - npm install --global windows-build-tools
+    - npm install --only=dev
+    - npm run rebuild-sqlite3
 
 build: off
 

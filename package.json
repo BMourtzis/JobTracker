@@ -42,6 +42,7 @@
         "datejs": "^1.0.0-rc3",
         "docxtemplater": "^3.0.3",
         "electron-is-dev": "^0.1.2",
+        "electron-updater": "^2.4.3",
         "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
         "jquery": "2.2",
         "jsrender": "^0.9.83",

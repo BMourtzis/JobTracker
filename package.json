@@ -2,7 +2,7 @@
     "name": "jobtracker",
     "productName": "JobTracker",
     "author": "Vasilis Mourtzis <vasilis.mourtzis@outlook.com>",
-    "version": "0.8.13",
+    "version": "0.8.14",
     "ReleaseTitle": "",
     "description": "An easy-to-use and stylish Job tracking application",
     "main": "main.js",

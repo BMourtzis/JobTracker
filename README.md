@@ -1,5 +1,7 @@
 # JobTracker
 
+[![Build status](https://ci.appveyor.com/api/projects/status/hu065oski62teeuw/branch/master?svg=true)](https://ci.appveyor.com/project/BMourtzis/jobtracker/branch/master)
+
 JobTracker is an easy to use application that allows
 
 The application is built with electron platform in order to utilise the nice visual created with HTML/CSS and related frameworks

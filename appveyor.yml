@@ -6,6 +6,8 @@ clone_folder: c:\projects\jobtracker
 
 environment:
     nodejs_version: "7.4"
+    GH_TOKEN:
+        secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
 
 platform:
     - x86
@@ -40,8 +42,7 @@ artifacts:
 
 deploy:
     - provider: github
-      auth_token:
-        secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
+      auth_token: $env:GH_TOKEN
       artifact:
       draft: true
       prerelease: false
@@ -49,8 +50,7 @@ deploy:
         branch: master
 
     - provider: github
-      auth_token:
-        secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
+      auth_token: $env:GH_TOKEN
       artifact: /.\nupkg/
       draft: true
       prerelease: true

@@ -28,7 +28,7 @@ before_test:
     - npm --version
 
 test_script:
-    - npm test
+    - npm run test
 
 after_test:
     - npm run pack
@@ -55,4 +55,4 @@ deploy:
       draft: true
       prerelease: true
       on:
-        branch: Dev
+        branch: Beta

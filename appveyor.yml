@@ -40,7 +40,7 @@ artifacts:
       name: installers
 
 deploy:
-    - provider: Github
+    - provider: GitHub
       auth_token: $env:GH_TOKEN
       artifact: $artifacts
         #   dist\*.exe

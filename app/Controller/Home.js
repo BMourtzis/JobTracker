@@ -40,6 +40,7 @@ function loadDayJobs() {
         for (var i = 0; i < data.jobs.length; i++) {
             data.sum += data.jobs[i].payment + data.jobs[i].gst;
         }
+        data.sum = numberFormatter(data.sum).format();
 
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
 

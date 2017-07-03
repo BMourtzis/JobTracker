@@ -1,6 +1,6 @@
 init:
 
-version: $(package_version)-{build}
+version: 0.8.15-{build}
 
 clone_folder: c:\projects\jobtracker
 

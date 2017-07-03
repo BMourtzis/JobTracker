@@ -10,7 +10,6 @@ environment:
         secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
 
 platform:
-    - x86
     - x64
 
 install:
@@ -44,6 +43,8 @@ deploy:
     - provider: Github
       auth_token: $env:GH_TOKEN
       artifact:
+          dist\*.exe
+          dist\latest.yml
       draft: true
       prerelease: false
       on:
@@ -51,7 +52,9 @@ deploy:
 
     - provider: Github
       auth_token: $env:GH_TOKEN
-      artifact: /.\nupkg/
+      artifact:
+          dist\*.exe
+          dist\latest.yml
       draft: true
       prerelease: true
       on:

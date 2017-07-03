@@ -1,6 +1,6 @@
 init:
 
-version: $(package_version).{build}
+version: $(package_version)-{build}
 
 clone_folder: c:\projects\jobtracker
 
@@ -53,10 +53,11 @@ deploy:
         branch: master
 
     - provider: Github
+      release: $(package_version)-beta.{build}
       auth_token:
           secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
       artifact: installers, version file
       draft: true
       prerelease: true
       on:
-        branch: Dev
+        branch: beta

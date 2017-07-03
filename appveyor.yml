@@ -41,7 +41,8 @@ artifacts:
 
 deploy:
     - provider: GitHub
-      auth_token: $env:GH_TOKEN
+      auth_token:
+          secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
       artifact: $artifacts
         #   dist\*.exe
         #   dist\latest.yml
@@ -51,7 +52,8 @@ deploy:
         branch: master
 
     - provider: Github
-      auth_token: $env:GH_TOKEN
+      auth_token:
+          secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
       artifact:
           dist\*.exe
           dist\latest.yml

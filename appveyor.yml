@@ -30,16 +30,7 @@ before_test:
 
 test_script:
     - npm run test
-
-
-after_test:
-    - npm run relese
-      on:
-          branch: master
-
-    - npm run beta_relese
-      on:
-          branch: beta
+    - npm run dist
 
 # artifacts:
 #     - path: dist\latest.yml

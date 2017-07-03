@@ -53,7 +53,7 @@ deploy:
         branch: master
 
     - provider: GitHub
-      release: $(package_version)-beta.{build}
+      release: $(package_version)-beta.$(APPVEYOR_BUILD_NUMBER)
       auth_token:
           secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
       artifact: installers, version file

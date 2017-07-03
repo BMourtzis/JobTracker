@@ -52,7 +52,7 @@ deploy:
       on:
         branch: master
 
-    - provider: Github
+    - provider: GitHub
       release: $(package_version)-beta.{build}
       auth_token:
           secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM

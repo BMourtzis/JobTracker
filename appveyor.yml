@@ -1,6 +1,6 @@
-version: 0.8.{build}
-
 init:
+    - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
+version: $(package_version).{build}
 
 clone_folder: c:\projects\jobtracker
 
@@ -41,6 +41,7 @@ artifacts:
 
 deploy:
     - provider: GitHub
+      release: $(package_version)
       auth_token:
           secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
       artifact: installers, version file
@@ -52,9 +53,7 @@ deploy:
     - provider: Github
       auth_token:
           secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
-      artifact:
-          dist\*.exe
-          dist\latest.yml
+      artifact: installers, version file
       draft: true
       prerelease: true
       on:

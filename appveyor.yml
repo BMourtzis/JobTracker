@@ -43,9 +43,9 @@ deploy:
     - provider: GitHub
       auth_token:
           secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
-      artifact: $artifacts
-        #   dist\*.exe
-        #   dist\latest.yml
+      artifact:
+          dist\*.exe
+          dist\latest.yml
       draft: true
       prerelease: false
       on:

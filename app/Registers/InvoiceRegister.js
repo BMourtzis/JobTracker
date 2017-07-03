@@ -194,7 +194,7 @@ function generateInvoice(invoiceId) {
             invoice.subtotal += invoice.jobs[i].payment;
         }
 
-        invoice.gst = invoice.total - invoice.subtotal;
+        invoice.gst = Math.round((invoice.total - invoice.subtotal) * 10) / 10;
 
         var period = new Date().set({
             year: invoice.year,
@@ -321,6 +321,11 @@ function checkCreateDirectory(year, month) {
         fs.mkdirSync(baseFolder);
     }
 
+    var date = new Date().set({
+        year: year,
+        month: month - 1
+    }); // NOTE: Use this after they have transition to the new software
+    
     baseFolder = path.resolve(baseFolder, month + "/");
     if (!fs.existsSync(baseFolder)) {
         fs.mkdirSync(baseFolder);

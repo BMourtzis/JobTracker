@@ -42,9 +42,9 @@ artifacts:
 deploy:
     - provider: Github
       auth_token: $env:GH_TOKEN
-      artifact:
-          dist\*.exe
-          dist\latest.yml
+      artifact: $artifacts
+        #   dist\*.exe
+        #   dist\latest.yml
       draft: true
       prerelease: false
       on:

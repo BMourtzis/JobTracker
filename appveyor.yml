@@ -31,21 +31,15 @@ before_test:
 test_script:
     - npm run test
 
--
-    branches:
-        only:
-            - master
 
-    after_test:
-        - npm run relese
+after_test:
+    - npm run relese
+      on:
+          branch: master
 
--
-    branches:
-        only:
-            - beta
-
-    after_test:
-        - npm run beta_relese
+    - npm run beta_relese
+      on:
+          branch: beta
 
 # artifacts:
 #     - path: dist\latest.yml

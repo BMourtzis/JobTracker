@@ -1,6 +1,6 @@
 init:
 
-version: 0.8.15-{build}
+version: $(package_version)-{build}
 
 clone_folder: c:\projects\jobtracker
 
@@ -30,4 +30,36 @@ before_test:
 
 test_script:
     - npm run test
-    - npm run dist
+
+after_test:
+    - npm run pack
+
+artifacts:
+    - path: dist\latest.yml
+      name: version file
+
+    - path: dist\*.exe
+      name: installers
+
+deploy:
+    - provider: GitHub
+      tag: v$(package_version)
+      release: $(package_version)
+      auth_token:
+          secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
+      artifact: installers, version file
+      draft: true
+      prerelease: false
+      on:
+        branch: master
+
+    - provider: GitHub
+      tag: v$(package_version)-beta$(APPVEYOR_BUILD_NUMBER)
+      release: $(package_version)-beta$(APPVEYOR_BUILD_NUMBER)
+      auth_token:
+          secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
+      artifact: installers, version file
+      draft: true
+      prerelease: true
+      on:
+        branch: beta

@@ -1,6 +1,6 @@
 init:
 
-version: $(package_version)-{build}
+version: $(package_version)-{build} {version} {branch} {postfix}
 
 clone_folder: c:\projects\jobtracker
 

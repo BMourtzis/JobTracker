@@ -21,13 +21,17 @@ module.exports = function getControllers() {
         ctrl.Invoices = data;
     });
 
+    var timetable = require("./timetable.js").then(function(data){
+        ctrl.Timetable = data;
+    });
+
     var settings = require("./Settings.js").then(function(data) {
         ctrl.Settings = data;
     });
 
     ctrl.Misc = require("./Misc.js");
 
-    return Promise.all([home, clients, jobs, jobSchemes, invoices]).then(function(data) {
+    return Promise.all([home, clients, jobs, jobSchemes, invoices, timetable, settings]).then(function(data) {
         return ctrl;
     });
 };

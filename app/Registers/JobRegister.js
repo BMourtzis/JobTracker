@@ -203,13 +203,11 @@ register.getJobsForMonth = function(date) {
         day: 1
     });
 
-    from.prev().month();
-    var to = new Date(from).set({
+    var to = new Date(date).set({
         day: from.getDaysInMonth(),
         hour: 23,
         minute: 59
     });
-    to.next().month();
 
     return orm.job.findAll({
         include: [orm.client],

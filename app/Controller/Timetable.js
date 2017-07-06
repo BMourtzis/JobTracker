@@ -4,6 +4,7 @@ var ctrl = {};
 
 ctrl.ctrlName = "Timetable";
 ctrl.templateDir = "../Templates/";
+var selectedDate;
 
 var calendarSettings = {
     header: {
@@ -33,11 +34,23 @@ ctrl.index = function() {
     $("#content").html(html);
 
     $("#calendar").fullCalendar(calendarSettings);
-    loadEvents(Date.today());
+    selectedDate = Date.today();
+    loadEvents();
+
+    $('.fc-prev-button').click(function() {
+        selectedDate.add(-1).month();
+        loadEvents(selectedDate);
+    });
+
+    $('.fc-next-button').click(function() {
+        selectedDate.add(1).month();
+        loadEvents(selectedDate);
+    });
 }
 
-function loadEvents(date) {
-    return facade.getJobsForMonth(date).then(function(data) {
+function loadEvents() {
+    console.log(selectedDate);
+    return facade.getJobsForMonth(selectedDate).then(function(data) {
         var events = [];
         for(var i = 0; i < data.length; i++)
         {
@@ -49,18 +62,6 @@ function loadEvents(date) {
         }
 
         $("#calendar").fullCalendar('renderEvents', events);
-
-        $('.fc-prev-button').click(function() {
-            date.prev().month();
-            $("#calendar").fullCalendar('renderEvents', events);
-            // loadEvents(date);
-        });
-
-        $('.fc-next-button').click(function(){
-            date.next().month();
-            $("#calendar").fullCalendar('renderEvents', events);
-            // loadEvents(date);
-        });
     });
 }
 

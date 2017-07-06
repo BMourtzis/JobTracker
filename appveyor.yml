@@ -4,6 +4,13 @@ version: $(package_version)-{build}
 
 clone_folder: c:\projects\jobtracker
 
+branches:
+    only:
+        - master
+        - beta
+        - production
+        - Dev
+
 environment:
     nodejs_version: "7.4"
     GH_TOKEN:

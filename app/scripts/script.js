@@ -61,7 +61,7 @@ function invoices() {
 function timetable() {
     removeActive();
     $("#timetable-nav-item").parent().addClass("active");
-    ctrls.Misc.comingsoon();
+    ctrls.Timetable.index();
 }
 
 function finances() {

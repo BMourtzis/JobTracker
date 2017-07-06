@@ -166,6 +166,16 @@ facade.getMonthJobs = function(clientId, date) {
 };
 
 /**
+ * facade.getMonthJobs - Gets jobs for the specified month
+ *
+ * @param  {Date} date     the date to be searched, only the month and year will be used
+ * @return {Promise}          A promise with a list of jobs
+ */
+facade.getJobsForMonth = function(date) {
+    return jobRegister.getJobsForMonth(date);
+}
+
+/**
  * facade.searchJobs - Searches for jobs with the specified searchParams
  *
  * @param  {Object} searchParams Object that includes the params to be searched

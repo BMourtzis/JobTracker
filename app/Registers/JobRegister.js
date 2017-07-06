@@ -153,7 +153,7 @@ register.getClientJobs = function(searchParams, orderParams, page) {
 };
 
 /**
- * register.getMonthJobs - Retursn jobs of a client for the month specified
+ * register.getMonthJobs - Returns jobs of a client for the month specified
  *
  * @param  {Number} clientId The id of the client
  * @param  {Date} date       The date with the month needed
@@ -172,6 +172,46 @@ register.getMonthJobs = function(clientId, date) {
     return orm.job.findAll({
         where: {
             clientID: clientId,
+            timeBooked: {
+                gt: from,
+                lt: to
+            }
+        }
+    }).then(function(data) {
+        if (data) {
+            var jobs = [];
+            for (var i = 0; i < data.length; i++) {
+                jobs.push(data[i].get({
+                    plain: true
+                }));
+            }
+
+            return jobs;
+        }
+        return data;
+    });
+};
+
+/**
+ * register.getMonthJobs - Returns jobs for the month specified
+ *
+ * @param  {Date} date       The date with the month needed
+ * @return {Promise}         A promise with a list of jobs
+ */
+register.getJobsForMonth = function(date) {
+    var from = new Date(date).set({
+        day: 1
+    });
+
+    var to = new Date(date).set({
+        day: from.getDaysInMonth(),
+        hour: 23,
+        minute: 59
+    });
+
+    return orm.job.findAll({
+        include: [orm.client],
+        where: {
             timeBooked: {
                 gt: from,
                 lt: to

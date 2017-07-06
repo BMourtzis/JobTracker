@@ -23,6 +23,7 @@ window.jsrender = require('jsrender');
 require('./app/scripts/JSRenderExtensions.js');
 window.bootstrap = require('bootstrap');
 window.datetimepicker = require('eonasdan-bootstrap-datetimepicker-npm'); // window.$.fn.datetimepicker = $.fn.datetimepicker; Need this!
+window.fullcalendar = require("fullcalendar");
 window.templateHelper = require("./app/scripts/TemplateHelper.js");
 window.numberFormatter = require("./app/scripts/numberFormatter.js");
 

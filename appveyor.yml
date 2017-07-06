@@ -21,7 +21,7 @@ install:
     - npm install --global windows-build-tools
     - npm install -g yarn
     - yarn
-    - npm run rebuild_sqlite3
+    # - npm run rebuild_sqlite3
 
 build: off
 

@@ -49,7 +49,6 @@ ctrl.index = function() {
 }
 
 function loadEvents() {
-    console.log(selectedDate);
     return facade.getJobsForMonth(selectedDate).then(function(data) {
         var events = [];
         for(var i = 0; i < data.length; i++)

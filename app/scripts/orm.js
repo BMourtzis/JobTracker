@@ -194,6 +194,14 @@ function initializeModels() {
             type: sequelize.JSON,
             field: 'repetitionValues'
         },
+        // lastlyBooked: {
+        //     type: sequelize.DATE,
+        //     allowNull: true,
+        //     field: 'lastlyBooked',
+        //     get: function() {
+        //         return moment(this.getDataValue('lastlyBooked'));
+        //     }
+        // },
         clientId: {
             type: sequelize.INTEGER,
             field: "clientId"
@@ -283,15 +291,22 @@ function initializeModels() {
             monthlyGenerator: function monthlyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
-                for (var i = 0; i < repvalues.length; i++) {
-                    var jobDate = new Date(date);
-                    jobDate.add(repvalues[i].day).day().at({
-                        hour: repvalues[i].hour,
-                        minute: repvalues[i].minute
-                    });
 
-                    promises.push(this.createJob(jobDate));
+                console.log(this.lastlyBooked);
+                while(date.toString("M") < (nextMonth)) {
+                    for (var i = 0; i < repvalues.length; i++) {
+                        var jobDate = new Date(date);
+                        jobDate.add(repvalues[i].day).day().at({
+                            hour: repvalues[i].hour,
+                            minute: repvalues[i].minute
+                        });
+
+                        promises.push(this.createJob(jobDate));
+                    }
+                    date.next().sunday().next().sunday();
+                    date.next().sunday().next().sunday();
                 }
+
                 return promises;
             },
             createJob: function createJob(jobDate) {

@@ -279,11 +279,10 @@ function initializeModels() {
                     date = new Date(this.lastlyBooked);
                 }
 
-                console.log(this.lastlyBooked);
+                var year = date.toString("yy");
 
-                while(date.toString("M") < (nextMonth)) {
+                while(date.toString("M") < (nextMonth) && date.toString("yy") == year) {
                     for (var i = 0; i < repvalues.length; i++) {
-                        console.log("works");
                         var jobDate = new Date(date);
                         jobDate.add(repvalues[i].day).day().at({
                             hour: repvalues[i].hour,
@@ -291,12 +290,10 @@ function initializeModels() {
                         });
 
                         promises.push(this.createJob(jobDate));
-                        console.log("works");
                     }
                     date.next().sunday().next().sunday();
                 }
 
-                console.log(date);
 
                 this.update({
                     lastlyBooked: date
@@ -314,7 +311,9 @@ function initializeModels() {
                     date = new Date(this.lastlyBooked);
                 }
 
-                while(date.toString("M") < (nextMonth)) {
+                var year = date.toString("yy");
+
+                while(date.toString("M") < (nextMonth) && date.toString("yy" == year) {
                     for (var i = 0; i < repvalues.length; i++) {
                         var jobDate = new Date(date);
                         jobDate.add(repvalues[i].day).day().at({

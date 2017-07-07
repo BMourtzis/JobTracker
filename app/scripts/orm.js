@@ -194,14 +194,14 @@ function initializeModels() {
             type: sequelize.JSON,
             field: 'repetitionValues'
         },
-        // lastlyBooked: {
-        //     type: sequelize.DATE,
-        //     allowNull: true,
-        //     field: 'lastlyBooked',
-        //     get: function() {
-        //         return moment(this.getDataValue('lastlyBooked'));
-        //     }
-        // },
+        lastlyBooked: {
+            type: sequelize.DATE,
+            allowNull: true,
+            field: 'lastlyBooked',
+            get: function() {
+                return moment(this.getDataValue('lastlyBooked'));
+            }
+        },
         clientId: {
             type: sequelize.INTEGER,
             field: "clientId"
@@ -275,8 +275,15 @@ function initializeModels() {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
 
-                for (; date.toString("M") < (nextMonth); date.next().sunday().next().sunday()) {
+                if(this.lastlyBooked._isValid) {
+                    date = new Date(this.lastlyBooked);
+                }
+
+                console.log(this.lastlyBooked);
+
+                while(date.toString("M") < (nextMonth)) {
                     for (var i = 0; i < repvalues.length; i++) {
+                        console.log("works");
                         var jobDate = new Date(date);
                         jobDate.add(repvalues[i].day).day().at({
                             hour: repvalues[i].hour,
@@ -284,15 +291,29 @@ function initializeModels() {
                         });
 
                         promises.push(this.createJob(jobDate));
+                        console.log("works");
                     }
+                    date.next().sunday().next().sunday();
                 }
+
+                console.log(date);
+
+                this.update({
+                    lastlyBooked: date
+                }, {
+                    fields: ['lastlyBooked']
+                });
+
                 return promises;
             },
             monthlyGenerator: function monthlyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
 
-                console.log(this.lastlyBooked);
+                if(this.lastlyBooked._isValid) {
+                    date = new Date(this.lastlyBooked);
+                }
+
                 while(date.toString("M") < (nextMonth)) {
                     for (var i = 0; i < repvalues.length; i++) {
                         var jobDate = new Date(date);
@@ -306,6 +327,12 @@ function initializeModels() {
                     date.next().sunday().next().sunday();
                     date.next().sunday().next().sunday();
                 }
+
+                this.update({
+                    lastlyBooked: date
+                }, {
+                    fields: ['lastlyBooked']
+                });
 
                 return promises;
             },

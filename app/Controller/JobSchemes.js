@@ -289,7 +289,7 @@ function generateForClients() {
         });
         sidebarManager.pop();
         sidebarManager.removeHtml();
-        UIFunctions.jobs();
+        ctrls.Jobs.index();
     });
 }
 
@@ -310,7 +310,7 @@ function generate(id) {
             type: "success",
             delay: 3000
         });
-        UIFunctions.jobs();
+        ctrls.Jobs.index();
     });
 }
 

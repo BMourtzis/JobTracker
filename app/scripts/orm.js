@@ -313,7 +313,7 @@ function initializeModels() {
 
                 var year = date.toString("yy");
 
-                while(date.toString("M") < (nextMonth) && date.toString("yy" == year) {
+                while(date.toString("M") < (nextMonth) && date.toString("yy") == year) {
                     for (var i = 0; i < repvalues.length; i++) {
                         var jobDate = new Date(date);
                         jobDate.add(repvalues[i].day).day().at({

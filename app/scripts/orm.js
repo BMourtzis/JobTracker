@@ -239,13 +239,13 @@ function initializeModels() {
                         default:
                     }
                     return Promise.all(returnObj);
-                    // TODO: Properly wait for the jobs to be created
                 }
             },
             dailyGenerator: function dailyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
-                for (; date.toString("M") < (nextMonth); date.next().day()) {
+                
+                while(date.toString("M") < (nextMonth)) {
                     for (var i = 0; i < repvalues.length; i++) {
                         date.at({
                             hour: repvalues[i].hour,
@@ -256,13 +256,15 @@ function initializeModels() {
                         promises.push(this.createJob(jobDate));
                     }
 
+                    date.next().day();
                 }
                 return Promise.all(promises);
             },
             weeklyGenerator: function weeklyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
-                for (; date.toString("M") < (nextMonth); date.next().sunday()) {
+
+                while(date.toString("M") < (nextMonth)) {
                     for (var i = 0; i < repvalues.length; i++) {
                         var jobDate = new Date(date);
                         jobDate.add(repvalues[i].day).day().at({
@@ -272,6 +274,8 @@ function initializeModels() {
 
                         promises.push(this.createJob(jobDate));
                     }
+
+                    date.next().sunday();
                 }
                 return Promise.all(promises);
             },
@@ -287,7 +291,7 @@ function initializeModels() {
                     var repvalues = JSON.parse(scheme.repetitionValues);
                     var promises = [];
 
-                    var month = parseInt(date.toString("M"));
+                    var month = date.getMonth();
 
                     while((month < nextMonth) || ((month == 11 || month == 12) && (nextMonth == 1 || nextMonth == 2))) {
                         for(var i = 0; i < repvalues.length; i++) {
@@ -319,7 +323,7 @@ function initializeModels() {
                     var repvalues = JSON.parse(scheme.repetitionValues);
                     var promises = [];
 
-                    var month = parseInt(date.toString("M"));
+                    var month = date.getMonth();
 
                     while((month < nextMonth) || ((month == 11 || month == 12) && (nextMonth == 1 || nextMonth == 2))) {
                         for (var i = 0; i < repvalues.length; i++) {
@@ -514,9 +518,9 @@ function getLatestJobFromScheme(schemeid, nextMonth, nod) {
         // TODO: only load timeBooked
         var timeBooked = new Date(data.get({plain:true}).timeBooked);
 
-        var month = parseInt(timeBooked.toString("M"));
-        var day = parseInt(timeBooked.toString("d"));
-        var lastDayOfMonth = parseInt(Date.today().moveToLastDayOfMonth().toString("d"));
+        var month = timeBooked.getMonth() + 1;
+        var day = timeBooked.getDate() + 1;
+        var lastDayOfMonth = Date.today().moveToLastDayOfMonth().getDate() + 1;
 
         if(nextMonth - month == 2 && lastDayOfMonth - day < nod) {
             return timeBooked;

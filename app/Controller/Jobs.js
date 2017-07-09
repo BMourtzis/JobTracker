@@ -99,14 +99,8 @@ ctrl.getClientJobs = function(clientId) {
 
 function loadAllJobs() {
     ctrl.searchParams = {
-        from: Date.today().last().year().set({
-            month: 0,
-            day: 1
-        }),
-        to: Date.today().set({
-            month: 11,
-            day: 31
-        }).at({
+        from: Date.today().last().year().moveToFirstDayOfMonth(),
+        to: Date.today().next().year().moveToLastDayOfMonth().at({
             hour: 23,
             minute: 59
         })

@@ -528,7 +528,7 @@ function getLatestJobFromScheme(schemeid, nextMonth, nod) {
         else if(nextMonth - month == 1 && day < nod) {
             return timeBooked;
         }
-        else if((month == 11 ||month == 12) && (nextMonth == 1) || nextMonth == 2)) {
+        else if((month == 11 || month == 12) && (nextMonth == 1 || nextMonth == 2)) {
             return timeBooked;
         }
 

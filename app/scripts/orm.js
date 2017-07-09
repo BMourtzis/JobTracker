@@ -238,7 +238,7 @@ function initializeModels() {
                             break;
                         default:
                     }
-                    return returnObj;
+                    return Promise.all(returnObj);
                     // TODO: Properly wait for the jobs to be created
                 }
             },
@@ -309,7 +309,7 @@ function initializeModels() {
             monthlyGenerator: function monthlyGenerator(date, nextMonth) {
                 // TODO: refactor monthlyGenerator
                 var scheme = this;
-                return getLatestJobFromScheme(scheme.id, nextMonth, 28).then(function(data) {
+                return [getLatestJobFromScheme(scheme.id, nextMonth, 28).then(function(data) {
                     if (data !== null) {
                         date = data;
                         date.next().sunday().next().sunday();
@@ -337,7 +337,7 @@ function initializeModels() {
                     }
 
                     return Promise.all(promises);
-                });
+                })];
             },
             createJob: function createJob(jobDate) {
                 var payment = this.payment;

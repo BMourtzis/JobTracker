@@ -518,10 +518,6 @@ function getLatestJobFromScheme(schemeid, nextMonth, nod) {
         var day = parseInt(timeBooked.toString("d"));
         var lastDayOfMonth = parseInt(Date.today().moveToLastDayOfMonth().toString("d"));
 
-        if(nextMonth - month == 1 && day > nod) {
-            throw new Error("Jobs generated from this service already exist for this month");
-        }
-
         if(nextMonth - month == 2 && lastDayOfMonth - day < nod) {
             return timeBooked;
         }

@@ -36,11 +36,7 @@
     <div class="col-md-1">
         <h5>{{:#index+1}}.</h5></div>
     <div class="col-md-offset-1">
-        {{if #parent.parent.data.repetition === "Monthly" || #parent.parent.data.repetition === "Fortnightly"}}
-        <p>
-            <strong>Week:</strong> {{:week+1}}
-        </p>
-        {{/if}} {{if #parent.parent.data.repetition !== "Daily"}}
+        {{if #parent.parent.data.repetition !== "Daily"}}
         <p>
             <strong>Day:</strong> {{:day}}
         </p>

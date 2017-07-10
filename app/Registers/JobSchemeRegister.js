@@ -20,6 +20,21 @@ register.getJobScheme = function(id) {
     });
 };
 
+register.getClientJobScheme = function(clientId) {
+    return orm.jobScheme.findAll({
+        where: generateQuery({ client: clientId })
+    }).then(function(query) {
+        var schemes = [];
+
+        for (var i = 0; i < query.length; i++) {
+            schemes.push(query[i].get({
+                plain: true
+            }));
+        }
+        return schemes;
+    });
+}
+
 /**
  * register.getActiveJobSchemes - Fetches all active jobSchemes
  *

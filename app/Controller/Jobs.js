@@ -99,14 +99,8 @@ ctrl.getClientJobs = function(clientId) {
 
 function loadAllJobs() {
     ctrl.searchParams = {
-        from: Date.today().last().year().set({
-            month: 0,
-            day: 1
-        }),
-        to: Date.today().set({
-            month: 11,
-            day: 31
-        }).at({
+        from: Date.today().last().year().moveToFirstDayOfMonth(),
+        to: Date.today().next().year().moveToLastDayOfMonth().at({
             hour: 23,
             minute: 59
         })
@@ -380,18 +374,22 @@ function bulkDelete() {
  * @return {Promise}    an empty promise
  */
 ctrl.edit = function(id) {
-    facade.getJob(id).then(function(data) {
-        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
-        var temp = jsrender.templates(templatePath);
-        var html = temp(data);
+    return facade.getJob(id).then(function(data) {
+        return facade.getClientJobScheme(data.clientId).then(function(schemes) {
+            data.services = schemes;
+            var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
+            var temp = jsrender.templates(templatePath);
+            var html = temp(data);
 
-        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.edit.bind(this), id);
-        $("#sidebar-heading").html("Edit Job");
-        $("#sidebar").html(html);
+            sidebarManager.add(ctrl.ctrlName, "edit", ctrl.edit.bind(this), id);
+            $("#sidebar-heading").html("Edit Job");
+            $("#sidebar").html(html);
 
-        $("#save-edit-button").click(function() {
-            edit(id);
+            $("#save-edit-button").click(function() {
+                edit(id);
+            });
         });
+
     });
 };
 

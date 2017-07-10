@@ -26,6 +26,25 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="schemeId">Part of Service</label>
+                <select class="form-control" name="schemeId">
+                    {{if schemeId == null}}
+                    <option value="" disabled selected>Select a Service</option>
+                    {{/if}}
+                    {{for services}}
+                        {{if #parent.parent.data.schemeId == id}}
+                        <option value="{{:id}}" selected>{{:jobName}}</option>
+                        {{else}}
+                        <option value="{{:id}}">{{:jobName}}</option>
+                        {{/if}}
+                    {{/for}}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <button id="save-edit-button" type="button" class="btn btn-lg btn-success submit-button">Save</button>
     </div>
 </form>

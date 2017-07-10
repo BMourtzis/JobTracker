@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <div class="row">
-    <h2 class="details-heading float-left">{{:jobName}}</h2>
+    <h2 class="details-heading float-left">{{:client.businessName + " - " + jobName}}</h2>
 </div>
 <div class="row button-row">
-    {{if state === "Placed"}}
-    <button id="done-button" type="button" class="btn btn-success">
-        <span class="glyphicon"></span>&nbsp;Done
-    </button> {{else state === "Done"}}
-    <button id="placed-button" type="button" class="btn btn-warning">
-        <span class="glyphicon"></span>&nbsp;Placed
-    </button> {{/if}}
-    <button id="rebook-button" type="button" class="btn btn-info">
-        <span class="glyphicon glyphicon-time"></span>&nbsp;Rebook
-    </button>
-    <button id="edit-button" type="button" class="btn btn-warning">
-        <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
-    </button>
-    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#duplicateJobModal">
+    <div class="btn-group">
+        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Edit <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a id="edit-button" href="#"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit Details</a></li>
+            <li><a id="rebook-button" href="#"><span class="glyphicon glyphicon-time"></span>&nbsp;Edit booking time</a></li>
+        </ul>
+    </div>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#duplicateJobModal">
         <span class="glyphicon glyphicon-duplicate"></span>&nbsp;Duplicate
     </button>
     <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
@@ -25,20 +20,28 @@
 </div>
 <div class="row">
     <p>
-        <strong>Business Name:</strong> {{:client.businessName}}
-    </p>
-    <p>
         <strong>Date Booked:</strong> {{:timeBooked.format("DD/MM/YYYY")}}
     </p>
     <p>
         <strong>Time Booked:</strong> {{:timeBooked.format("HH:mm")}}
     </p>
     <p>
-        <strong>Total Price (inc. GST):</strong> {{:total}}
+        <strong>Payment (inc. GST):</strong> {{:total}}
     </p>
     <p>
         <strong>Status:</strong> {{:state}}
     </p>
+</div>
+<div class="row button-row">
+    {{if state === "Placed"}}
+    <button id="done-button" type="button" class="btn btn-success">
+        <span class="glyphicon"></span>&nbsp;Change status to Done
+    </button>
+    {{else state === "Done"}}
+    <button id="placed-button" type="button" class="btn btn-warning">
+        <span class="glyphicon"></span>&nbsp;Change status to Placed
+    </button>
+    {{/if}}
 </div>
 
 <!-- Delete confirmation Modal -->

@@ -210,41 +210,43 @@ function initializeModels() {
         },
         instanceMethods: {
             generateJobs: function generateJobs(year, month) {
-                if (this.enabled) {
-                    var date = Date.today().set({
-                        year: year,
-                        month: month,
-                        day: 1
-                    }).first().sunday();
-                    var returnObj;
-                    month += 2;
-
-                    if(month == 13) {
-                        month = 1;
-                    }
-
-                    switch (this.repetition) {
-                        case "Daily":
-                            returnObj = this.dailyGenerator(date, month);
-                            break;
-                        case "Weekly":
-                            returnObj = this.weeklyGenerator(date, month);
-                            break;
-                        case "Fortnightly":
-                            returnObj = this.fortnightlyGenerator(date, month);
-                            break;
-                        case "Monthly":
-                            returnObj = this.monthlyGenerator(date, month);
-                            break;
-                        default:
-                    }
-                    return Promise.all(returnObj);
+                if (!this.enabled) {
+                    return null;
                 }
+
+                var date = Date.today().set({
+                    year: year,
+                    month: month,
+                    day: 1
+                }).first().sunday();
+                var returnObj;
+                month += 2;
+
+                if(month == 13) {
+                    month = 1;
+                }
+
+                switch (this.repetition) {
+                    case "Daily":
+                        returnObj = this.dailyGenerator(date, month);
+                        break;
+                    case "Weekly":
+                        returnObj = this.weeklyGenerator(date, month);
+                        break;
+                    case "Fortnightly":
+                        returnObj = this.fortnightlyGenerator(date, month);
+                        break;
+                    case "Monthly":
+                        returnObj = this.monthlyGenerator(date, month);
+                        break;
+                    default:
+                }
+                return Promise.all(returnObj);
             },
             dailyGenerator: function dailyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
-                
+
                 while(date.toString("M") < (nextMonth)) {
                     for (var i = 0; i < repvalues.length; i++) {
                         date.at({

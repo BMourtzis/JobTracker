@@ -243,9 +243,17 @@ ctrl.details = function(id) {
     return facade.getJobFull(id).then(function(data) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
+        data.total = numberFormatter(data.payment + data.gst).format();
         var html = temp(data);
         $("#sidebar-heading").html("Job Details");
         $("#sidebar").html(html);
+
+        $('#datepicker').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#timepicker').datetimepicker({
+            format: 'HH:mm'
+        });
 
         $("#done-button").click(function() {
             done(id);
@@ -259,6 +267,17 @@ ctrl.details = function(id) {
         $("#edit-button").click(function() {
             ctrl.edit(id);
         });
+
+        $("#duplicate-button").click(function() {
+            new Promise(function(resolve, reject) {
+                $("#duplicateJobModal").on('hidden.bs.modal', function(e) {
+                    resolve();
+                });
+            }).then(function() {
+                duplicate(data.id);
+            });
+        });
+
         $("#delete-button").click(function() {
             new Promise(function(resolve, reject) {
                 $("#deleteConfirmationModal").on('hidden.bs.modal', function(e) {
@@ -338,6 +357,21 @@ function create() {
         sidebarManager.pop();
         contentManager.reload();
         return ctrl.details(job.id);
+    });
+}
+
+function duplicate(jobId) {
+    var date = $('#datepicker :input').val();
+    var time = $('#timepicker :input').val();
+    var dateTimeFormat = "DD/MM/YYYY HH:mm";
+    var timeBooked = moment(date + " " + time, dateTimeFormat)._d;
+
+    return facade.getJob(jobId).then(function(job) {
+        return facade.createJob(job.jobName, timeBooked, job.payment, job.clientId).then(function(job) {
+            sidebarManager.pop();
+            contentManager.reload();
+            return ctrl.details(job.id);
+        });
     });
 }
 

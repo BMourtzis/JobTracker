@@ -16,6 +16,9 @@
     <button id="edit-button" type="button" class="btn btn-warning">
         <span class="glyphicon glyphicon-pencil"></span>&nbsp;Edit
     </button>
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#duplicateJobModal">
+        <span class="glyphicon glyphicon-duplicate"></span>&nbsp;Duplicate
+    </button>
     <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteConfirmationModal">
         <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
     </button>
@@ -31,7 +34,7 @@
         <strong>Time Booked:</strong> {{:timeBooked.format("HH:mm")}}
     </p>
     <p>
-        <strong>Total Price:</strong> ${{:payment + gst}}
+        <strong>Total Price:</strong> {{:total}}
     </p>
     <p>
         <strong>Status:</strong> {{:state}}
@@ -49,6 +52,50 @@
             <div class="modal-body">
                 <button id="delete-button" type="button" class="btn btn-danger" data-dismiss="modal">Delete Job</button>
                 <button type="button" class="btn btn-default float-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirmation Modal -->
+<div id="duplicateJobModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-medium" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title modalLabel">Job Duplication Options</h4>
+            </div>
+            <div class="modal-body">
+                <form id="JobDuplicationForm">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="timeBooked">Booking Date</label>
+                                <div class="input-group date datetimepicker" id="datepicker">
+                                    <input type="text" class="form-control" value="{{:timeBooked.format('DD/MM/YYYY')}}">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="timeBooked">Booking Time</label>
+                                <div class="input-group date datetimepicker" id="timepicker">
+                                    <input type="text" class="form-control" value="{{:timeBooked.format('HH:mm')}}">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-body">
+                <button id="duplicate-button" type="button" class="btn btn-success float-right" data-dismiss="modal">Duplicate Job</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

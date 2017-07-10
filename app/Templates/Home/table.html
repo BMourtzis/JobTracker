@@ -21,7 +21,7 @@
             <th>Client</th>
             <th>Job</th>
             <th>Time</th>
-            <th>Payment</th>
+            <th>Payment (inc. GST)</th>
             <th>Done</th>
         </tr>
     </thead>
@@ -31,7 +31,7 @@
             <td>{{:client.businessName}}</td>
             <td>{{:jobName}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>${{:payment + gst}}</td>
+            <td>{{:total}}</td>
             <td>
                 {{if state === "Placed"}}
                 <input class="placed" type="checkbox" data-id="{{:id}}"> {{else}}

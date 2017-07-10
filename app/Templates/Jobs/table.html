@@ -7,7 +7,7 @@
             <th>Name</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Total</th>
+            <th>Total (inc. GST)</th>
             <th>Status</th>
         </tr>
     </thead>
@@ -19,7 +19,7 @@
             <td>{{:jobName}}</td>
             <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>${{:payment + gst}}</td>
+            <td>{{:total}}</td>
             <td>{{:state}}</td>
             <td>
                 <button type="button" class="btn btn-primary btn-xs details-button" data-id="{{:id}}">More...</button>

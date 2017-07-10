@@ -214,6 +214,9 @@ function gotoPage(page) {
 
 function loadTable(data) {
     data.currentPage = ctrl.currentPage;
+    for(var i = 0; i < data.jobs.length; i++) {
+        data.jobs[i].total = numberFormatter(data.jobs[i].payment + data.jobs[i].gst).format();
+    }
 
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var tableTemp = jsrender.templates(templatePath);

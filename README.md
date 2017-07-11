@@ -18,7 +18,6 @@ The application is built with electron platform in order to utilise the nice vis
 
 - Create Back-end tests
 - Move HTML templating from JSRender to Vue
-- Fix UI bugs
 - Add functionality to keep track of business finances
 - Add notes to clients
-- Add do list to jobs
+- Add do list for jobs

@@ -15,8 +15,14 @@
             <td>{{:client.businessName}}</td>
             <td>{{:jobName}}</td>
             <td>{{:repetition}}</td>
-            <td>${{:payment}}</td>
-            <td>{{:enabled}}</td>
+            <td>{{:payment}}</td>
+            <td>
+                {{if enabled}}
+                <span class="glyphicon glyphicon-ok"></span>
+                {{else}}
+                <span class="glyphicon glyphicon-remove"></span>
+                {{/if}}
+            </td>
             <td>
                 <button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">Details</button>
             </td>
@@ -40,15 +46,19 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            {{/if}} {{for ~getFields(count)}} {{if #index == #parent.parent.data.currentPage}}
-            <li class="active">
-                <a href="#">{{:#getIndex()+1}}</a>
-            </li>
-            {{else}}
-            <li data-id="{{:#getIndex()}}">
-                <a href="#">{{:#getIndex()+1}}</a>
-            </li>
-            {{/if}} {{/for}} {{if currentPage == count}}
+            {{/if}}
+            {{for ~getFields(count)}}
+                {{if #index == #parent.parent.data.currentPage}}
+                <li class="active">
+                    <a href="#">{{:#getIndex()+1}}</a>
+                </li>
+                {{else}}
+                <li data-id="{{:#getIndex()}}">
+                    <a href="#">{{:#getIndex()+1}}</a>
+                </li>
+                {{/if}}
+            {{/for}}
+            {{if currentPage == count}}
             <li class="disabled">
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>

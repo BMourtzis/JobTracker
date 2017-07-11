@@ -1,4 +1,4 @@
-var facade;
+    var facade;
 
 var ctrl = {};
 
@@ -92,6 +92,10 @@ function loadActiveJobs() {
  */
 function loadTable(data) {
     data.currentPage = ctrl.currentPage;
+
+    for(var i = 0; i < data.schemes.length; i++) {
+        data.schemes[i].payment = numberFormatter(data.schemes[i].payment).format()
+    }
 
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var tableTemp = jsrender.templates(templatePath);

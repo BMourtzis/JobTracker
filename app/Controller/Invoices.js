@@ -84,6 +84,10 @@ function loadPendingInvoices() {
  * @param  {Object} data The list of invoices to be loads on the table
  */
 function loadTable(data) {
+    for(var i = 0; i < data.invoices.length; i++) {
+        data.invoices[i].total = numberFormatter(data.invoices[i].total).format();
+    }
+
     data.currentPage = ctrl.currentPage;
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var temp = jsrender.templates(templatePath);

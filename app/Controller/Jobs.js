@@ -58,7 +58,7 @@ function initiatePage() {
             $('#fromDatepicker').data("DateTimePicker").maxDate(e.date);
         });
 
-        $("#jobAllCheckbox").click(function() {
+        $("#selectAllButton").click(function() {
             updateAllCheckboxes();
         });
         $("#create-button").click(function() {
@@ -156,17 +156,26 @@ function reload() {
  */
 function updateSelectedList() {
     var tdList = $("#indexJobTable :checked");
+
     ctrl.selectedList = [];
 
     tdList.each(function() {
         ctrl.selectedList.push(parseInt($(this).data("id")));
     });
 
+    if(ctrl.selectedList.length < 100) {
+        uncheckSelectAllButton();
+    }
+    else {
+        checkSelectAllButton();
+    }
+
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/selectedListOptions.html");
     var temp = jsrender.templates(templatePath);
     var html = temp({
         count: ctrl.selectedList.length
     });
+
     sidebarManager.add(ctrl.ctrlName, "updateSelectedList", updateSelectedList.bind(this));
     $("#sidebar-heading").html("Selection List");
     $("#sidebar").html(html);
@@ -182,7 +191,17 @@ function updateSelectedList() {
  * @return {Promise}  an empty promise
  */
 function updateAllCheckboxes() {
-    var checked = $("#jobAllCheckbox").is(":checked");
+    var checked = $("#selectAllButton").data("checked");
+
+    if(checked) {
+        uncheckSelectAllButton();
+    }
+    else {
+        checkSelectAllButton();
+    }
+
+    checked = !checked;
+    $("#selectAllButton").data("checked", checked);
     var tdList = $("#indexJobTable :checkbox");
 
     tdList.each(function() {
@@ -190,6 +209,24 @@ function updateAllCheckboxes() {
     });
 
     updateSelectedList();
+}
+
+/**
+ * checkSelectAllButton - Updates the content of the select all button to checked
+ *
+ * @return {Position}      an empty promise
+ */
+function checkSelectAllButton() {
+    $("#selectAllButton").html("Select All&nbsp;<span class='glyphicon glyphicon-check'></span>");
+}
+
+/**
+ * uncheckSelectAllButton - Updates the content of the select all button to unchecked
+ *
+ * @return {Position}  Nothing
+ */
+function uncheckSelectAllButton() {
+    $("#selectAllButton").html("Select All&nbsp;<span class='glyphicon glyphicon-unchecked'></span>");
 }
 
 /**

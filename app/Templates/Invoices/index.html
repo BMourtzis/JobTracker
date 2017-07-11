@@ -51,7 +51,7 @@
                             <div class="form-group">
                                 <label for="client">Client</label>
                                 <select class="form-control" name="clientID">
-                                    <option value="" selected></option>
+                                    <option value="" selected>All</option>
                                     {{for clients}}
                                         <option value="{{:id}}">{{:businessName}}</option>
                                     {{/for}}
@@ -62,7 +62,7 @@
                             <div class="form-group">
                                 <label for="state">Paid</label>
                                 <select class="form-control" name="paid">
-                                    <option value="" selected></option>
+                                    <option value="" selected>All</option>
                                     <option value="paid">Paid</option>
                                     <option value="unpaid">Not Paid</option>
                                 </select>

@@ -2,16 +2,15 @@
 <div class="row">
     <h1 class="float-left">Clients</h1>
     <button id="create-button" type="button" class="btn btn-primary custom-button">
-        <span class="glyphicon glyphicon-plus"></span> Create
+        <span class="glyphicon glyphicon-plus"></span>&nbsp;Create
     </button>
 </div>
 <div class="row">
     <table id="client-table" class="table table-striped">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Client</th>
+                <th>Full Name</th>
                 <th>Short Name</th>
             </tr>
         </thead>
@@ -19,8 +18,7 @@
             {{for clients}}
             <tr>
                 <td>{{:businessName}}</td>
-                <td>{{:firstName}}</td>
-                <td>{{:lastName}}</td>
+                <td>{{:firstName + "&nbsp;" + lastName}}</td>
                 <td>{{:shortName}}</td>
                 <td>
                     <button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">Details</button>

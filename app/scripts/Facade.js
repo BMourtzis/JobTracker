@@ -334,6 +334,10 @@ facade.getJobSchemeFull = function(id) {
     return schemeRegister.getJobSchemeFull(id);
 };
 
+facade.getClientJobScheme = function(clientId) {
+    return schemeRegister.getClientJobScheme(clientId);
+};
+
 /**
  * facade.getActiveJobSchemes - Returns a list of all the active (enabled) jobSchemes
  *

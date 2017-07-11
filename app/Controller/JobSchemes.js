@@ -289,7 +289,7 @@ function generateForClients() {
         });
         sidebarManager.pop();
         sidebarManager.removeHtml();
-        UIFunctions.jobs();
+        ctrls.Jobs.index();
     });
 }
 
@@ -310,7 +310,7 @@ function generate(id) {
             type: "success",
             delay: 3000
         });
-        UIFunctions.jobs();
+        ctrls.Jobs.index();
     });
 }
 
@@ -401,16 +401,16 @@ function getRepValues() {
 
     $("#repValuesDiv").children().each(function(no, data) {
         var day = 0;
-        if (selected === "Monthly" || selected === "Fortnightly") {
-            day = parseInt($(data).find("#day").val()) + 7 * parseInt($(data).find("#week").val());
-        } else if (selected === "Weekly") {
+        if (selected !== "Daily") {
             day = parseInt($(data).find("#day").val());
         }
 
+        var time = $(data).find("#time").val().split(":");
+
         var rep = {
             day: day,
-            hour: parseInt($(data).find("#time").val().split(":")[0]),
-            minute: parseInt($(data).find("#time").val().split(":")[1])
+            hour: parseInt(time[0]),
+            minute: parseInt(time[1])
         };
         repvalues.push(rep);
     });

@@ -72,12 +72,13 @@ function initializeModels() {
 
         },
         instanceMethods: {
-            addNewJob: function(jobname, timebooked, payment) {
+            addNewJob: function(jobname, timebooked, payment, schemeId) {
                 return orm.job.create({
                     jobName: jobname,
                     timeBooked: timebooked,
                     payment: payment,
                     state: 'Placed',
+                    schemeId: schemeId,
                     clientId: this.id,
                     gst: (payment / settings.GSTPercentage)
                 });
@@ -140,6 +141,11 @@ function initializeModels() {
             type: sequelize.DECIMAL,
             allowNull: false,
             field: 'gst'
+        },
+        schemeId: {
+            type: sequelize.INTEGER,
+            allowNull: true,
+            field: 'schemeId'
         },
         clientId: {
             type: sequelize.INTEGER,
@@ -204,36 +210,44 @@ function initializeModels() {
         },
         instanceMethods: {
             generateJobs: function generateJobs(year, month) {
-                if (this.enabled) {
-                    var date = Date.today().set({
-                        year: year,
-                        month: month,
-                        day: 1
-                    }).first().sunday();
-                    var returnObj;
-                    month += 2;
-                    switch (this.repetition) {
-                        case "Daily":
-                            returnObj = this.dailyGenerator(date, month);
-                            break;
-                        case "Weekly":
-                            returnObj = this.weeklyGenerator(date, month);
-                            break;
-                        case "Fortnightly":
-                            returnObj = this.fortnightlyGenerator(date, month);
-                            break;
-                        case "Monthly":
-                            returnObj = this.monthlyGenerator(date, month);
-                            break;
-                        default:
-                    }
-                    return Promise.all(returnObj);
+                if (!this.enabled) {
+                    return null;
                 }
+
+                var date = Date.today().set({
+                    year: year,
+                    month: month,
+                    day: 1
+                }).first().sunday();
+                var returnObj;
+                month += 2;
+
+                if(month == 13) {
+                    month = 1;
+                }
+
+                switch (this.repetition) {
+                    case "Daily":
+                        returnObj = this.dailyGenerator(date, month);
+                        break;
+                    case "Weekly":
+                        returnObj = this.weeklyGenerator(date, month);
+                        break;
+                    case "Fortnightly":
+                        returnObj = this.fortnightlyGenerator(date, month);
+                        break;
+                    case "Monthly":
+                        returnObj = this.monthlyGenerator(date, month);
+                        break;
+                    default:
+                }
+                return Promise.all(returnObj);
             },
             dailyGenerator: function dailyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
-                for (; date.toString("M") < (nextMonth); date.next().day()) {
+
+                while(date.toString("M") < (nextMonth)) {
                     for (var i = 0; i < repvalues.length; i++) {
                         date.at({
                             hour: repvalues[i].hour,
@@ -244,13 +258,15 @@ function initializeModels() {
                         promises.push(this.createJob(jobDate));
                     }
 
+                    date.next().day();
                 }
-                return promises;
+                return Promise.all(promises);
             },
             weeklyGenerator: function weeklyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
                 var promises = [];
-                for (; date.toString("M") < (nextMonth); date.next().sunday()) {
+
+                while(date.toString("M") < (nextMonth)) {
                     for (var i = 0; i < repvalues.length; i++) {
                         var jobDate = new Date(date);
                         jobDate.add(repvalues[i].day).day().at({
@@ -260,45 +276,81 @@ function initializeModels() {
 
                         promises.push(this.createJob(jobDate));
                     }
+
+                    date.next().sunday();
                 }
-                return promises;
+                return Promise.all(promises);
             },
             fortnightlyGenerator: function fortnightlyGenerator(date, nextMonth) {
-                var repvalues = JSON.parse(this.repetitionValues);
-                var promises = [];
-
-                for (; date.toString("M") < (nextMonth); date.next().sunday().next().sunday()) {
-                    for (var i = 0; i < repvalues.length; i++) {
-                        var jobDate = new Date(date);
-                        jobDate.add(repvalues[i].day).day().at({
-                            hour: repvalues[i].hour,
-                            minute: repvalues[i].minute
-                        });
-
-                        promises.push(this.createJob(jobDate));
+                // TODO: refactor fortnightlyGenerator
+                var scheme = this;
+                return [getLatestJobFromScheme(scheme.id, nextMonth, 14).then(function(data) {
+                    if (data !== null) {
+                        date = data;
+                        date.next().sunday().next().sunday();
                     }
-                }
-                return promises;
+
+                    var repvalues = JSON.parse(scheme.repetitionValues);
+                    var promises = [];
+
+                    var month = date.getMonth();
+
+                    while((month < nextMonth) || ((month == 11 || month == 12) && (nextMonth == 1 || nextMonth == 2))) {
+                        for(var i = 0; i < repvalues.length; i++) {
+                            var jobDate = new Date(date);
+                            jobDate.add(repvalues[i].day).day().at({
+                                hour: repvalues[i].hour,
+                                minute: repvalues[i].minute
+                            });
+
+                            promises.push(scheme.createJob(jobDate));
+                        }
+                        date.next().sunday().next().sunday();
+                        month = parseInt(date.toString("M"));
+                    }
+
+                    return Promise.all(promises);
+                })];
             },
             monthlyGenerator: function monthlyGenerator(date, nextMonth) {
-                var repvalues = JSON.parse(this.repetitionValues);
-                var promises = [];
-                for (var i = 0; i < repvalues.length; i++) {
-                    var jobDate = new Date(date);
-                    jobDate.add(repvalues[i].day).day().at({
-                        hour: repvalues[i].hour,
-                        minute: repvalues[i].minute
-                    });
+                // TODO: refactor monthlyGenerator
+                var scheme = this;
+                return [getLatestJobFromScheme(scheme.id, nextMonth, 28).then(function(data) {
+                    if (data !== null) {
+                        date = data;
+                        date.next().sunday().next().sunday();
+                        date.next().sunday().next().sunday();
+                    }
 
-                    promises.push(this.createJob(jobDate));
-                }
-                return promises;
+                    var repvalues = JSON.parse(scheme.repetitionValues);
+                    var promises = [];
+
+                    var month = date.getMonth();
+
+                    while((month < nextMonth) || ((month == 11 || month == 12) && (nextMonth == 1 || nextMonth == 2))) {
+                        for (var i = 0; i < repvalues.length; i++) {
+                            var jobDate = new Date(date);
+                            jobDate.add(repvalues[i].day).day().at({
+                                hour: repvalues[i].hour,
+                                minute: repvalues[i].minute
+                            });
+
+                            promises.push(scheme.createJob(jobDate));
+                        }
+                        date.next().sunday().next().sunday();
+                        date.next().sunday().next().sunday();
+                        month = parseInt(date.toString("M"));
+                    }
+
+                    return Promise.all(promises);
+                })];
             },
             createJob: function createJob(jobDate) {
                 var payment = this.payment;
                 var jobName = this.jobName;
+                var schemeid = this.id;
                 return orm.client.findById(this.clientId).then(function(client) {
-                    return client.addNewJob(jobName, jobDate, payment);
+                    return client.addNewJob(jobName, jobDate, payment, schemeid);
                 });
             }
         }
@@ -452,6 +504,38 @@ function validateDB() {
             return orm;
         });
     }
+}
+
+function getLatestJobFromScheme(schemeid, nextMonth, nod) {
+    return orm.job.find({
+        where: {
+            schemeId: schemeid
+        },
+        order: [["timeBooked", "DESC"]],
+        limit: 1
+    }).then(function(data) {
+        if(data == null) {
+            return null;
+        }
+        // TODO: only load timeBooked
+        var timeBooked = new Date(data.get({plain:true}).timeBooked);
+
+        var month = timeBooked.getMonth() + 1;
+        var day = timeBooked.getDate() + 1;
+        var lastDayOfMonth = Date.today().moveToLastDayOfMonth().getDate() + 1;
+
+        if(nextMonth - month == 2 && lastDayOfMonth - day < nod) {
+            return timeBooked;
+        }
+        else if(nextMonth - month == 1 && day < nod) {
+            return timeBooked;
+        }
+        else if((month == 11 || month == 12) && (nextMonth == 1 || nextMonth == 2)) {
+            return timeBooked;
+        }
+
+        return null;
+    });
 }
 
 /**

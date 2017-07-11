@@ -25,7 +25,7 @@
         <strong>Issue Date:</strong> {{:createdAt.format("DD/MM/YYYY")}}
     </p>
     <p>
-        <strong>Total:</strong> ${{:total}}
+        <strong>Payment (inc. GST):</strong> ${{:total}}
     </p>
     <p>
         <strong>Paid:</strong> {{:paid}}
@@ -43,7 +43,7 @@
                 <th>Job Name</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Total</th>
+                <th>Payment</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -53,7 +53,7 @@
                 <td>{{:jobName}}</td>
                 <td>{{:timeBooked.format("DD/MM/YYYY")}}</td>
                 <td>{{:timeBooked.format("HH:mm")}}</td>
-                <td>${{:payment + gst}}</td>
+                <td>{{:total}}</td>
                 <td>{{:state}}</td>
             </tr>
             {{/for }}

@@ -12,7 +12,7 @@ branches:
         - Dev
 
 environment:
-    nodejs_version: "7.4"
+    nodejs_version: "7.10"
     GH_TOKEN:
         secure: UgQokWY8FPEnAvHi9crKc5/WXLnYpLDB8A8xvTfAeoXMzqyyFC2meBEoKYLyalvM
 

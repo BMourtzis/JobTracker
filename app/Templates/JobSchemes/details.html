@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <div class="row">
-    <h2 class="details-heading float-left">{{:jobName}}</h2>
+    <h2 class="details-heading float-left">{{:client.businessName + " - " + jobName}}</h2>
 </div>
 <div class="row button-row">
     <button id="edit-button" type="button" class="btn btn-warning">
@@ -15,13 +15,10 @@
 </div>
 <div class="row">
     <p>
-        <strong>Business Name:</strong> {{:client.businessName}}
-    </p>
-    <p>
         <strong>Repetition:</strong> {{:repetition}}
     </p>
     <p>
-        <strong>Payment:</strong> ${{:payment}}
+        <strong>Payment (ex. GST):</strong> ${{:payment}}
     </p>
     <p>
         <strong>Enabled:</strong> {{:enabled}}

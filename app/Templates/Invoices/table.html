@@ -4,7 +4,7 @@
         <tr>
             <th>Client</th>
             <th>Invoice No</th>
-            <th>Total</th>
+            <th>Total (inc. GST)</th>
             <th>Issue Date</th>
             <th>Paid</th>
         </tr>
@@ -20,7 +20,7 @@
                 {{if paid === false}} {{:paid}} {{else}} {{:paidAt.format("DD/MM/YYYY")}} {{/if}}
             </td>
             <td>
-                <button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">More...</button>
+                <button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">Details</button>
             </td>
         </tr>
         {{/for}}

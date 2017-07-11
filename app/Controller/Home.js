@@ -38,6 +38,7 @@ function loadDayJobs() {
         data.sum = 0;
 
         for (var i = 0; i < data.jobs.length; i++) {
+            data.jobs[i].total = numberFormatter(data.jobs[i].payment + data.jobs[i].gst).format();
             data.sum += data.jobs[i].payment + data.jobs[i].gst;
         }
         data.sum = numberFormatter(data.sum).format();

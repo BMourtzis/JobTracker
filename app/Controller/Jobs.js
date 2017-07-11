@@ -99,14 +99,8 @@ ctrl.getClientJobs = function(clientId) {
 
 function loadAllJobs() {
     ctrl.searchParams = {
-        from: Date.today().last().year().set({
-            month: 0,
-            day: 1
-        }),
-        to: Date.today().set({
-            month: 11,
-            day: 31
-        }).at({
+        from: Date.today().last().year().moveToFirstDayOfMonth(),
+        to: Date.today().next().year().moveToLastDayOfMonth().at({
             hour: 23,
             minute: 59
         })
@@ -220,6 +214,9 @@ function gotoPage(page) {
 
 function loadTable(data) {
     data.currentPage = ctrl.currentPage;
+    for(var i = 0; i < data.jobs.length; i++) {
+        data.jobs[i].total = numberFormatter(data.jobs[i].payment + data.jobs[i].gst).format();
+    }
 
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var tableTemp = jsrender.templates(templatePath);
@@ -249,9 +246,17 @@ ctrl.details = function(id) {
     return facade.getJobFull(id).then(function(data) {
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
+        data.total = numberFormatter(data.payment + data.gst).format();
         var html = temp(data);
         $("#sidebar-heading").html("Job Details");
         $("#sidebar").html(html);
+
+        $('#datepicker').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('#timepicker').datetimepicker({
+            format: 'HH:mm'
+        });
 
         $("#done-button").click(function() {
             done(id);
@@ -265,6 +270,17 @@ ctrl.details = function(id) {
         $("#edit-button").click(function() {
             ctrl.edit(id);
         });
+
+        $("#duplicate-button").click(function() {
+            new Promise(function(resolve, reject) {
+                $("#duplicateJobModal").on('hidden.bs.modal', function(e) {
+                    resolve();
+                });
+            }).then(function() {
+                duplicate(data.id);
+            });
+        });
+
         $("#delete-button").click(function() {
             new Promise(function(resolve, reject) {
                 $("#deleteConfirmationModal").on('hidden.bs.modal', function(e) {
@@ -347,6 +363,21 @@ function create() {
     });
 }
 
+function duplicate(jobId) {
+    var date = $('#datepicker :input').val();
+    var time = $('#timepicker :input').val();
+    var dateTimeFormat = "DD/MM/YYYY HH:mm";
+    var timeBooked = moment(date + " " + time, dateTimeFormat)._d;
+
+    return facade.getJob(jobId).then(function(job) {
+        return facade.createJob(job.jobName, timeBooked, job.payment, job.clientId).then(function(job) {
+            sidebarManager.pop();
+            contentManager.reload();
+            return ctrl.details(job.id);
+        });
+    });
+}
+
 /**
  * remove - Deletes the selected Job
  *
@@ -380,18 +411,22 @@ function bulkDelete() {
  * @return {Promise}    an empty promise
  */
 ctrl.edit = function(id) {
-    facade.getJob(id).then(function(data) {
-        var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
-        var temp = jsrender.templates(templatePath);
-        var html = temp(data);
+    return facade.getJob(id).then(function(data) {
+        return facade.getClientJobScheme(data.clientId).then(function(schemes) {
+            data.services = schemes;
+            var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/edit.html");
+            var temp = jsrender.templates(templatePath);
+            var html = temp(data);
 
-        sidebarManager.add(ctrl.ctrlName, "edit", ctrl.edit.bind(this), id);
-        $("#sidebar-heading").html("Edit Job");
-        $("#sidebar").html(html);
+            sidebarManager.add(ctrl.ctrlName, "edit", ctrl.edit.bind(this), id);
+            $("#sidebar-heading").html("Edit Job");
+            $("#sidebar").html(html);
 
-        $("#save-edit-button").click(function() {
-            edit(id);
+            $("#save-edit-button").click(function() {
+                edit(id);
+            });
         });
+
     });
 };
 

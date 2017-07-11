@@ -3,17 +3,17 @@
     <div class="custom-button">
         <button id="prev-day-button" type="button" class="btn btn-default">
             <span class="glyphicon glyphicon-menu-left"></span>
-            Previous
+            Previous Day
         </button>
         <button id="reload-day-button" type="button" class="btn btn-success">
             {{:selectedDay}}
         </button>
         <button id="next-day-button" type="button" class="btn btn-default">
-            Next
+            Next Day
             <span class="glyphicon glyphicon-menu-right"></span>
         </button>
     </div>
-    <h2 id="daily-heading">Daily Schedule</h2>
+    <h2 id="daily-heading">Day's Schedule</h2>
 </div>
 <table id="home-job-table" class="table table-striped">
     <thead>
@@ -21,7 +21,7 @@
             <th>Client</th>
             <th>Job</th>
             <th>Time</th>
-            <th>Payment</th>
+            <th>Payment (inc. GST)</th>
             <th>Done</th>
         </tr>
     </thead>
@@ -31,13 +31,15 @@
             <td>{{:client.businessName}}</td>
             <td>{{:jobName}}</td>
             <td>{{:timeBooked.format("HH:mm")}}</td>
-            <td>${{:payment + gst}}</td>
+            <td>{{:total}}</td>
             <td>
                 {{if state === "Placed"}}
-                <input class="placed" type="checkbox" data-id="{{:id}}"> {{else}}
-                <input class="done" type="checkbox" data-id="{{:id}}" checked> {{/if}}
+                <input class="placed" type="checkbox" data-id="{{:id}}">
+                {{else}}
+                <input class="done" type="checkbox" data-id="{{:id}}" checked>
+                {{/if}}
             </td>
-            <td><button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">More...</button></td>
+            <td><button type="button" class="btn btn-primary btn-xs" data-id="{{:id}}">Details</button></td>
         </tr>
         {{/for}}
     </tbody>

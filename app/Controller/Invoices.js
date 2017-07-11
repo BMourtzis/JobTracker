@@ -285,6 +285,11 @@ function create() {
 ctrl.details = function(id) {
     sidebarManager.add(ctrl.ctrlName, "details", ctrl.details.bind(this), id);
     return facade.getInvoice(id).then(function(invoice) {
+
+        for(var i = 0; i < invoice.jobs.length; i++) {
+            invoice.jobs[i].total = numberFormatter(invoice.jobs[i].payment + invoice.jobs[i].gst).format();
+        }
+
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(invoice);

@@ -21,7 +21,7 @@ module.exports = function getControllers() {
         ctrl.Invoices = data;
     });
 
-    var timetable = require("./timetable.js").then(function(data){
+    var timetable = require("./Timetable.js").then(function(data){
         ctrl.Timetable = data;
     });
 

@@ -4,14 +4,14 @@ var ctrl = {};
 
 ctrl.ctrlName = "Timetable";
 ctrl.templateDir = "../Templates/";
-var selectedDate;
 
 var calendarSettings = {
     header: {
-        left: 'prev, next, today',
-        center: 'title',
-        right: 'month, basicWeek, basicDay'
+        left: "prev, next",
+        center: "title",
+        right: ""
     },
+    defaultDate: new Date.today().moveToFirstDayOfMonth().at({hour: 0, minute: 0}),
     aspectRatio: 1,
     events: [],
     timeFormat: 'HH:mm',
@@ -34,22 +34,20 @@ ctrl.index = function() {
     $("#content").html(html);
 
     $("#calendar").fullCalendar(calendarSettings);
-    selectedDate = Date.today();
     loadEvents();
 
     $('.fc-prev-button').click(function() {
-        selectedDate.add(-1).month();
-        loadEvents(selectedDate);
+        loadEvents();
     });
 
     $('.fc-next-button').click(function() {
-        selectedDate.add(1).month();
-        loadEvents(selectedDate);
+        loadEvents();
     });
 }
 
 function loadEvents() {
-    return facade.getJobsForMonth(selectedDate).then(function(data) {
+    var date = new Date($("#calendar").fullCalendar("getDate")).moveToFirstDayOfMonth();
+    return facade.getJobsForMonth(date).then(function(data) {
         var events = [];
         for(var i = 0; i < data.length; i++)
         {

@@ -19,18 +19,19 @@
     </button>
 </div>
 <div class="row">
-    <p>
-        <strong>Date Booked:</strong> {{:timeBooked.format("DD/MM/YYYY")}}
-    </p>
-    <p>
-        <strong>Time Booked:</strong> {{:timeBooked.format("HH:mm")}}
-    </p>
-    <p>
-        <strong>Payment (inc. GST):</strong> {{:total}}
-    </p>
-    <p>
-        <strong>Status:</strong> {{:state}}
-    </p>
+    <h3>Details</h3>
+</div>
+<div class="row">
+    <dl>
+        <dt>Date Booked:&nbsp;</dt>
+        <dd>{{:timeBooked.format("DD/MM/YYYY")}}</dd>
+        <dt>Time Booked:&nbsp;</dt>
+        <dd>{{:timeBooked.format("HH:mm")}}</dd>
+        <dt>Payment (inc. GST):&nbsp;</dt>
+        <dd>{{:total}}</dd>
+        <dt>Status:&nbsp;</dt>
+        <dd>{{:state}}</dd>
+    </dl>
 </div>
 <div class="row button-row">
     {{if state === "Placed"}}

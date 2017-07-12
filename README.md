@@ -11,14 +11,13 @@ The application is built with electron platform in order to utilise the nice vis
 - Creating and editing Jobs
 - Generating monthly Jobs with the use of Services
 - Generating and editing Invoices based on Jobs
-- Keeping track of clients and their associated jobs, services and Invoices
+- Keeping track of clients and their associated jobs, services and invoices
 - Built-in Calendar
 
 ## TODO List
 
-- Create Back-end tests (maybe front-end as well)
+- Create Back-end tests
 - Move HTML templating from JSRender to Vue
-- Fix UI bugs
 - Add functionality to keep track of business finances
 - Add notes to clients
-- Add do list to jobs
+- Add do list for jobs

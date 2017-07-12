@@ -84,6 +84,10 @@ function loadPendingInvoices() {
  * @param  {Object} data The list of invoices to be loads on the table
  */
 function loadTable(data) {
+    for(var i = 0; i < data.invoices.length; i++) {
+        data.invoices[i].total = numberFormatter(data.invoices[i].total).format();
+    }
+
     data.currentPage = ctrl.currentPage;
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var temp = jsrender.templates(templatePath);
@@ -289,6 +293,8 @@ ctrl.details = function(id) {
         for(var i = 0; i < invoice.jobs.length; i++) {
             invoice.jobs[i].total = numberFormatter(invoice.jobs[i].payment + invoice.jobs[i].gst).format();
         }
+
+        invoice.total = numberFormatter(invoice.total).format();
 
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);

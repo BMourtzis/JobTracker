@@ -14,49 +14,54 @@
         </button>
 </div>
 <div class="row">
-    <p>
-        <strong>Repetition:</strong> {{:repetition}}
-    </p>
-    <p>
-        <strong>Payment (ex. GST):</strong> ${{:payment}}
-    </p>
-    <p>
-        <strong>Enabled:</strong> {{:enabled}}
-    </p>
+    <h3>Details</h3>
 </div>
 <div class="row">
-    <h4>Repetition Values:</h4>
+    <dl>
+        <dt>Repetition:&nbsp;</dt>
+        <dd>{{:repetition}}</dd>
+        <dt>Payment (ex. GST):&nbsp;</dt>
+        <dd>{{:payment}}</dd>
+        <dt>Active:&nbsp;</dt>
+        <dd>
+            {{if enabled}}
+            <span class="glyphicon glyphicon-check"></span>
+            {{else}}
+            <span class="glyphicon glyphicon-unchecked"></span>
+            {{/if}}
+        </dd>
+    </dl>
 </div>
-
+<div class="row">
+    {{if enabled}}
+    <button id="disable-button" type="button" class="btn btn-warning">
+        Disable Service
+    </button>
+    {{else}}
+    <button id="enable-button" type="button" class="btn btn-warning">
+        Enable Service
+    </button>
+    {{/if}}
+</div>
+<div class="row">
+    <h3>Repetition Values</h3>
+</div>
 {{for repetitionValues}}
 <div class="row sub-details">
     <div class="col-md-1">
         <h5>{{:#index+1}}.</h5></div>
     <div class="col-md-offset-1">
-        {{if #parent.parent.data.repetition !== "Daily"}}
-        <p>
-            <strong>Day:</strong> {{:day}}
-        </p>
-        {{/if}}
-        <p>
-            <strong>Time:</strong> {{:hour}}:{{:minute}}
-        </p>
+        <dl>
+            {{if #parent.parent.data.repetition !== "Daily"}}
+            <dt>Day:&nbsp;</dt>
+            <dd>{{:day}}</dd>
+            {{/if}}
+            <dt>Time:&nbsp;</dt>
+            <dd>{{:hour}}:{{:minute}}</dd>
+        </dl>
     </div>
 </div>
 {{/for}}
-<div class="row">
-    <div class="custom-button">
-        {{if enabled}}
-        <button id="disable-button" type="button" class="btn btn-warning">
-            <span class="glyphicon glyphicon-unchecked"></span>
-            Disable
-        </button> {{else}}
-        <button id="enable-button" type="button" class="btn btn-warning">
-            <span class="glyphicon glyphicon-check"></span>
-            Enabled
-        </button> {{/if}}
-    </div>
-</div>
 
 <!-- Delete confirmation Modal -->
 <div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -74,7 +79,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Generate Jobs Modal -->
 <div class="modal fade" id="generateJobsOptionsModal" tabindex="" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-medium" role="document">
         <div class="modal-content">

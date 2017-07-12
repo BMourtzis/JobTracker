@@ -25,7 +25,7 @@ autoUpdater.on('update-downloaded', function(ev, info) {
 function initiateUpdater(mainWindow) {
     main = mainWindow;
     autoUpdater.checkForUpdates();
-    return mainWindow;
+    return main;
 }
 
 module.exports = initiateUpdater;

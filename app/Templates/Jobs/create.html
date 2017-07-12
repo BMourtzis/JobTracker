@@ -7,7 +7,7 @@
         <div class="col-md-12 col-lg-12">
             <div class="form-group">
                 <label for="client">Client*</label>
-                <select class="form-control" name="clientSelect" onblur="validRules.Selected($(this))" onchange="validRules.Selected($(this))">
+                <select class="form-control" name="clientSelect">
                     {{if client == null}}
                         <option value="" disabled selected>Select a Client</option>
                         {{for clients}}
@@ -34,7 +34,7 @@
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-usd"></span>
                     </span>
-                    <input type="text" class="form-control" name="payment" placeholder="Eg. 50" onblur="validRules.isNumeric($(this))" onkeyup="validRules.isNumeric($(this))">
+                    <input type="text" class="form-control" name="payment" placeholder="Eg. 50">
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
             <div class="form-group">
                 <label for="timeBooked">Booking Date*</label>
                 <div class="input-group date datetimepicker" id="datepicker">
-                    <input type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onchange="validRules.isEmptyField($(this))">
+                    <input type="text" class="form-control">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -55,7 +55,7 @@
             <div class="form-group">
                 <label for="timeBooked">Booking Time*</label>
                 <div class="input-group date datetimepicker" id="timepicker">
-                    <input type="text" class="form-control" onblur="validRules.isEmptyField($(this))" onchange="validRules.isEmptyField($(this))">
+                    <input type="text" class="form-control">
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -64,6 +64,6 @@
         </div>
     </div>
     <div class="row">
-        <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button" disabled="true">Submit</button>
+        <button id="form-submit-button" type="button" class="btn btn-lg btn-success submit-button">Submit</button>
     </div>
 </form>

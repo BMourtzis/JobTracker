@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<div>
+<div class="row">
     <h1>Settings</h1>
 </div>
 <div class="row">
-    <div class="col-md-2 setting-label">
-        <label for="InvoiceTemplatePath">Invoice Template:</label>
-    </div>
-    <div class="col-md-10 col-lg-10">
+    <div class="form-group">
+        <label for="InvoiceTemplatePath">Invoice Template</label>
         <div id="InvoiceTemplatePath" class="input-group">
             <input type="text" class="form-control" value="{{:InvoiceTemplatePath}}" readonly="true">
             <span class="input-group-addon"><span class="glyphicon glyphicon-file"></span></span>
@@ -14,10 +12,8 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-2 setting-label">
-        <label for="InvoiceOutputPath">Invoice Output:</label>
-    </div>
-    <div class="col-md-10 col-lg-10">
+    <div class="form-group">
+        <label for="InvoiceOutputPath">Invoice Output</label>
         <div id="InvoiceOutputPath" class="input-group">
             <input type="text" class="form-control" value="{{:InvoiceOutputPath}}" readonly="true">
             <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
@@ -25,10 +21,8 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-2 col-lg-2">
-        <label for="BackupPath">Backup Path:</label>
-    </div>
-    <div class="col-md-10 col-lg-10">
+    <div class="form-group">
+        <label for="BackupPath">Backup Path</label>
         <div id="BackupPath" class="input-group">
             <input type="text" class="form-control" value="{{:BackupPath}}" readonly="true">
             <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
@@ -37,10 +31,8 @@
 </div>
 <hr>
 <div class="row">
-    <div class="col-md-2 setting-label">
-        <label for="GSTPercentage">GST:</label>
-    </div>
-    <div class="col-md-2 col-lg-2">
+    <div class="form-group">
+        <label for="GSTPercentage">GST</label>
         <div id="GSTPercentage" class="input-group">
             <input type="text" class="form-control" value="{{:GSTPercentage}}">
             <span class="input-group-addon">%</span>
@@ -53,3 +45,6 @@
     <button id="update-version-button" type="button" class="btn btn-primary">Restart and install update</button>
 </div>
 {{/if}}
+<div class="row">
+    <span class="float-right">Version: {{:version}}</span>
+</div>

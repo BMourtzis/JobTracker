@@ -294,6 +294,8 @@ ctrl.details = function(id) {
             invoice.jobs[i].total = numberFormatter(invoice.jobs[i].payment + invoice.jobs[i].gst).format();
         }
 
+        invoice.total = numberFormatter(invoice.total).format();
+
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(invoice);

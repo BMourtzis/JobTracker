@@ -18,11 +18,27 @@
         <strong>Repetition:</strong> {{:repetition}}
     </p>
     <p>
-        <strong>Payment (ex. GST):</strong> ${{:payment}}
+        <strong>Payment (ex. GST):</strong> {{:payment}}
     </p>
     <p>
-        <strong>Enabled:</strong> {{:enabled}}
+        <strong>Active:</strong>
+        {{if enabled}}
+        <span class="glyphicon glyphicon-check"></span>
+        {{else}}
+        <span class="glyphicon glyphicon-unchecked"></span>
+        {{/if}}
     </p>
+</div>
+<div class="row">
+    {{if enabled}}
+    <button id="disable-button" type="button" class="btn btn-warning">
+        Disable Service
+    </button>
+    {{else}}
+    <button id="enable-button" type="button" class="btn btn-warning">
+        Enable Service
+    </button>
+    {{/if}}
 </div>
 <div class="row">
     <h4>Repetition Values:</h4>
@@ -44,19 +60,6 @@
     </div>
 </div>
 {{/for}}
-<div class="row">
-    <div class="custom-button">
-        {{if enabled}}
-        <button id="disable-button" type="button" class="btn btn-warning">
-            <span class="glyphicon glyphicon-unchecked"></span>
-            Disable
-        </button> {{else}}
-        <button id="enable-button" type="button" class="btn btn-warning">
-            <span class="glyphicon glyphicon-check"></span>
-            Enabled
-        </button> {{/if}}
-    </div>
-</div>
 
 <!-- Delete confirmation Modal -->
 <div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">

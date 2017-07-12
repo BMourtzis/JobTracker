@@ -14,7 +14,9 @@ ctrl.index = function() {
     var temp = jsrender.templates(templatePath);
 
     var tempSettings = settings;
+    
     tempSettings.updateReady = window.updateReady;
+    tempSettings.version = app.getVersion();
 
     var html = temp(tempSettings);
     $("#content").html(html);

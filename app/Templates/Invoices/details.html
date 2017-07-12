@@ -25,12 +25,18 @@
         <strong>Issue Date:</strong> {{:createdAt.format("DD/MM/YYYY")}}
     </p>
     <p>
-        <strong>Payment (inc. GST):</strong> ${{:total}}
+        <strong>Payment (inc. GST):</strong> {{:total}}
     </p>
+
     <p>
-        <strong>Paid:</strong> {{:paid}}
+        <strong>Status:</strong>
+        {{if paid}}
+        Paid
+        {{else}}
+        Not Paid
+        {{/if}}
     </p>
-    {{if paid === true}}
+    {{if paid}}
     <p>
         <strong>Paid At:</strong> {{:paidAt.format("DD/MM/YYYY")}}
     </p>

@@ -93,6 +93,10 @@ function loadActiveJobs() {
 function loadTable(data) {
     data.currentPage = ctrl.currentPage;
 
+    for(var i = 0; i < data.schemes.length; i++) {
+        data.schemes[i].payment = numberFormatter(data.schemes[i].payment).format()
+    }
+
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/table.html");
     var tableTemp = jsrender.templates(templatePath);
     var table = tableTemp(data);
@@ -177,7 +181,8 @@ ctrl.details = function(id) {
     ctrl.year = parseInt(new Date.today().toString("yyyy"));
     return facade.getJobSchemeFull(id).then(function(data) {
         data.year = ctrl.year;
-
+        data.payment = numberFormatter(data.payment).format();
+        
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);

@@ -11,6 +11,7 @@ var calendarSettings = {
         center: "title",
         right: ""
     },
+    defaultDate: new Date.today().moveToFirstDayOfMonth().at({hour: 0, minute: 0}),
     aspectRatio: 1,
     events: [],
     timeFormat: 'HH:mm',

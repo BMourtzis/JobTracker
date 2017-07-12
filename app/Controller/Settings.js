@@ -91,18 +91,8 @@ function UpdateBackupPath() {
 }
 
 /**
- * UpdateGSTPercentage - Updates the GST Percentage in the settings file
+ * saveChanges - Saves the changed fields
  */
-function UpdateGSTPercentage() {
-    var gst = parseInt($($("#GSTPercentage :input")[0]).val());
-    if (!Number.isNaN(gst)) {
-        ctrl.tempSettings.GSTPercentage = gst;
-    }
-    else {
-        $($("#GSTPercentage :input")[0]).val(ctrl.tempSettings.GSTPercentage);
-    }
-}
-
 function saveChanges() {
     var gst = parseInt($($("#GSTPercentage :input")[0]).val());
     if (!Number.isNaN(gst)) {

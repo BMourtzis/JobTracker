@@ -6,6 +6,7 @@ function loadSettings() {
     if (!fs.existsSync(settingsPath)) {
         createDefaultSettings();
     }
+
     settingsData = JSON.parse(fs.readFileSync(settingsPath, "utf8"));
     settingsData.settingsPath = settingsPath;
     return settingsData;

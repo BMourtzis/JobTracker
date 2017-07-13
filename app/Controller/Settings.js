@@ -53,7 +53,7 @@ function applicationSettings() {
     var html = temp(ctrl.tempSettings);
     $("#settings-content").html(html);
 
-    $("#GSTPercentage").keydown(function(){
+    $("#GSTPercentage").keyup(function(){
         UpdateGSTPercentage();
     })
 }

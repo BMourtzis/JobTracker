@@ -260,7 +260,7 @@ function initializeModels() {
 
                     date.next().day();
                 }
-                return Promise.all(promises);
+                return promises;
             },
             weeklyGenerator: function weeklyGenerator(date, nextMonth) {
                 var repvalues = JSON.parse(this.repetitionValues);
@@ -279,7 +279,7 @@ function initializeModels() {
 
                     date.next().sunday();
                 }
-                return Promise.all(promises);
+                return promises;
             },
             fortnightlyGenerator: function fortnightlyGenerator(date, nextMonth) {
                 // TODO: refactor fortnightlyGenerator

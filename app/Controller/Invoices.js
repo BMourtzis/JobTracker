@@ -213,7 +213,6 @@ ctrl.create = function(id) {
  *
  * @param  {Object} data an Object of the data to be rendered, it should have a list of clients or just one client
  */
-
 function fillCreatePage(data) {
     var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/create.html");
     var temp = jsrender.templates(templatePath);
@@ -272,7 +271,7 @@ function create() {
 
         sidebarManager.pop();
         if (formData[0].value !== 0) {
-            ctrl.invoiceDetails(data);
+            ctrl.details(data);
         } else {
             sidebarManager.removeHtml();
         }

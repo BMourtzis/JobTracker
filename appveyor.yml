@@ -41,8 +41,6 @@ test_script:
 
 after_test:
     - npm run pack
-
-build_success:
     - ps: Rename-Item -Path "c:\projects\jobtracker\dist\JobTracker.Setup.$(package_version).exe" -NewName "jobtracker-setup-$(package_version).exe"
 
 artifacts:

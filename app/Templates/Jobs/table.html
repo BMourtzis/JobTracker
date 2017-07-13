@@ -44,15 +44,21 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            {{/if}} {{for ~getFields(count)}} {{if #index == #parent.parent.data.currentPage}}
-            <li class="active">
-                <a href="#">{{:#getIndex()+1}}</a>
-            </li>
-            {{else}}
-            <li data-page="{{:#getIndex()}}">
-                <a href="#">{{:#getIndex()+1}}</a>
-            </li>
-            {{/if}} {{/for}} {{if currentPage == count}}
+            {{/if}}
+
+            {{for ~getFields(count)}}
+                {{if #index == #parent.parent.data.currentPage}}
+                <li class="active">
+                    <a href="#">{{:#getIndex()+1}}</a>
+                </li>
+                {{else}}
+                <li data-page="{{:#getIndex()}}">
+                    <a href="#">{{:#getIndex()+1}}</a>
+                </li>
+                {{/if}}
+            {{/for}}
+
+            {{if currentPage == count}}
             <li class="disabled">
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>

@@ -1,69 +1,23 @@
 <!DOCTYPE html>
 <div class="row">
-    <h1 class="float-left">Settings</h1>
     <span class="float-right">Version: {{:version}}</span>
 </div>
 <div class="row">
-    <h4>Invoice Settings</h4>
-</div>
-<div class="row">
-    <div class="col-md-8 col-lg-8">
-        <div class="form-group">
-            <label for="InvoiceTemplatePath">Invoice Template</label>
-            <div id="InvoiceTemplatePath" class="input-group">
-                <input type="text" class="form-control" value="{{:InvoiceTemplatePath}}" readonly="true">
-                <span class="input-group-addon"><span class="glyphicon glyphicon-file"></span></span>
-            </div>
-        </div>
+    <h1 class="float-left">Settings</h1>
+    {{if updateReady}}
+    <div class="custom-button">
+        <button id="update-version-button" type="button" class="btn btn-primary">Restart and install update</button>
     </div>
+    {{/if}}
 </div>
 <div class="row">
-    <div class="col-md-8 col-lg-8">
-        <div class="form-group">
-            <label for="InvoiceOutputPath">Invoice Output</label>
-            <div id="InvoiceOutputPath" class="input-group">
-                <input type="text" class="form-control" value="{{:InvoiceOutputPath}}" readonly="true">
-                <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
-            </div>
-        </div>
-    </div>
+    <ul class="nav nav-tabs">
+      <li id="application-nav-item" role="presentation" class="active"><a href="#">Application</a></li>
+      <li id="invoice-nav-item" role="presentation"><a href="#">Invoice</a></li>
+      <li id="backup-nav-item" role="presentation"><a href="#">Backup</a></li>
+    </ul>
 </div>
-<hr>
-<div class="row">
-    <h4>Backup Settings</h4>
-</div>
-<div class="row">
-    <div class="col-md-8 col-lg-8">
-        <div class="form-group">
-            <label for="BackupPath">Backup Path</label>
-            <div id="BackupPath" class="input-group">
-                <input type="text" class="form-control" value="{{:BackupPath}}" readonly="true">
-                <span class="input-group-addon"><span class="glyphicon glyphicon-folder-open"></span></span>
-            </div>
-        </div>
-    </div>
-</div>
-<hr>
-<div class="row">
-    <h4>Application Settings</h4>
-</div>
-<div class="row">
-    <div class="col-md-2 col-lg-2">
-        <div class="form-group">
-            <label for="GSTPercentage">GST</label>
-            <div id="GSTPercentage" class="input-group">
-                <input type="text" class="form-control" value="{{:GSTPercentage}}">
-                <span class="input-group-addon">%</span>
-            </div>
-        </div>
-    </div>
-</div>
-{{if updateReady}}
-<hr>
-<div class="row">
-    <button id="update-version-button" type="button" class="btn btn-primary">Restart and install update</button>
-</div>
-{{/if}}
+<div id="settings-content"></div>
 <hr>
 <div class="row">
     <button id="undo-changes-settings-button" type="button" class="btn btn-warning">

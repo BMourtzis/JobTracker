@@ -322,10 +322,9 @@ function checkCreateDirectory(year, month) {
     }
 
     var date = new Date().set({
-        year: year,
-        month: month - 1
+        month: parseInt(month) - 1
     }); // NOTE: Use this after they have transition to the new software
-    
+
     baseFolder = path.resolve(baseFolder, month + "/");
     if (!fs.existsSync(baseFolder)) {
         fs.mkdirSync(baseFolder);

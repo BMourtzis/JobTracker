@@ -182,7 +182,7 @@ ctrl.details = function(id) {
     return facade.getJobSchemeFull(id).then(function(data) {
         data.year = ctrl.year;
         data.payment = numberFormatter(data.payment).format();
-        
+
         var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/details.html");
         var temp = jsrender.templates(templatePath);
         var html = temp(data);
@@ -292,6 +292,7 @@ function generateForClients() {
             type: "success",
             delay: 3000
         });
+        
         sidebarManager.pop();
         sidebarManager.removeHtml();
         ctrls.Jobs.index();

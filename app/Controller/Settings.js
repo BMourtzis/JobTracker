@@ -21,15 +21,12 @@ ctrl.index = function() {
     var html = temp(ctrl.tempSettings);
     $("#content").html(html);
 
-    $("#InvoiceTemplatePath").click(function() {
-        UpdateInvoiceTemplatePath();
-    });
-    $("#InvoiceOutputPath").click(function() {
-        UpdateInvoiceOutputPath();
-    });
-    $("#BackupPath").click(function() {
-        UpdateBackupPath();
-    });
+    applicationSettings();
+
+    $("#application-nav-item").click(applicationSettings);
+    $("#invoice-nav-item").click(invoiceSettings);
+    $("#backup-nav-item").click(backupSettings);
+
     $("#update-version-button").click(function(){
         InstallUpdate();
     });
@@ -44,6 +41,63 @@ ctrl.index = function() {
 
     contentManager.restartLineup(ctrl.ctrlName, "index", ctrl.index.bind(this));
 };
+
+/**
+ * applicationSettings - Renders the application section of the settings page
+ */
+function applicationSettings() {
+    removeActiveNav();
+    $("#application-nav-item").addClass("active");
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/application.html");
+    var temp = jsrender.templates(templatePath);
+    var html = temp(ctrl.tempSettings);
+    $("#settings-content").html(html);
+
+    $("#GSTPercentage").keydown(function(){
+        UpdateGSTPercentage();
+    })
+}
+
+/**
+ * invoiceSettings - Renders the invoice section of the settings page
+ */
+function invoiceSettings() {
+    removeActiveNav();
+    $("#invoice-nav-item").addClass("active");
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/invoice.html");
+    var temp = jsrender.templates(templatePath);
+    var html = temp(ctrl.tempSettings);
+    $("#settings-content").html(html);
+
+    $("#InvoiceTemplatePath").click(function() {
+        UpdateInvoiceTemplatePath();
+    });
+    $("#InvoiceOutputPath").click(function() {
+        UpdateInvoiceOutputPath();
+    });
+}
+
+/**
+ * backupSettings - Renders the backup section of the settings page
+ */
+function backupSettings() {
+    removeActiveNav();
+    $("#backup-nav-item").addClass("active");
+    var templatePath = templateHelper.getRelativePath(__dirname, ctrl.templateDir + ctrl.ctrlName + "/backup.html");
+    var temp = jsrender.templates(templatePath);
+    var html = temp(ctrl.tempSettings);
+    $("#settings-content").html(html);
+
+    $("#BackupPath").click(function() {
+        UpdateBackupPath();
+    });
+}
+
+function removeActiveNav() {
+    $("#application-nav-item").removeClass("active");
+    $("#invoice-nav-item").removeClass("active");
+    $("#backup-nav-item").removeClass("active");
+}
 
 /**
  * UpdateInvoiceTemplatePath - Updates the Invoice Template Path input field
@@ -90,15 +144,20 @@ function UpdateBackupPath() {
     }
 }
 
-/**
- * saveChanges - Saves the changed fields
- */
-function saveChanges() {
+function UpdateGSTPercentage() {
     var gst = parseInt($($("#GSTPercentage :input")[0]).val());
     if (!Number.isNaN(gst)) {
         ctrl.tempSettings.GSTPercentage = gst;
     }
+    else {
+        $($("#GSTPercentage :input")[0]).val(ctrl.tempSettings.GSTPercentage);
+    }
+}
 
+/**
+ * saveChanges - Saves the changed fields
+ */
+function saveChanges() {
     var changes = false;
 
     if(ctrl.tempSettings.InvoiceTemplatePath !== settings.InvoiceTemplatePath) {

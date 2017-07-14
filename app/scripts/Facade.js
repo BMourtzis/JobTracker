@@ -708,28 +708,27 @@ facade.UpdateGSTPercentage = function(gst) {
  * @return {Object}  The facade
  */
 function initiateFacade(orm) {
-    var clients = require('../Registers/ClientRegister.js')(orm).then(function(data) {
-        clientRegister = data;
-    });
+    if(orm === undefined) {
+        return require('../scripts/orm.js').then(function(data) {
+            return initiateRegisters(data);
+        });
+    }
+    else {
+        return Promise.resolve(function() {
+            return initiateRegisters(orm);
+        });
+    }
+}
 
-    var jobs = require('../Registers/JobRegister.js')(orm).then(function(data) {
-        jobRegister = data;
-    });
-
-    var schemes = require('../Registers/JobSchemeRegister.js')(orm).then(function(data) {
-        schemeRegister = data;
-    });
-
-    var invoices = require('../Registers/InvoiceRegister.js')(orm).then(function(data) {
-        invoiceRegister = data;
-    });
-
+function initiateRegisters(orm) {
+    clientRegister = require('../Registers/ClientRegister.js')(orm);
+    jobRegister = require('../Registers/JobRegister.js')(orm);
+    schemeRegister = require('../Registers/JobSchemeRegister.js')(orm);
+    invoiceRegister = require('../Registers/InvoiceRegister.js')(orm);
     settingsRegister = require('../Registers/SettingsRegister.js');
     backupRegister = require('../Registers/BackupRegister');
 
-    return Promise.all([clients, jobs, schemes, invoices]).then(function(data) {
-        return facade;
-    });
+    return facade;
 }
 
 module.exports = initiateFacade;

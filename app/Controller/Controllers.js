@@ -9,7 +9,7 @@ module.exports = function getControllers(facade) {
     else {
         return Promise.resolve(function() {
             return initiateControllers(facade);
-        })
+        });
     }
 };
 

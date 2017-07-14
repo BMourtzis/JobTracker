@@ -469,18 +469,8 @@ function jobSchemeEditHelper(data) {
  * @return {Object}  Returns the initiated JobScheme Register
  */
 function initiateRegister(injORM) {
-    if(injORM === undefined) {
-        return require('../scripts/orm.js').then(function(data) {
-            orm = data;
-            return register;
-        });
-    }
-    else {
-        return Promise.resolve(function(){
-            orm = injORM;
-            return register;
-        });
-    }
+    orm = injORM;
+    return register;
 }
 
 module.exports = initiateRegister;

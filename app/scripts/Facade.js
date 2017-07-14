@@ -707,20 +707,20 @@ facade.UpdateGSTPercentage = function(gst) {
  *
  * @return {Object}  The facade
  */
-function initiateFacade() {
-    var clients = require('../Registers/ClientRegister.js').then(function(data) {
+function initiateFacade(orm) {
+    var clients = require('../Registers/ClientRegister.js')(orm).then(function(data) {
         clientRegister = data;
     });
 
-    var jobs = require('../Registers/JobRegister.js').then(function(data) {
+    var jobs = require('../Registers/JobRegister.js')(orm).then(function(data) {
         jobRegister = data;
     });
 
-    var schemes = require('../Registers/JobSchemeRegister.js').then(function(data) {
+    var schemes = require('../Registers/JobSchemeRegister.js')(orm).then(function(data) {
         schemeRegister = data;
     });
 
-    var invoices = require('../Registers/InvoiceRegister.js').then(function(data) {
+    var invoices = require('../Registers/InvoiceRegister.js')(orm).then(function(data) {
         invoiceRegister = data;
     });
 
@@ -732,4 +732,4 @@ function initiateFacade() {
     });
 }
 
-module.exports = initiateFacade();
+module.exports = initiateFacade;

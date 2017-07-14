@@ -568,11 +568,9 @@ function done(id) {
  *
  * @return {Object}  Jobs controller
  */
-function initiateController() {
-    return require('../scripts/Facade.js').then(function(data) {
-        facade = data;
-        return ctrl;
-    });
+function initiateController(injFacade) {
+    facade = injFacade;
+    return ctrl;
 }
 
-module.exports = initiateController();
+module.exports = initiateController;

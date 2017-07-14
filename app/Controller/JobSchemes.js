@@ -292,7 +292,7 @@ function generateForClients() {
             type: "success",
             delay: 3000
         });
-        
+
         sidebarManager.pop();
         sidebarManager.removeHtml();
         ctrls.Jobs.index();
@@ -608,11 +608,9 @@ function remove(id) {
  *
  * @return {Object}  JobSchemes controller
  */
-function initiateController() {
-    return require('../scripts/Facade.js').then(function(data) {
-        facade = data;
-        return ctrl;
-    });
+function initiateController(injFacade) {
+    facade = injFacade;
+    return ctrl;
 }
 
-module.exports = initiateController();
+module.exports = initiateController;

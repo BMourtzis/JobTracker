@@ -1,37 +1,26 @@
 var ctrl = {};
 
-module.exports = function getControllers() {
-    var home = require("./Home.js").then(function(data) {
-        ctrl.Home = data;
-    });
-
-    var clients = require("./Clients.js").then(function(data) {
-        ctrl.Clients = data;
-    });
-
-    var jobs = require("./Jobs.js").then(function(data) {
-        ctrl.Jobs = data;
-    });
-
-    var jobSchemes = require("./JobSchemes.js").then(function(data) {
-        ctrl.JobSchemes = data;
-    });
-
-    var invoices = require("./Invoices.js").then(function(data) {
-        ctrl.Invoices = data;
-    });
-
-    var timetable = require("./Timetable.js").then(function(data){
-        ctrl.Timetable = data;
-    });
-
-    var settings = require("./Settings.js").then(function(data) {
-        ctrl.Settings = data;
-    });
-
-    ctrl.Misc = require("./Misc.js");
-
-    return Promise.all([home, clients, jobs, jobSchemes, invoices, timetable, settings]).then(function(data) {
-        return ctrl;
-    });
+module.exports = function getControllers(facade) {
+    if(facade === undefined) {
+        return require('../scripts/Facade.js')().then(function(data) {
+            return initiateControllers(data);
+        });
+    }
+    else {
+        return Promise.resolve(function() {
+            return initiateControllers(facade);
+        })
+    }
 };
+
+function initiateControllers(facade) {
+    ctrl.Home = require("./Home.js")(facade);
+    ctrl.Clients = require("./Clients.js")(facade);
+    ctrl.Jobs = require("./Jobs.js")(facade);
+    ctrl.JobSchemes = require("./JobSchemes.js")(facade);
+    ctrl.Invoices = require("./Invoices.js")(facade);
+    ctrl.Timetable = require("./Timetable.js")(facade);
+    ctrl.Settings = require("./Settings.js")(facade);
+    ctrl.Misc = require("./Misc.js");
+    return ctrl;
+}

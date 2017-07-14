@@ -62,11 +62,9 @@ function loadEvents() {
     });
 }
 
-function initaitesController() {
-    return require('../scripts/Facade.js').then(function(data) {
-        facade = data;
-        return ctrl;
-    });
+function initaitesController(injFacade) {
+    facade = injFacade;
+    return ctrl;
 }
 
-module.exports = initaitesController();
+module.exports = initaitesController;

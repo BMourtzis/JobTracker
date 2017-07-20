@@ -1,4 +1,4 @@
-var orm = require('../scripts/orm.js');
+var orm;
 
 var register = {};
 

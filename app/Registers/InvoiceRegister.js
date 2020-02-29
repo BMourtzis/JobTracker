@@ -202,7 +202,7 @@ function generateInvoice(invoiceId) {
         });
         invoice.issueDate = new Date.today().toString("dd-MM-yyyy");
         invoice.invoicePeriod = period.toString("MMMM yyyy");
-        invoice.address = invoice.client.address;
+        invoice.address = invoice.client.firstName + " " + invoice.client.lastName + "\n" + invoice.client.address;
 
         return getJobs(invoice.year, invoice.month + 1, invoice.clientId, "Placed").then(function(data) {
             if (data) {

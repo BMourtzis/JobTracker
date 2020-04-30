@@ -46,7 +46,7 @@
         "electron-updater": "^2.4.3",
         "eonasdan-bootstrap-datetimepicker-npm": "^4.17.37",
         "fullcalendar": "^3.4.0",
-        "jquery": "2.2",
+        "jquery": "3.5",
         "jsrender": "^0.9.83",
         "jszip": "^2.6.1",
         "less": "2.7.1",
